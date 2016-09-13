@@ -24,7 +24,6 @@
 package Maths;
 
 import java.nio.FloatBuffer;
-import org.lwjgl.BufferUtils;
 
 /**
  * This class represents a (x,y)-Vector. GLSL equivalent to vec2.
@@ -156,17 +155,5 @@ public class Vector2f {
      */
     public Vector2f lerp(Vector2f other, float alpha) {
         return this.scale(1f - alpha).add(other.scale(alpha));
-    }
-    
-    /**
-     * Returns the Buffer representation of this vector.
-     *
-     * @return Vector as FloatBuffer
-     */
-    public FloatBuffer getBuffer() {
-        FloatBuffer buffer = BufferUtils.createFloatBuffer(2);
-        buffer.put(x).put(y);
-        buffer.flip();
-        return buffer;
     }
 }

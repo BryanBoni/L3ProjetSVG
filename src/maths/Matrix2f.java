@@ -24,7 +24,6 @@
 package Maths;
 
 import java.nio.FloatBuffer;
-import org.lwjgl.BufferUtils;
 
 /**
  * This class represents a 2x2-Matrix. GLSL equivalent to mat2.
@@ -168,18 +167,5 @@ public class Matrix2f {
         result.m11 = this.m11;
         
         return result;
-    }
-    
-    /**
-     * Returns the Buffer representation of this vector.
-     *
-     * @return Vector as FloatBuffer
-     */
-    public FloatBuffer getBuffer() {
-        FloatBuffer buffer = BufferUtils.createFloatBuffer(4);
-        buffer.put(m00).put(m10);
-        buffer.put(m01).put(m11);
-        buffer.flip();
-        return buffer;
     }
 }

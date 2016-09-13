@@ -24,7 +24,6 @@
 package Maths;
 
 import java.nio.FloatBuffer;
-import org.lwjgl.BufferUtils;
 
 /**
  * This class represents a 4x4-Matrix. GLSL equivalent to mat4.
@@ -256,21 +255,6 @@ public class Matrix4f {
         result.m33 = this.m33;
         
         return result;
-    }
-    
-    /**
-     * Returns the Buffer representation of this vector.
-     *
-     * @return Vector as FloatBuffer
-     */
-    public FloatBuffer getBuffer() {
-        FloatBuffer buffer = BufferUtils.createFloatBuffer(16);
-        buffer.put(m00).put(m10).put(m20).put(m30);
-        buffer.put(m01).put(m11).put(m21).put(m31);
-        buffer.put(m02).put(m12).put(m22).put(m32);
-        buffer.put(m03).put(m13).put(m23).put(m33);
-        buffer.flip();
-        return buffer;
     }
     
     /**

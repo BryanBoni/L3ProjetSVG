@@ -1,5 +1,7 @@
 package data;
 
+import Maths.Vector2f;
+
 /**
  *
  * @author p1402828
@@ -18,8 +20,24 @@ public class Curve extends Line implements IDrawableSVG {
      */
     @Override
     public void addStop(float x, float y) {
-        //if(m_stops.length() <4)
-        //m_stops.add(new Vector2f(x,y));
+        if(m_stops.size() <4)
+            m_stops.add(new Vector2f(x,y));
+    }
+    /**
+     * Add a new stop to the Line.
+     * A curve is only 4 points, so we can't add more than 4 stops.
+     * @param position Vector representing the abstract position in world cordinate for the stop.
+     */
+    @Override
+    public void addStop(Vector2f position) {
+        if (m_stops.size() < 4) {
+            m_stops.add(position);
+        }
+    }
+    
+    @Override
+    public void draw() {
+        
     }
 
 }

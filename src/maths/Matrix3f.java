@@ -24,7 +24,6 @@
 package Maths;
 
 import java.nio.FloatBuffer;
-import org.lwjgl.BufferUtils;
 
 /**
  * This class represents a 3x3-Matrix. GLSL equivalent to mat3.
@@ -206,19 +205,5 @@ public class Matrix3f {
         result.m22 = this.m22;
         
         return result;
-    }
-    
-    /**
-     * Returns the Buffer representation of this vector.
-     *
-     * @return Vector as FloatBuffer
-     */
-    public FloatBuffer getBuffer() {
-        FloatBuffer buffer = BufferUtils.createFloatBuffer(9);
-        buffer.put(m00).put(m10).put(m20);
-        buffer.put(m01).put(m11).put(m21);
-        buffer.put(m02).put(m12).put(m22);
-        buffer.flip();
-        return buffer;
     }
 }

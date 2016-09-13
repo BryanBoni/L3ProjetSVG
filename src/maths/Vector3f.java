@@ -24,7 +24,6 @@
 package Maths;
 
 import java.nio.FloatBuffer;
-import org.lwjgl.BufferUtils;
 
 /**
  * This class represents a (x,y,z)-Vector. GLSL equivalent to vec3.
@@ -175,17 +174,5 @@ public class Vector3f {
      */
     public Vector3f lerp(Vector3f other, float alpha) {
         return this.scale(1f - alpha).add(other.scale(alpha));
-    }
-    
-    /**
-     * Returns the Buffer representation of this vector.
-     *
-     * @return Vector as FloatBuffer
-     */
-    public FloatBuffer getBuffer() {
-        FloatBuffer buffer = BufferUtils.createFloatBuffer(3);
-        buffer.put(x).put(y).put(z);
-        buffer.flip();
-        return buffer;
     }
 }
