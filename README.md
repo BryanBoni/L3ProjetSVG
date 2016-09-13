@@ -9,6 +9,7 @@ Here is our project of creating a Java application that can read and edit vector
 * Create an application capable of reading an SVG file,
 * Implement Bézier curve,  
 * Create a basic interface.
+
 ###If possible
 * Create a fancy and ergonomic interface and add it function (file management, animation, zoom and more...),
 * Be able to import other format,
