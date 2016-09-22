@@ -16,6 +16,7 @@ public class MainWindow extends JFrame {
 		super();
 		m_panelCanvas = new CanvasPanel();
 		initCompenents();
+                
 	}
 
 	private void initCompenents() {
@@ -38,8 +39,8 @@ public class MainWindow extends JFrame {
 		m_panelCanvas.resetImage();
 	}
 
-	public void drawPoint(int x, int y) {
-		m_panelCanvas.drawPoint(x, y);
+	public void drawPoint(int x, int y, int r, int g, int b) {
+		m_panelCanvas.drawPoint(x, y, r, g, b);
 	}
 
 	public void showImage() {

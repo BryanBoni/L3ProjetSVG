@@ -5,6 +5,10 @@
  */
 package view;
 
+
+import Maths.Vector2f;
+import Maths.Vector3f;
+import draw.SimpleDrawer;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
@@ -13,12 +17,15 @@ import javax.swing.JPanel;
 public class CanvasPanel extends JPanel {
 
 	BufferedImage m_canvasImage;
-
+        SimpleDrawer m_simpDraw;
+        
 	public CanvasPanel() {
 		super();
 		setBackground(Color.gray);
 		setSize(200, 200);
 		resetImage();
+                
+                
 	}
 
 	@Override
@@ -34,12 +41,9 @@ public class CanvasPanel extends JPanel {
         g2.fillRect(0, 0, 500, 500);
 	}
 
-	public void drawPoint(int x, int y) {
-		/*Graphics2D g2 = (Graphics2D) m_canvasImage.getGraphics();
-		g2.setStroke(new BasicStroke(5));
-		g2.setColor(Color.black);
-		g2.drawLine(x, y, x + 5, y + 5);*/
-		m_canvasImage.setRGB(x, y, Color.black.getRGB());
+	public void drawPoint(int x, int y, int r, int g, int b) {
+                m_simpDraw = new SimpleDrawer(m_canvasImage);
+		m_simpDraw.drawPixel(new Vector2f(x,y), new Vector3f(255,0,0));
 	}
 
 	public void showImage() {
