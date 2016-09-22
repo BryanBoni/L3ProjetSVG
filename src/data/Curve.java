@@ -20,7 +20,7 @@ public class Curve extends Line implements IDrawableSVG {
      */
     @Override
     public void addStop(float x, float y) {
-        if(m_stops.size() <4)
+        if(m_stops.size() < 4)
             m_stops.add(new Vector2f(x,y));
     }
     /**
