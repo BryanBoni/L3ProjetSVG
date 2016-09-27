@@ -46,6 +46,10 @@ public class Line implements IDrawableSVG {
 	public void draw() {
 
 	}
+        
+        public ArrayList<Vector2f> getStops() {
+            return m_stops;
+        }
 
 	public Vector2f getPoint(float progression) {
 		return interpolate(m_stops, progression);
