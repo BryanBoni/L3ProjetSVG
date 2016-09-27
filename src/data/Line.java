@@ -1,6 +1,7 @@
 package data;
 
 import Maths.Vector2f;
+import draw.ThreadedRastirizer;
 import java.util.ArrayList;
 
 /**
@@ -45,6 +46,10 @@ public class Line implements IDrawableSVG {
 	public void draw() {
 
 	}
+        
+        public ArrayList<Vector2f> getStops() {
+            return m_stops;
+        }
 
 	public Vector2f getPoint(float progression) {
 		return interpolate(m_stops, progression);
@@ -62,5 +67,15 @@ public class Line implements IDrawableSVG {
 			return interpolate(stops, progression);
 		}
 		return stops.get(0);
+	}
+
+	public void rasterizeThread() {
+		try {
+			ThreadedRastirizer thread = new ThreadedRastirizer(m_stops, 0.5f, 0.5f);
+			thread.start();
+			thread.join();
+		} catch (InterruptedException ex) {
+			// show "error multithreading application!"
+		}
 	}
 }

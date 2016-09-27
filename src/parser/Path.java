@@ -1,5 +1,8 @@
-package data;
+package parser;
 
+import data.Curve;
+import data.IDrawableSVG;
+import data.Line;
 import java.util.ArrayList;
 
 
@@ -14,7 +17,7 @@ public class Path implements IDrawableSVG {
     private ArrayList<Line> m_elements;
     
     public Path() {
-        
+        m_elements = new ArrayList<>();
     }
     /**
      * Add a Line to be rendered with the Path.
@@ -23,6 +26,7 @@ public class Path implements IDrawableSVG {
     public void addLine(Line line) {
         m_elements.add(line);
     }
+    
     /**
      * Add a Curve to be rendered with the Path.
      * @param curve
@@ -31,9 +35,14 @@ public class Path implements IDrawableSVG {
         m_elements.add(curve);
     }
     
+    public ArrayList<Line> getElements() {
+        return m_elements;
+    }
+    
     @Override
     public void draw() {
-        
-    }
+        for(Line l:m_elements)
+            l.draw();
+    } 
     
 }

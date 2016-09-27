@@ -17,8 +17,6 @@ public class L3ProjetSVG {
 
         }
         window.showImage();
-
-        
     }
 
 }
