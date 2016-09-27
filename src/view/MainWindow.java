@@ -5,12 +5,16 @@
  */
 package view;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import javax.swing.DebugGraphics;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 
 public class MainWindow extends JFrame {
 
     private CanvasPanel m_panelCanvas;
+    private javax.swing.JMenuItem m_FileChooser;
     private javax.swing.JMenu m_FileMenu;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
@@ -31,10 +35,12 @@ public class MainWindow extends JFrame {
         jMenuBar1 = new javax.swing.JMenuBar();
         m_FileMenu = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
-
+        m_FileChooser = new javax.swing.JMenuItem();
+        
         setCursor(null);
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("SVG");
+        setTitle("SVG Editor");
+  
         
         m_panelCanvas.setDebugGraphicsOptions(DebugGraphics.NONE_OPTION);
         m_panelCanvas.setDoubleBuffered(false);
@@ -81,6 +87,15 @@ public class MainWindow extends JFrame {
         );
 
         m_FileMenu.setText("File");
+        
+        m_FileChooser.setText("Chose File");
+        m_FileChooser.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                m_FileChooserActionPerformed(evt);
+            }
+        });
+        m_FileMenu.add(m_FileChooser);
+        
         jMenuBar1.add(m_FileMenu);
 
         jMenu2.setText("Edit");
@@ -129,4 +144,23 @@ public class MainWindow extends JFrame {
     public void showImage() {
         m_panelCanvas.showImage();
     }
-}
+    
+    private void m_FileChooserActionPerformed(java.awt.event.ActionEvent evt) {
+        /*
+        This function is a listener for the FileChooser item,
+        use to retreve the path of a file from a repository and 
+        call a function to parse this file
+        */
+        JFileChooser fc = new JFileChooser();
+        String filePath;
+        int returnVal = fc.showOpenDialog(MainWindow.this);
+
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            File file = fc.getSelectedFile();
+            filePath = file.getAbsolutePath();
+            System.out.println(filePath + "\n");
+            //call Parser
+            }
+        }
+    }
+
