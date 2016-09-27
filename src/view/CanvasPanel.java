@@ -23,9 +23,9 @@ public class CanvasPanel extends JPanel {
     SimpleDrawer m_simpDraw;
     Path m_p;
 
-    public CanvasPanel() {
+    public CanvasPanel(String pathUrl) {
         super();
-        Parser parser = new Parser("L3SVG.svg");
+        Parser parser = new Parser(pathUrl); 
         SVG svg = parser.parse();
 
         m_p = svg.getPathList().get(0);
@@ -33,6 +33,16 @@ public class CanvasPanel extends JPanel {
         setBackground(Color.gray);
         setSize(500, 500);
     }
+
+    public CanvasPanel() {
+        super();
+        
+        setBackground(Color.gray);
+        setSize(500, 500);
+    }
+    
+    
+    
 
     @Override
     protected void paintComponent(Graphics g) {
