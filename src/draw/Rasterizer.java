@@ -41,7 +41,8 @@ public class Rasterizer {
 			}
 		}
 		// start recursive approximation
-
+		line.rasterizeThread();
+		
 		// send pixels for render
 	}
 
@@ -53,7 +54,7 @@ public class Rasterizer {
 	 * @param position the real coordinates of the point to be drawn
 	 * @return false if the pixel was already drawed, true if not
 	 */
-	static private boolean rasterize(Vector2f position) {
+	static public boolean rasterize(Vector2f position) {
 		//int x1 = (int)Math.floor(position.x);
 		//int y1 = (int)Math.floor(position.y);
 		//int x2 = (int)Math.ceil(position.x);
