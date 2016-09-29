@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package view;
 
 import java.awt.Color;
@@ -35,6 +30,7 @@ public class MainWindow extends JFrame {
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel postionPanel;
     private javax.swing.JPanel toolsPanel;
+    private javax.swing.JLabel position;
 
     public MainWindow() {
         super();
@@ -44,18 +40,19 @@ public class MainWindow extends JFrame {
     }
 
     private void initCompenents() {
-        
+
         toolsPanel = new JPanel();
         postionPanel = new JPanel();
         jMenuBar1 = new JMenuBar();
         m_FileMenu = new JMenu();
         jMenu2 = new JMenu();
         m_FileChooser = new JMenuItem();
-        
+        position = new javax.swing.JLabel();
+
         setCursor(null);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        setTitle("SVG Editor");
-  
+        setTitle("I wanna move it move it");
+
         m_panelCanvas.setDebugGraphicsOptions(DebugGraphics.NONE_OPTION);
         m_panelCanvas.setDoubleBuffered(false);
         m_panelCanvas.setRequestFocusEnabled(false);
@@ -63,13 +60,12 @@ public class MainWindow extends JFrame {
 
         GroupLayout m_panelCanvasLayout = new GroupLayout(m_panelCanvas);
         m_panelCanvas.setLayout(m_panelCanvasLayout);
-        
-        
+
         //Setting the size of a the canvas
-        m_panelCanvasLayout.setHorizontalGroup( 
+        m_panelCanvasLayout.setHorizontalGroup(
                 m_panelCanvasLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
                 .addGap(0, 500, Short.MAX_VALUE));
-        m_panelCanvasLayout.setVerticalGroup( 
+        m_panelCanvasLayout.setVerticalGroup(
                 m_panelCanvasLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addGap(0, 500, Short.MAX_VALUE));
 
         toolsPanel.setBorder(BorderFactory.createEtchedBorder());
@@ -85,21 +81,31 @@ public class MainWindow extends JFrame {
                 .addGap(0, 496, Short.MAX_VALUE)
         );
 
+        position.setText("X: Y:");
+
         postionPanel.setBorder(BorderFactory.createEtchedBorder());
 
         GroupLayout postionPanelLayout = new GroupLayout(postionPanel);
         postionPanel.setLayout(postionPanelLayout);
         postionPanelLayout.setHorizontalGroup(
                 postionPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                .addGap(0, 0, Short.MAX_VALUE)
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, postionPanelLayout.createSequentialGroup()
+                        .addContainerGap(292, Short.MAX_VALUE)
+                        .addComponent(position, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())
+        //.addGap(0, 0, Short.MAX_VALUE)
         );
         postionPanelLayout.setVerticalGroup(
                 postionPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                .addGap(0, 30, Short.MAX_VALUE)
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, postionPanelLayout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(position)
+                        .addContainerGap())
+        //.addGap(0, 30, Short.MAX_VALUE)
         );
 
         m_FileMenu.setText("File");
-        
+
         m_FileChooser.setText("Chose File");
         m_FileChooser.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
@@ -107,7 +113,7 @@ public class MainWindow extends JFrame {
             }
         });
         m_FileMenu.add(m_FileChooser);
-        
+
         jMenuBar1.add(m_FileMenu);
 
         jMenu2.setText("Edit");
@@ -140,24 +146,14 @@ public class MainWindow extends JFrame {
         setVisible(true);
     }
 
-    public void resetImage() {
-        m_panelCanvas.resetImage();
-    }
-
-    public void drawPoint(int x, int y, int r, int g, int b) {
-        m_panelCanvas.drawPoint(x, y, r, g, b);
-    }
-
-    public void showImage() {
-        m_panelCanvas.showImage();
-    }
-    
+    /**
+     * This function is a listener for the FileChooser item, use to retreve the
+     * path of a file from a repository and call a function to parse this file.
+     *
+     * @param evt
+     */
     private void m_FileChooserActionPerformed(ActionEvent evt) {
-        /*
-        This function is a listener for the FileChooser item,
-        use to retreve the path of a file from a repository and 
-        call a function to parse this file
-        */
+
         Path path;
         JFileChooser fc = new JFileChooser();
         String filePath;
@@ -168,21 +164,14 @@ public class MainWindow extends JFrame {
             //filePath = file.getAbsolutePath();
             filePath = file.getPath();
             System.out.println(filePath + "\n");
-            
-            //redraw
-            
-            Parser parser = new Parser(filePath); 
-            SVG svg = parser.parse();
 
+            //redraw
+            Parser parser = new Parser(filePath);
+            SVG svg = parser.parse();
             path = svg.getPathList().get(0);
-            
-            m_panelCanvas.m_p = path;
-            
-            m_panelCanvas.repaint();
-            /*initCompenents();
-            
-            showImage();*/
+            m_panelCanvas.setM_p(path);
+            m_panelCanvas.repaintImage();
+
         }
     }
 }
-

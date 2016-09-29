@@ -10,13 +10,13 @@ public class L3ProjetSVG {
 
         MainWindow window = new MainWindow();
 
-        // render
+      /*  // render
         try {
             Thread.sleep(500);
         } catch (Exception e) {
 
         }
-        window.showImage();
+        window.showImage();*/
     }
 
 }

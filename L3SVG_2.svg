@@ -31,8 +31,8 @@
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
-     inkscape:window-width="1280"
-     inkscape:window-height="737"
+     inkscape:window-width="500"
+     inkscape:window-height="500"
      inkscape:window-x="-8"
      inkscape:window-y="-8"
      inkscape:window-maximized="1" />
@@ -54,7 +54,7 @@
      id="layer1">
     <path
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 448.57143,143.79078 c -240,182.85714 -154.28572,297.14285 -154.28572,297.14285 l 88.57143,20"
+       d="m 448.57143,143.79078 c -240,182.85714 -154.28572,297.14285 -154.28572,297.14285"
        id="path3338"
        inkscape:connector-curvature="0" />
   </g>
