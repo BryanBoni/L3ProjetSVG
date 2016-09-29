@@ -1,11 +1,8 @@
 package view;
 
-import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.DebugGraphics;
 import javax.swing.GroupLayout;
@@ -38,7 +35,9 @@ public class MainWindow extends JFrame {
         initCompenents();
 
     }
-
+    /**
+     * 
+     */
     private void initCompenents() {
 
         toolsPanel = new JPanel();

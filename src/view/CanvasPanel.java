@@ -24,17 +24,19 @@ public class CanvasPanel extends JPanel implements MouseMotionListener{
     BufferedImage m_canvasImage;
     SimpleDrawer m_simpDraw;
     Path m_p;
+    boolean m_stayPressed;
 
     public CanvasPanel(String pathUrl) {
         super();
         Parser parser = new Parser(pathUrl);
         SVG svg = parser.parse();
-
         m_p = svg.getPathList().get(0);
-
+        
         setBackground(Color.gray);
         setSize(500, 500);
+        
         this.addMouseMotionListener(this);
+        m_stayPressed = false;
     }
 
     public CanvasPanel() {
@@ -76,21 +78,45 @@ public class CanvasPanel extends JPanel implements MouseMotionListener{
 
     public void repaintImage() {
         repaint();
+    }    
+        
+    public void translateCanvas(Graphics g, int x, int y){
+        g.translate(x, y);
     }
 
     @Override
     public void mouseMoved(MouseEvent e) {
        System.out.println("Mouse moved" + e);
        
-       
+       if(m_stayPressed == true){
+           //translateCanvas(WIDTH, WIDTH);
+       }
     }
-    
+
+    /**
+     * Unused here
+     * 
+     * @param e 
+     */
     @Override
     public void mouseDragged(MouseEvent e) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
     
+    public void mouseClicked(MouseEvent e){
+        m_stayPressed = true;
+    }
+    
+    public void mouseReleased(MouseEvent e){
+        m_stayPressed = false;
+    }
+
+    /**
+     * Use this function to modify the path list variable of an SVG file
+     * for the canvas panel.
+     * 
+     * @param m_p 
+     */
     public void setM_p(Path m_p) {
         this.m_p = m_p;
     }
