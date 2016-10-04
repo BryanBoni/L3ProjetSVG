@@ -2,10 +2,6 @@ package data;
 
 import Maths.Vector2f;
 
-/**
- *
- * @author p1402828
- */
 public class Curve extends Line implements IDrawableSVG {
 
     public Curve() {
@@ -13,20 +9,25 @@ public class Curve extends Line implements IDrawableSVG {
     }
 
     /**
-     * Add a new stop to the Curve.
-     * A curve is only 4 points, so we can't add more than 4 stops.
+     * Add a new stop to the Curve. A curve is only 4 points, so we can't add
+     * more than 4 stops.
+     *
      * @param x The abstract x position in world cooridinate for the stop.
      * @param y The abstract y position in world cooridinate for the stop.
      */
     @Override
     public void addStop(float x, float y) {
-        if(m_stops.size() < 4)
-            m_stops.add(new Vector2f(x,y));
+        if (m_stops.size() < 4) {
+            m_stops.add(new Vector2f(x, y));
+        }
     }
+
     /**
-     * Add a new stop to the Line.
-     * A curve is only 4 points, so we can't add more than 4 stops.
-     * @param position Vector representing the abstract position in world cordinate for the stop.
+     * Add a new stop to the Line. A curve is only 4 points, so we can't add
+     * more than 4 stops.
+     *
+     * @param position Vector representing the abstract position in world
+     * cordinate for the stop.
      */
     @Override
     public void addStop(Vector2f position) {
@@ -34,10 +35,10 @@ public class Curve extends Line implements IDrawableSVG {
             m_stops.add(position);
         }
     }
-    
+
     @Override
     public void draw() {
-        
+
     }
 
 }

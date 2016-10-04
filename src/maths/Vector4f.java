@@ -20,10 +20,8 @@
 * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 * SOFTWARE.
-*/
+ */
 package Maths;
-
-import java.nio.FloatBuffer;
 
 /**
  * This class represents a (x,y,z,w)-Vector. GLSL equivalent to vec4.
@@ -31,12 +29,12 @@ import java.nio.FloatBuffer;
  * @author Heiko Brumme
  */
 public class Vector4f {
-    
+
     public float x;
     public float y;
     public float z;
     public float w;
-    
+
     /**
      * Creates a default 4-tuple vector with all values set to 0.
      */
@@ -46,7 +44,7 @@ public class Vector4f {
         this.z = 0f;
         this.w = 0f;
     }
-    
+
     /**
      * Creates a 4-tuple vector with specified values.
      *
@@ -61,7 +59,7 @@ public class Vector4f {
         this.z = z;
         this.w = w;
     }
-    
+
     /**
      * Calculates the squared length of the vector.
      *
@@ -70,7 +68,7 @@ public class Vector4f {
     public float lengthSquared() {
         return x * x + y * y + z * z + w * w;
     }
-    
+
     /**
      * Calculates the length of the vector.
      *
@@ -79,7 +77,7 @@ public class Vector4f {
     public float length() {
         return (float) Math.sqrt(lengthSquared());
     }
-    
+
     /**
      * Normalizes the vector.
      *
@@ -89,7 +87,7 @@ public class Vector4f {
         float length = length();
         return divide(length);
     }
-    
+
     /**
      * Adds this vector to another vector.
      *
@@ -103,7 +101,7 @@ public class Vector4f {
         float w = this.w + other.w;
         return new Vector4f(x, y, z, w);
     }
-    
+
     /**
      * Negates this vector.
      *
@@ -112,7 +110,7 @@ public class Vector4f {
     public Vector4f negate() {
         return scale(-1f);
     }
-    
+
     /**
      * Subtracts this vector from another vector.
      *
@@ -122,7 +120,7 @@ public class Vector4f {
     public Vector4f subtract(Vector4f other) {
         return this.add(other.negate());
     }
-    
+
     /**
      * Multiplies a vector by a scalar.
      *
@@ -136,7 +134,7 @@ public class Vector4f {
         float w = this.w * scalar;
         return new Vector4f(x, y, z, w);
     }
-    
+
     /**
      * Divides a vector by a scalar.
      *
@@ -146,7 +144,7 @@ public class Vector4f {
     public Vector4f divide(float scalar) {
         return scale(1f / scalar);
     }
-    
+
     /**
      * Calculates the dot product of this vector with another vector.
      *
@@ -156,7 +154,7 @@ public class Vector4f {
     public float dot(Vector4f other) {
         return this.x * other.x + this.y * other.y + this.z * other.z + this.w * other.w;
     }
-    
+
     /**
      * Calculates a linear interpolation between this vector with another
      * vector.

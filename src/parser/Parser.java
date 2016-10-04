@@ -33,31 +33,29 @@ public class Parser {
     public SVG parse() {
         if (doc != null) {
             SVG svg = new SVG();
-                       
+
             // Parsing path
-            
             NodeList nodeList = doc.getElementsByTagName("path");
-            
-            for(int i=0;i<nodeList.getLength();i++) {
-                
+
+            for (int i = 0; i < nodeList.getLength(); i++) {
+
                 Path path = new Path();
-                
+
                 Node node = nodeList.item(i);
-                
+
                 // Parsing style
-                
-                if(node.getAttributes().getNamedItem("style") != null) {
+                if (node.getAttributes().getNamedItem("style") != null) {
                     String style = node.getAttributes().getNamedItem("style").getNodeValue();
-                    for(String s : style.split(";")) {
-                        if(s.contains("stroke:")) {
-                            path.setStroke(Color.decode(s.replace("stroke:","")));
+                    for (String s : style.split(";")) {
+                        if (s.contains("stroke:")) {
+                            path.setStroke(Color.decode(s.replace("stroke:", "")));
                         }
                     }
                 }
-                
+
                 // String to be scanned to find the pattern.
                 String d = node.getAttributes().getNamedItem("d").getNodeValue();
-                
+
                 String pattern = "[a-z][^a-z]*";
 
                 // Create a Pattern object.
@@ -67,41 +65,38 @@ public class Parser {
                 Matcher m = r.matcher(d);
                 float previousX = 0f;
                 float previousY = 0f;
-                
+
                 while (m.find()) {
                     String match = m.group(0);
-                    
-                    if(match.startsWith("m") || match.startsWith("M")) {
+
+                    if (match.startsWith("m") || match.startsWith("M")) {
                         String coord = match.replace("m ", "").replace("M ", "");
                         previousX = Float.parseFloat(coord.split(",")[0]);
                         previousY = Float.parseFloat(coord.split(",")[1]);
-                    }
-                    
-                    else if(match.startsWith("c") || match.startsWith("C")) {
+                    } else if (match.startsWith("c") || match.startsWith("C")) {
                         String coord = match.replace("c ", "").replace("C ", "");
                         Curve curve = new Curve();
-                        for(String s : coord.split(" ")) {
-                           if(curve.getStops().isEmpty()) {
-                               curve.addStop(previousX, previousY);
-                           }                           
-                           previousX = Float.parseFloat(s.split(",")[0]);
-                           previousY = Float.parseFloat(s.split(",")[1]);
-                           
-                           curve.addStop(previousX, previousY);
+                        for (String s : coord.split(" ")) {
+                            if (curve.getStops().isEmpty()) {
+                                curve.addStop(previousX, previousY);
+                            }
+                            previousX = Float.parseFloat(s.split(",")[0]);
+                            previousY = Float.parseFloat(s.split(",")[1]);
+
+                            curve.addStop(previousX, previousY);
                         }
                         path.addCurve(curve);
                     }
                 }
-                
+
                 svg.getPathList().add(path);
-            }         
-            
+            }
+
             return svg;
-        }
-        else {
+        } else {
             return null;
         }
-        
+
     }
 
 }

@@ -20,10 +20,8 @@
 * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 * SOFTWARE.
-*/
+ */
 package Maths;
-
-import java.nio.FloatBuffer;
 
 /**
  * This class represents a (x,y,z)-Vector. GLSL equivalent to vec3.
@@ -31,11 +29,11 @@ import java.nio.FloatBuffer;
  * @author Heiko Brumme
  */
 public class Vector3f {
-    
+
     public float x;
     public float y;
     public float z;
-    
+
     /**
      * Creates a default 3-tuple vector with all values set to 0.
      */
@@ -44,7 +42,7 @@ public class Vector3f {
         this.y = 0f;
         this.z = 0f;
     }
-    
+
     /**
      * Creates a 3-tuple vector with specified values.
      *
@@ -57,7 +55,7 @@ public class Vector3f {
         this.y = y;
         this.z = z;
     }
-    
+
     /**
      * Calculates the squared length of the vector.
      *
@@ -66,7 +64,7 @@ public class Vector3f {
     public float lengthSquared() {
         return x * x + y * y + z * z;
     }
-    
+
     /**
      * Calculates the length of the vector.
      *
@@ -75,7 +73,7 @@ public class Vector3f {
     public float length() {
         return (float) Math.sqrt(lengthSquared());
     }
-    
+
     /**
      * Normalizes the vector.
      *
@@ -85,7 +83,7 @@ public class Vector3f {
         float length = length();
         return divide(length);
     }
-    
+
     /**
      * Adds this vector to another vector.
      *
@@ -98,7 +96,7 @@ public class Vector3f {
         float z = this.z + other.z;
         return new Vector3f(x, y, z);
     }
-    
+
     /**
      * Negates this vector.
      *
@@ -107,7 +105,7 @@ public class Vector3f {
     public Vector3f negate() {
         return scale(-1f);
     }
-    
+
     /**
      * Subtracts this vector from another vector.
      *
@@ -117,7 +115,7 @@ public class Vector3f {
     public Vector3f subtract(Vector3f other) {
         return this.add(other.negate());
     }
-    
+
     /**
      * Multiplies a vector by a scalar.
      *
@@ -130,7 +128,7 @@ public class Vector3f {
         float z = this.z * scalar;
         return new Vector3f(x, y, z);
     }
-    
+
     /**
      * Divides a vector by a scalar.
      *
@@ -140,7 +138,7 @@ public class Vector3f {
     public Vector3f divide(float scalar) {
         return scale(1f / scalar);
     }
-    
+
     /**
      * Calculates the dot product of this vector with another vector.
      *
@@ -150,7 +148,7 @@ public class Vector3f {
     public float dot(Vector3f other) {
         return this.x * other.x + this.y * other.y + this.z * other.z;
     }
-    
+
     /**
      * Calculates the dot product of this vector with another vector.
      *
@@ -163,7 +161,7 @@ public class Vector3f {
         float z = this.x * other.y - this.y * other.x;
         return new Vector3f(x, y, z);
     }
-    
+
     /**
      * Calculates a linear interpolation between this vector with another
      * vector.

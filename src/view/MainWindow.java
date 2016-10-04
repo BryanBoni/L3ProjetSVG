@@ -19,9 +19,8 @@ import parser.Path;
 import parser.SVG;
 
 public class MainWindow extends JFrame {
-    
-    
-    private CanvasPanel m_panelCanvas;
+
+    private final CanvasPanel m_panelCanvas;
     private javax.swing.JMenuItem m_FileChooser;
     private javax.swing.JMenu m_FileMenu;
     private javax.swing.JMenu m_jMenu2;
@@ -33,13 +32,13 @@ public class MainWindow extends JFrame {
     public MainWindow() {
         super();
         m_panelCanvas = new CanvasPanel("L3SVG.svg");
-        initCompenents();
-        
+        initComponents();
     }
+
     /**
-     * 
+     *
      */
-    private void initCompenents() {
+    private void initComponents() {
 
         m_toolsPanel = new JPanel();
         m_postionPanel = new JPanel();
@@ -105,11 +104,7 @@ public class MainWindow extends JFrame {
         m_FileMenu.setText("File");
 
         m_FileChooser.setText("Chose File");
-        m_FileChooser.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                m_FileChooserActionPerformed(evt);
-            }
-        });
+        m_FileChooser.addActionListener(this::m_FileChooserActionPerformed);
         m_FileMenu.add(m_FileChooser);
 
         m_jMenuBar1.add(m_FileMenu);
@@ -172,16 +167,15 @@ public class MainWindow extends JFrame {
 
         }
     }
-    
+
     /**
-     * Display constantly the position of the mouse
-     * on the canvasPanel.
-     * 
+     * Display constantly the position of the mouse on the canvasPanel.
+     *
      * @param mouseX
-     * @param mouseY 
+     * @param mouseY
      */
-    public static void changeLabelPosition(int mouseX, int mouseY){
-        m_position.setText("X:"+ mouseX +"Y:"+ mouseY);
+    public static void changeLabelPosition(int mouseX, int mouseY) {
+        m_position.setText("X:" + mouseX + "Y:" + mouseY);
     }
 
 }
