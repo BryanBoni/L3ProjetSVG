@@ -25,7 +25,9 @@ public class CanvasPanel extends JPanel implements MouseMotionListener, MouseLis
     private BufferedImage m_canvasImage;
     private SimpleDrawer m_simpDraw;
     private Path m_p;
-    private boolean m_stayPressed;
+    private boolean m_stayPressed, m_isDragged;
+    
+    
     public static int mouseX, mouseY;
     private static int mouseInitX, mouseInitY, mouseDeltaX, mouseDeltaY, positionCanvasX, positionCanvasY;
     
@@ -47,7 +49,7 @@ public class CanvasPanel extends JPanel implements MouseMotionListener, MouseLis
         addMouseMotionListener(this);
         addMouseListener(this);
         m_stayPressed = false;
-        
+        m_isDragged = false;
         currentCanvas= this;
         
         mouseDeltaX = 0;
@@ -83,7 +85,7 @@ public class CanvasPanel extends JPanel implements MouseMotionListener, MouseLis
         super.paintComponent(g);
         resetImage(g);
         g.translate(positionCanvasX + mouseDeltaX, positionCanvasY + mouseDeltaY);
-        g.setColor(Color.red);
+        g.setColor(Color.BLUE);
         for (Line l : m_p.getElements()) {
             //System.out.println("paintComponent un elem");
 
@@ -153,6 +155,8 @@ public class CanvasPanel extends JPanel implements MouseMotionListener, MouseLis
     @Override
     public void mouseDragged(MouseEvent e) {
         //System.out.println("Mouse moved" + e);
+        m_isDragged = true;
+        
         mouseX = e.getXOnScreen();
         mouseY = e.getYOnScreen();
         
@@ -180,16 +184,18 @@ public class CanvasPanel extends JPanel implements MouseMotionListener, MouseLis
     /**
      * Call when the right click of the mouse is pressed,
      * change the state of stayPressed to false and
-     * change the position of the canvas.
+     * change the position of the canvas right after a drag operation.
      * 
      * @param e 
      */
     @Override
     public void mouseReleased(MouseEvent e) {
         m_stayPressed = false;
-        
-        positionCanvasX += mouseDeltaX;
-        positionCanvasY += mouseDeltaY;
+        if(m_isDragged == true){
+            positionCanvasX += mouseDeltaX;
+            positionCanvasY += mouseDeltaY;
+            m_isDragged = false;
+        }
         
     }
 
