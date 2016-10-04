@@ -33,8 +33,7 @@ public class Parser {
     public SVG parse() {
         if (doc != null) {
             SVG svg = new SVG();
-            
-            
+                       
             // Parsing path
             
             NodeList nodeList = doc.getElementsByTagName("path");
@@ -47,13 +46,14 @@ public class Parser {
                 
                 // Parsing style
                 
-                String style = node.getAttributes().getNamedItem("style").getNodeValue();
-                for(String s : style.split(";")) {
-                    if(s.contains("stroke:")) {
-                        path.setStroke(Color.decode(s.replace("stroke:","")));
+                if(node.getAttributes().getNamedItem("style") != null) {
+                    String style = node.getAttributes().getNamedItem("style").getNodeValue();
+                    for(String s : style.split(";")) {
+                        if(s.contains("stroke:")) {
+                            path.setStroke(Color.decode(s.replace("stroke:","")));
+                        }
                     }
                 }
-                
                 
                 // String to be scanned to find the pattern.
                 String d = node.getAttributes().getNamedItem("d").getNodeValue();
