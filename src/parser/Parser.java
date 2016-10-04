@@ -1,6 +1,7 @@
 package parser;
 
 import data.Curve;
+import java.awt.Color;
 import java.io.File;
 import java.io.IOException;
 import java.util.regex.Matcher;
@@ -33,15 +34,30 @@ public class Parser {
         if (doc != null) {
             SVG svg = new SVG();
             
+            
+            // Parsing path
+            
             NodeList nodeList = doc.getElementsByTagName("path");
             
             for(int i=0;i<nodeList.getLength();i++) {
                 
                 Path path = new Path();
                 
-                Node node = nodeList.item(i);                
+                Node node = nodeList.item(i);
+                
+                // Parsing style
+                
+                String style = node.getAttributes().getNamedItem("style").getNodeValue();
+                for(String s : style.split(";")) {
+                    if(s.contains("stroke:")) {
+                        path.setStroke(Color.decode(s.replace("stroke:","")));
+                    }
+                }
+                
+                
                 // String to be scanned to find the pattern.
                 String d = node.getAttributes().getNamedItem("d").getNodeValue();
+                
                 String pattern = "[a-z][^a-z]*";
 
                 // Create a Pattern object.
@@ -78,7 +94,7 @@ public class Parser {
                 }
                 
                 svg.getPathList().add(path);
-            }
+            }         
             
             return svg;
         }

@@ -3,6 +3,7 @@ package parser;
 import data.Curve;
 import data.IDrawableSVG;
 import data.Line;
+import java.awt.Color;
 import java.util.ArrayList;
 
 
@@ -15,6 +16,7 @@ import java.util.ArrayList;
 public class Path implements IDrawableSVG {
     
     private ArrayList<Line> m_elements;
+    private Color m_stroke;
     
     public Path() {
         m_elements = new ArrayList<>();
@@ -44,5 +46,19 @@ public class Path implements IDrawableSVG {
         for(Line l:m_elements)
             l.draw();
     } 
+
+    /**
+     * @return the m_stroke
+     */
+    public Color getStroke() {
+        return m_stroke;
+    }
+
+    /**
+     * @param m_stroke the m_stroke to set
+     */
+    public void setStroke(Color m_stroke) {
+        this.m_stroke = m_stroke;
+    }
     
 }
