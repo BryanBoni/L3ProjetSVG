@@ -12,6 +12,7 @@ import draw.SimpleDrawer;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
 import javax.swing.JPanel;
@@ -19,24 +20,35 @@ import parser.Parser;
 import parser.Path;
 import parser.SVG;
 
-public class CanvasPanel extends JPanel implements MouseMotionListener{
-
-    BufferedImage m_canvasImage;
-    SimpleDrawer m_simpDraw;
-    Path m_p;
-    boolean m_stayPressed;
+public class CanvasPanel extends JPanel implements MouseMotionListener, MouseListener {
+    
+    public static CanvasPanel currentCanvas;
+    private BufferedImage m_canvasImage;
+    private SimpleDrawer m_simpDraw;
+    private Path m_p;
+    private boolean m_stayPressed;
+    public static int mouseX, mouseY;
+    private static int mouseInitX, mouseInitY, mouseDeltaX, mouseDeltaY, positionCanvasX, positionCanvasY;
 
     public CanvasPanel(String pathUrl) {
         super();
         Parser parser = new Parser(pathUrl);
         SVG svg = parser.parse();
         m_p = svg.getPathList().get(0);
-        
+
         setBackground(Color.gray);
         setSize(500, 500);
-        
-        this.addMouseMotionListener(this);
+
+        addMouseMotionListener(this);
+        addMouseListener(this);
         m_stayPressed = false;
+        
+        currentCanvas= this;
+        
+        mouseDeltaX = 0;
+        mouseDeltaY = 0;
+        positionCanvasX = 0; 
+        positionCanvasY = 0;
     }
 
     public CanvasPanel() {
@@ -51,20 +63,20 @@ public class CanvasPanel extends JPanel implements MouseMotionListener{
         //System.out.println("paintComponent");
         super.paintComponent(g);
         resetImage(g);
+        g.translate(positionCanvasX + mouseDeltaX, positionCanvasY + mouseDeltaY);
         g.setColor(Color.red);
         for (Line l : m_p.getElements()) {
             //System.out.println("paintComponent un elem");
-            
+
             for (float t = 0.01f; t < 1; t += 0.01f) {
-                Vector2f a = l.getPoint(t-0.01f);
+                Vector2f a = l.getPoint(t - 0.01f);
                 Vector2f b = l.getPoint(t);
 
-                g.drawLine((int)a.x, (int)a.y, (int)b.x, (int)b.y);
+                g.drawLine((int) a.x, (int) a.y, (int) b.x, (int) b.y);
 
             }
         }
     }
-    
 
     public void resetImage(Graphics g) {
         g.setColor(Color.white);
@@ -76,48 +88,93 @@ public class CanvasPanel extends JPanel implements MouseMotionListener{
         m_simpDraw.drawPixel(new Vector2f(x, y), new Vector3f(r, g, b));
     }
 
+    /**
+     * Used to outsource the repaint method
+     */
     public void repaintImage() {
         repaint();
-    }    
-        
-    public void translateCanvas(Graphics g, int x, int y){
-        g.translate(x, y);
     }
 
+    
     @Override
     public void mouseMoved(MouseEvent e) {
-       System.out.println("Mouse moved" + e);
-       
-       if(m_stayPressed == true){
-           //translateCanvas(WIDTH, WIDTH);
-       }
+        //System.out.println("Mouse moved" + e);
+        
+        if (m_stayPressed == false) {
+            mouseInitX = e.getX();
+            mouseInitY = e.getY();
+        }
+
+        MainWindow.changeLabelPosition(e.getX(), e.getY());       
     }
 
     /**
      * Unused here
-     * 
-     * @param e 
+     *
+     * @param e
      */
     @Override
     public void mouseDragged(MouseEvent e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //System.out.println("Mouse moved" + e);
+        mouseX = e.getX();
+        mouseY = e.getY();
+        
+        mouseDeltaX = mouseX - mouseInitX;
+        mouseDeltaY = mouseY - mouseInitY;
+        
+          
+        //System.out.println("Mouse delta X: " + mouseDeltaX + " Y: " + mouseDeltaY);
+        
+        MainWindow.changeLabelPosition(e.getX(), e.getY());  
+        repaint();
     }
-    
-    public void mouseClicked(MouseEvent e){
+
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
         m_stayPressed = true;
     }
-    
-    public void mouseReleased(MouseEvent e){
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
         m_stayPressed = false;
+        
+        positionCanvasX += mouseDeltaX;
+        positionCanvasY += mouseDeltaY;
+        
     }
 
     /**
-     * Use this function to modify the path list variable of an SVG file
-     * for the canvas panel.
-     * 
-     * @param m_p 
+     * Use this function to modify the path list variable of an SVG file for the
+     * canvas panel.
+     *
+     * @param m_p
      */
     public void setM_p(Path m_p) {
         this.m_p = m_p;
     }
+
+    /**
+     * unused here
+     * 
+     * @param e 
+     */
+    @Override
+    public void mousePressed(MouseEvent e) {}
+
+    /**
+     * unused here
+     * 
+     * @param e 
+     */
+    @Override
+    public void mouseEntered(MouseEvent e) {}
+
+    /**
+     * unused here
+     * 
+     * @param e 
+     */
+    @Override
+    public void mouseExited(MouseEvent e) {}
 }

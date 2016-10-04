@@ -19,34 +19,35 @@ import parser.Path;
 import parser.SVG;
 
 public class MainWindow extends JFrame {
-
+    
+    
     private CanvasPanel m_panelCanvas;
     private javax.swing.JMenuItem m_FileChooser;
     private javax.swing.JMenu m_FileMenu;
-    private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JPanel postionPanel;
-    private javax.swing.JPanel toolsPanel;
-    private javax.swing.JLabel position;
+    private javax.swing.JMenu m_jMenu2;
+    private javax.swing.JMenuBar m_jMenuBar1;
+    private javax.swing.JPanel m_postionPanel;
+    private javax.swing.JPanel m_toolsPanel;
+    private static javax.swing.JLabel m_position;
 
     public MainWindow() {
         super();
         m_panelCanvas = new CanvasPanel("L3SVG.svg");
         initCompenents();
-
+        
     }
     /**
      * 
      */
     private void initCompenents() {
 
-        toolsPanel = new JPanel();
-        postionPanel = new JPanel();
-        jMenuBar1 = new JMenuBar();
+        m_toolsPanel = new JPanel();
+        m_postionPanel = new JPanel();
+        m_jMenuBar1 = new JMenuBar();
         m_FileMenu = new JMenu();
-        jMenu2 = new JMenu();
+        m_jMenu2 = new JMenu();
         m_FileChooser = new JMenuItem();
-        position = new javax.swing.JLabel();
+        m_position = new javax.swing.JLabel();
 
         setCursor(null);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -67,10 +68,10 @@ public class MainWindow extends JFrame {
         m_panelCanvasLayout.setVerticalGroup(
                 m_panelCanvasLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addGap(0, 500, Short.MAX_VALUE));
 
-        toolsPanel.setBorder(BorderFactory.createEtchedBorder());
+        m_toolsPanel.setBorder(BorderFactory.createEtchedBorder());
 
-        GroupLayout toolsPanelLayout = new GroupLayout(toolsPanel);
-        toolsPanel.setLayout(toolsPanelLayout);
+        GroupLayout toolsPanelLayout = new GroupLayout(m_toolsPanel);
+        m_toolsPanel.setLayout(toolsPanelLayout);
         toolsPanelLayout.setHorizontalGroup(
                 toolsPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
                 .addGap(0, 137, Short.MAX_VALUE)
@@ -80,25 +81,23 @@ public class MainWindow extends JFrame {
                 .addGap(0, 496, Short.MAX_VALUE)
         );
 
-        position.setText("X: Y:");
+        m_position.setText("X: Y:");
 
-        postionPanel.setBorder(BorderFactory.createEtchedBorder());
+        m_postionPanel.setBorder(BorderFactory.createEtchedBorder());
 
-        GroupLayout postionPanelLayout = new GroupLayout(postionPanel);
-        postionPanel.setLayout(postionPanelLayout);
-        postionPanelLayout.setHorizontalGroup(
-                postionPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+        GroupLayout postionPanelLayout = new GroupLayout(m_postionPanel);
+        m_postionPanel.setLayout(postionPanelLayout);
+        postionPanelLayout.setHorizontalGroup(postionPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, postionPanelLayout.createSequentialGroup()
                         .addContainerGap(292, Short.MAX_VALUE)
-                        .addComponent(position, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(m_position, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap())
         //.addGap(0, 0, Short.MAX_VALUE)
         );
-        postionPanelLayout.setVerticalGroup(
-                postionPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+        postionPanelLayout.setVerticalGroup(postionPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, postionPanelLayout.createSequentialGroup()
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(position)
+                        .addComponent(m_position)
                         .addContainerGap())
         //.addGap(0, 30, Short.MAX_VALUE)
         );
@@ -113,29 +112,29 @@ public class MainWindow extends JFrame {
         });
         m_FileMenu.add(m_FileChooser);
 
-        jMenuBar1.add(m_FileMenu);
+        m_jMenuBar1.add(m_FileMenu);
 
-        jMenu2.setText("Edit");
-        jMenuBar1.add(jMenu2);
+        m_jMenu2.setText("Edit");
+        m_jMenuBar1.add(m_jMenu2);
 
-        setJMenuBar(jMenuBar1);
+        setJMenuBar(m_jMenuBar1);
 
         GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
-                        .addComponent(toolsPanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(m_toolsPanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(m_panelCanvas, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                .addComponent(postionPanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(m_postionPanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                 .addGroup(GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                                 .addComponent(m_panelCanvas, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                .addComponent(toolsPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                                .addComponent(m_toolsPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(postionPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                        .addComponent(m_postionPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
         );
 
         pack();
@@ -173,4 +172,16 @@ public class MainWindow extends JFrame {
 
         }
     }
+    
+    /**
+     * Display constantly the position of the mouse
+     * on the canvasPanel.
+     * 
+     * @param mouseX
+     * @param mouseY 
+     */
+    public static void changeLabelPosition(int mouseX, int mouseY){
+        m_position.setText("X:"+ mouseX +"Y:"+ mouseY);
+    }
+
 }
