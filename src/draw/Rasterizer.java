@@ -2,6 +2,9 @@ package draw;
 
 import Maths.Vector2f;
 import data.Line;
+import java.awt.Color;
+import java.awt.Graphics;
+import view.CanvasPanel;
 
 /**
  *
@@ -12,6 +15,8 @@ public class Rasterizer {
 	// static
 	static private float[][] m_pixels;
 	static private int m_width, m_height;
+	static private CanvasPanel m_canvas;
+	static private int success, terminate;
 
 	/**
 	 * Reset the drawing context using the current area size. Must be called
@@ -32,18 +37,33 @@ public class Rasterizer {
 	 * for rendering.
 	 *
 	 * @param line
+	 * @param g
 	 */
-	static public void drawLine(Line line) {
+	static public void drawLine(Line line, Graphics g) {
+		success = 0;
+		terminate = 0;
 		// clean pixel array
 		for (int x = 0; x < m_width; x++) {
 			for (int y = 0; y < m_height; y++) {
-				m_pixels[x][y] = -1;
+				m_pixels[x][y] = 0;
 			}
 		}
+		System.out.println("before rast ");
 		// start recursive approximation
 		line.rasterizeThread();
-		
+		System.out.println("after rast");
+
 		// send pixels for render
+		for (int x = 0; x < m_width; x++) {
+			for (int y = 0; y < m_height; y++) {
+				if (m_pixels[x][y] > 0) {
+					g.setColor(new Color(1.f, 0.f, 0.f, m_pixels[x][y]));
+					g.drawRect(x, y, 0, 0);
+				}
+			}
+		}
+		System.out.println("Success: " + success);
+		System.out.println("Terminate: " + terminate);
 	}
 
 	/**
@@ -55,19 +75,43 @@ public class Rasterizer {
 	 * @return false if the pixel was already drawed, true if not
 	 */
 	static public boolean rasterize(Vector2f position) {
-		//int x1 = (int)Math.floor(position.x);
-		//int y1 = (int)Math.floor(position.y);
-		//int x2 = (int)Math.ceil(position.x);
-		//int y2 = (int)Math.ceil(position.y);
-
-		int x = (int) Math.round(position.x);
-		int y = (int) Math.round(position.y);
-
-		if (m_pixels[x][y] < 0) {
-			m_pixels[x][y] = 1;
-			return true; // not drawed yet, continue recursion
+		int lineWidth = 3;
+		int X = (int) Math.floor(position.x);
+		int Y = (int) Math.floor(position.y);
+		boolean overWrite = false;
+		for (int x = X - lineWidth; x < X + lineWidth; x++) {
+			for (int y = Y - lineWidth; y < Y + lineWidth; y++) {
+				float weight = clamp(0, 1, position.subtract(new Vector2f(x, y)).length() * lineWidth);
+				if (m_pixels[x][y] < weight) {
+					m_pixels[x][y] = weight;
+					overWrite = true; // not drawed yet, continue recursion
+				}
+			}
 		}
-		return false; // already drawed, stop recursion
+		if (overWrite) {
+			success++;
+		} else {
+			terminate++;
+		}
+		return overWrite;
+	}
+
+	/**
+	 * Returns the value clamped between min and max.
+	 *
+	 * @param min The minimum value that will return the function.
+	 * @param max The maximum value that will return the function.
+	 * @param value The value to be clamped.
+	 * @return
+	 */
+	public static float clamp(float min, float max, float value) {
+		if (value > max) {
+			return max;
+		}
+		if (value < min) {
+			return min;
+		}
+		return value;
 	}
 
 }
