@@ -9,16 +9,6 @@ public class L3ProjetSVG {
         System.out.println("L3ProjetSVG");
 
         MainWindow window = new MainWindow();
-
-        // render
-        try {
-            Thread.sleep(500);
-        } catch (Exception e) {
-
-        }
-        window.showImage();
-
-        
     }
 
 }

@@ -1,7 +1,6 @@
 /*
 This class is use to draw simple compenents in the canvas,
 like a line, a circle, a point/pixel , and a square.
-
 */
 package draw;
 
@@ -38,7 +37,8 @@ public class SimpleDrawer {
         int r= (int) color.x;
         int g= (int) color.y;
         int b= (int) color.z;
-        Color cPixel = new Color(r,g,b);
+        int a= 0;
+        Color cPixel = new Color(r, g, b, a);
         
         //Graphic object
         Graphics gPixel = m_canvasImage.getGraphics();
