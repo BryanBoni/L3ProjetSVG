@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package view;
 
 import Maths.Vector2f;
@@ -20,6 +15,10 @@ import parser.Parser;
 import parser.Path;
 import parser.SVG;
 
+/**
+ * This class is used to create a canvas.
+ * 
+ */
 public class CanvasPanel extends JPanel implements MouseMotionListener, MouseListener {
     
     public static CanvasPanel currentCanvas;
@@ -29,7 +28,13 @@ public class CanvasPanel extends JPanel implements MouseMotionListener, MouseLis
     private boolean m_stayPressed;
     public static int mouseX, mouseY;
     private static int mouseInitX, mouseInitY, mouseDeltaX, mouseDeltaY, positionCanvasX, positionCanvasY;
-
+    
+    /**
+     * The constructor of the CanvasPanel, used when a default SVG file
+     * is define at the begining.
+     * 
+     * @param pathUrl 
+     */
     public CanvasPanel(String pathUrl) {
         super();
         Parser parser = new Parser(pathUrl);
@@ -51,11 +56,25 @@ public class CanvasPanel extends JPanel implements MouseMotionListener, MouseLis
         positionCanvasY = 0;
     }
 
+    /**
+     * The constructor of the CanvasPanel.
+     */
     public CanvasPanel() {
         super();
 
         setBackground(Color.gray);
         setSize(500, 500);
+        
+        addMouseMotionListener(this);
+        addMouseListener(this);
+        m_stayPressed = false;
+        
+        currentCanvas= this;
+        
+        mouseDeltaX = 0;
+        mouseDeltaY = 0;
+        positionCanvasX = 0; 
+        positionCanvasY = 0;
     }
 
     @Override
@@ -78,46 +97,64 @@ public class CanvasPanel extends JPanel implements MouseMotionListener, MouseLis
         }
     }
 
+    /**
+     * 
+     * @param g 
+     */
     public void resetImage(Graphics g) {
         g.setColor(Color.white);
         g.fillRect(0, 0, 500, 500);
     }
 
+    /**
+     * 
+     * 
+     * @param x
+     * @param y
+     * @param r
+     * @param g
+     * @param b 
+     */
     public void drawPoint(int x, int y, int r, int g, int b) {
         m_simpDraw = new SimpleDrawer(m_canvasImage);
         m_simpDraw.drawPixel(new Vector2f(x, y), new Vector3f(r, g, b));
     }
 
     /**
-     * Used to outsource the repaint method
+     * Used to outsource the repaint method.
      */
     public void repaintImage() {
         repaint();
     }
 
-    
+    /**
+     * 
+     * @param e 
+     */
     @Override
     public void mouseMoved(MouseEvent e) {
         //System.out.println("Mouse moved" + e);
         
         if (m_stayPressed == false) {
-            mouseInitX = e.getX();
-            mouseInitY = e.getY();
+            mouseInitX = e.getXOnScreen();
+            mouseInitY = e.getYOnScreen();
         }
 
         MainWindow.changeLabelPosition(e.getX(), e.getY());       
     }
 
     /**
-     * Unused here
+     * 
+     * Call when the right click of the mouse is pressed and exit when it's released,
+     * used to change the position of the picture on the canvas.
      *
      * @param e
      */
     @Override
     public void mouseDragged(MouseEvent e) {
         //System.out.println("Mouse moved" + e);
-        mouseX = e.getX();
-        mouseY = e.getY();
+        mouseX = e.getXOnScreen();
+        mouseY = e.getYOnScreen();
         
         mouseDeltaX = mouseX - mouseInitX;
         mouseDeltaY = mouseY - mouseInitY;
@@ -129,12 +166,24 @@ public class CanvasPanel extends JPanel implements MouseMotionListener, MouseLis
         repaint();
     }
 
-
+    /**
+     * Call when the right click of the mouse is pressed,
+     * Change the state of stayPressed to true.
+     * 
+     * @param e 
+     */
     @Override
     public void mouseClicked(MouseEvent e) {
         m_stayPressed = true;
     }
 
+    /**
+     * Call when the right click of the mouse is pressed,
+     * change the state of stayPressed to false and
+     * change the position of the canvas.
+     * 
+     * @param e 
+     */
     @Override
     public void mouseReleased(MouseEvent e) {
         m_stayPressed = false;
@@ -155,7 +204,7 @@ public class CanvasPanel extends JPanel implements MouseMotionListener, MouseLis
     }
 
     /**
-     * unused here
+     * unused here.
      * 
      * @param e 
      */
@@ -163,7 +212,7 @@ public class CanvasPanel extends JPanel implements MouseMotionListener, MouseLis
     public void mousePressed(MouseEvent e) {}
 
     /**
-     * unused here
+     * unused here.
      * 
      * @param e 
      */
@@ -171,7 +220,7 @@ public class CanvasPanel extends JPanel implements MouseMotionListener, MouseLis
     public void mouseEntered(MouseEvent e) {}
 
     /**
-     * unused here
+     * unused here.
      * 
      * @param e 
      */
