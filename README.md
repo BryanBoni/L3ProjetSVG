@@ -12,7 +12,7 @@ Here is our project of creating a Java application that can read and edit vector
 
 ###If possible
 * Create a fancy and ergonomic interface and add it function (file management, animation, zoom and more...),
-* Be able to import other format,
+* Be able to save in other format or reading other format (ex: implement splin),
 * Upgrade the SVG language support.
 
 ##To do
