@@ -1,13 +1,14 @@
 package view;
 
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 import javax.swing.BorderFactory;
 import javax.swing.DebugGraphics;
 import javax.swing.GroupLayout;
+import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -21,22 +22,24 @@ import parser.SVG;
 public class MainWindow extends JFrame {
 
     private final CanvasPanel m_panelCanvas;
-    private javax.swing.JMenuItem m_FileChooser;
-    private javax.swing.JMenu m_FileMenu;
-    private javax.swing.JMenu m_jMenu2;
-    private javax.swing.JMenuBar m_jMenuBar1;
-    private javax.swing.JPanel m_postionPanel;
-    private javax.swing.JPanel m_toolsPanel;
-    private static javax.swing.JLabel m_position;
+    private JMenuItem m_FileChooser;
+    private JMenu m_FileMenu;
+    private JMenu m_jMenu2;
+    private JMenuBar m_jMenuBar1;
+    private JPanel m_postionPanel;
+    private JPanel m_toolsPanel;
+    private JButton m_resetButton;
+    private static JLabel position;
 
-    public MainWindow() {
+    public MainWindow(String filePath) {
         super();
-        m_panelCanvas = new CanvasPanel("L3SVG.svg");
+        m_panelCanvas = new CanvasPanel(filePath);
         initComponents();
+        setTitle(filePath);
     }
 
     /**
-     *
+     * Intialise all the components of the main window.
      */
     private void initComponents() {
 
@@ -46,11 +49,12 @@ public class MainWindow extends JFrame {
         m_FileMenu = new JMenu();
         m_jMenu2 = new JMenu();
         m_FileChooser = new JMenuItem();
-        m_position = new javax.swing.JLabel();
-
+        position = new JLabel();
+        m_resetButton = new JButton();
+        
         setCursor(null);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        setTitle("I wanna move it move it");
+        //setTitle("I wanna move it move it");
 
         m_panelCanvas.setDebugGraphicsOptions(DebugGraphics.NONE_OPTION);
         m_panelCanvas.setDoubleBuffered(false);
@@ -67,38 +71,40 @@ public class MainWindow extends JFrame {
         m_panelCanvasLayout.setVerticalGroup(
                 m_panelCanvasLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addGap(0, 500, Short.MAX_VALUE));
 
+        m_resetButton.setText("reset position");
+        
         m_toolsPanel.setBorder(BorderFactory.createEtchedBorder());
 
         GroupLayout toolsPanelLayout = new GroupLayout(m_toolsPanel);
         m_toolsPanel.setLayout(toolsPanelLayout);
         toolsPanelLayout.setHorizontalGroup(
                 toolsPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                .addGap(0, 137, Short.MAX_VALUE)
+                    .addComponent(m_resetButton)
+                    .addGap(0, 137, Short.MAX_VALUE)
         );
         toolsPanelLayout.setVerticalGroup(
-                toolsPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                .addGap(0, 496, Short.MAX_VALUE)
+                toolsPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)   
+                    .addComponent(m_resetButton)
+                    .addGap(0, 496, Short.MAX_VALUE)
         );
 
-        m_position.setText("X: Y:");
+        position.setText("X: Y:");
 
         m_postionPanel.setBorder(BorderFactory.createEtchedBorder());
 
         GroupLayout postionPanelLayout = new GroupLayout(m_postionPanel);
         m_postionPanel.setLayout(postionPanelLayout);
         postionPanelLayout.setHorizontalGroup(postionPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, postionPanelLayout.createSequentialGroup()
+                .addGroup(GroupLayout.Alignment.TRAILING, postionPanelLayout.createSequentialGroup()
                         .addContainerGap(292, Short.MAX_VALUE)
-                        .addComponent(m_position, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(position, GroupLayout.PREFERRED_SIZE, 98, GroupLayout.PREFERRED_SIZE)
                         .addContainerGap())
-        //.addGap(0, 0, Short.MAX_VALUE)
         );
         postionPanelLayout.setVerticalGroup(postionPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, postionPanelLayout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(m_position)
+                .addGroup(GroupLayout.Alignment.TRAILING, postionPanelLayout.createSequentialGroup()
+                        .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(position)
                         .addContainerGap())
-        //.addGap(0, 30, Short.MAX_VALUE)
         );
 
         m_FileMenu.setText("File");
@@ -136,7 +142,6 @@ public class MainWindow extends JFrame {
 
         setResizable(false);
         setLocationRelativeTo(null);
-        setVisible(true);
     }
 
     /**
@@ -154,19 +159,21 @@ public class MainWindow extends JFrame {
 
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             File file = fc.getSelectedFile();
-            //filePath = file.getAbsolutePath();
             filePath = file.getPath();
             System.out.println(filePath + "\n");
-
+            
             //redraw
             Parser parser = new Parser(filePath);
             SVG svg = parser.parse();
             path = svg.getPathList().get(0);
             m_panelCanvas.setM_p(path);
             m_panelCanvas.repaintImage();
+            setTitle(file.getName());
 
         }
     }
+    
+    
 
     /**
      * Display constantly the position of the mouse on the canvasPanel.
@@ -175,7 +182,7 @@ public class MainWindow extends JFrame {
      * @param mouseY
      */
     public static void changeLabelPosition(int mouseX, int mouseY) {
-        m_position.setText("X:" + mouseX + "Y:" + mouseY);
+        position.setText("X:" + mouseX + "Y:" + mouseY);
     }
 
 }
