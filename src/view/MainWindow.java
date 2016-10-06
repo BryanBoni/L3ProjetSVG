@@ -173,6 +173,16 @@ public class MainWindow extends JFrame {
         }
     }
     
+    /**
+     * On call, reset the position of the panel m_panelCanvas.
+     * 
+     * @param evt 
+     */
+    private void m_resetButtonActionPerformed(ActionEvent evt){
+        m_panelCanvas.resetPostion();
+        m_panelCanvas.repaintImage();
+    }
+    
     
 
     /**

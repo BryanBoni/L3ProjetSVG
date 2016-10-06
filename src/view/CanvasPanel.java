@@ -123,6 +123,14 @@ public class CanvasPanel extends JPanel implements MouseMotionListener, MouseLis
     }
 
     /**
+     * Used to reset the position of the canvas himself.
+     */
+    public void resetPostion() {
+        positionCanvasX = 0;
+        positionCanvasY = 0;
+    }
+
+    /**
      *
      * @param e
      */
@@ -155,6 +163,7 @@ public class CanvasPanel extends JPanel implements MouseMotionListener, MouseLis
 
         mouseDeltaX = mouseX - mouseInitX;
         mouseDeltaY = mouseY - mouseInitY;
+        
 
         //System.out.println("Mouse delta X: " + m_mouseDeltaX + " Y: " + m_mouseDeltaY);
         MainWindow.changeLabelPosition(e.getX(), e.getY());
@@ -185,6 +194,8 @@ public class CanvasPanel extends JPanel implements MouseMotionListener, MouseLis
         if (m_isDragged == true) {
             positionCanvasX += mouseDeltaX;
             positionCanvasY += mouseDeltaY;
+            mouseDeltaX = 0;
+            mouseDeltaY = 0;
             m_isDragged = false;
         }
 
