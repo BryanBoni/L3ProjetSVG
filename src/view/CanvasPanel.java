@@ -25,17 +25,11 @@ public class CanvasPanel extends JPanel implements MouseMotionListener, MouseLis
 	private SimpleDrawer m_simpDraw;
 	private ArrayList<Path> m_pathList;
 
-	private boolean m_stayPressed;
-	private boolean m_isDragged;
-
 	public static int mouseX;
 	public static int mouseY;
-	private static int mouseInitX;
-	private static int mouseInitY;
-	private static int mouseDeltaX;
-	private static int mouseDeltaY;
-	private static int positionCanvasX;
-	private static int positionCanvasY;
+	private static int translateX;
+	private static int translateY;
+	private static boolean isMousePressed;
 
 	/**
 	 * The constructor of the CanvasPanel, used when a default SVG file is
@@ -63,12 +57,7 @@ public class CanvasPanel extends JPanel implements MouseMotionListener, MouseLis
 		addMouseMotionListener(this);
 		addMouseListener(this);
 		currentCanvas = this;
-		m_stayPressed = false;
-		m_isDragged = false;
-		mouseDeltaX = 0;
-		mouseDeltaY = 0;
-		positionCanvasX = 0;
-		positionCanvasY = 0;
+		isMousePressed = false;
 	}
 
 	@Override
@@ -76,11 +65,11 @@ public class CanvasPanel extends JPanel implements MouseMotionListener, MouseLis
 		//System.out.println("paintComponent");
 		super.paintComponent(g);
 		resetImage(g);
-		g.translate(positionCanvasX + mouseDeltaX, positionCanvasY + mouseDeltaY);
+		g.translate(translateX, translateY);
 		//Rasterizer.renderPath(m_pathList, g);
 
 		for (Path p : m_pathList) {
-		g.setColor(p.getStroke());
+			g.setColor(p.getStroke());
 			for (Line l : p.getElements()) {
 				for (float t = 0.01f; t < 1; t += 0.01f) {
 					Vector2f a = l.getPoint(t - 0.01f);
@@ -127,8 +116,9 @@ public class CanvasPanel extends JPanel implements MouseMotionListener, MouseLis
 	 * Used to reset the position of the canvas himself.
 	 */
 	public void resetPostion() {
-		positionCanvasX = 0;
-		positionCanvasY = 0;
+		translateX = 0;
+		translateY = 0;
+		repaint();
 	}
 
 	/**
@@ -137,14 +127,11 @@ public class CanvasPanel extends JPanel implements MouseMotionListener, MouseLis
 	 */
 	@Override
 	public void mouseMoved(MouseEvent e) {
-		//System.out.println("Mouse moved" + e);
-
-		if (m_stayPressed == false) {
-			mouseInitX = e.getXOnScreen();
-			mouseInitY = e.getYOnScreen();
+		if (!isMousePressed) {
+			mouseX = e.getX();
+			mouseY = e.getY();
 		}
-
-		MainWindow.changeLabelPosition(e.getX(), e.getY());
+		MainWindow.changeLabelPosition(translateX + mouseX, translateY + mouseY);
 	}
 
 	/**
@@ -156,17 +143,15 @@ public class CanvasPanel extends JPanel implements MouseMotionListener, MouseLis
 	 */
 	@Override
 	public void mouseDragged(MouseEvent e) {
-		//System.out.println("Mouse moved" + e);
-		m_isDragged = true;
+		int deltaX, deltaY;
+		deltaX = e.getX() - mouseX;
+		deltaY = e.getY() - mouseY;
+		mouseX += deltaX;
+		mouseY += deltaY;
+		translateX += deltaX;
+		translateY += deltaY;
 
-		mouseX = e.getXOnScreen();
-		mouseY = e.getYOnScreen();
-
-		mouseDeltaX = mouseX - mouseInitX;
-		mouseDeltaY = mouseY - mouseInitY;
-
-		//System.out.println("Mouse delta X: " + m_mouseDeltaX + " Y: " + m_mouseDeltaY);
-		MainWindow.changeLabelPosition(e.getX(), e.getY());
+		MainWindow.changeLabelPosition(translateX + mouseX, translateY + mouseY);
 		repaint();
 	}
 
@@ -178,7 +163,6 @@ public class CanvasPanel extends JPanel implements MouseMotionListener, MouseLis
 	 */
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		m_stayPressed = true;
 	}
 
 	/**
@@ -190,15 +174,7 @@ public class CanvasPanel extends JPanel implements MouseMotionListener, MouseLis
 	 */
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		m_stayPressed = false;
-		if (m_isDragged == true) {
-			positionCanvasX += mouseDeltaX;
-			positionCanvasY += mouseDeltaY;
-			mouseDeltaX = 0;
-			mouseDeltaY = 0;
-			m_isDragged = false;
-		}
-
+		isMousePressed = false;
 	}
 
 	/**
@@ -218,6 +194,7 @@ public class CanvasPanel extends JPanel implements MouseMotionListener, MouseLis
 	 */
 	@Override
 	public void mousePressed(MouseEvent e) {
+		isMousePressed = true;
 	}
 
 	/**
@@ -227,6 +204,7 @@ public class CanvasPanel extends JPanel implements MouseMotionListener, MouseLis
 	 */
 	@Override
 	public void mouseEntered(MouseEvent e) {
+		MainWindow.changeLabelPosition(translateX + mouseX, translateY + mouseY);
 	}
 
 	/**
@@ -236,5 +214,6 @@ public class CanvasPanel extends JPanel implements MouseMotionListener, MouseLis
 	 */
 	@Override
 	public void mouseExited(MouseEvent e) {
+		MainWindow.changeLabelPosition(translateX, translateY);
 	}
 }
