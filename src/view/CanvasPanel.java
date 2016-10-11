@@ -2,6 +2,7 @@ package view;
 
 import Maths.Vector2f;
 import Maths.Vector3f;
+import draw.Rasterizer;
 import draw.SimpleDrawer;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -9,10 +10,9 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import javax.swing.JPanel;
-import parser.Parser;
 import parser.Path;
-import parser.SVG;
 
 /**
  * This class is used to create a canvas.
@@ -23,7 +23,7 @@ public class CanvasPanel extends JPanel implements MouseMotionListener, MouseLis
     public static CanvasPanel m_currentCanvas;
     private BufferedImage m_canvasImage;
     private SimpleDrawer m_simpDraw;
-    private Path m_p;
+    private ArrayList<Path> m_pathList;
 
     private boolean m_stayPressed;
     private boolean m_isDragged;
@@ -45,9 +45,7 @@ public class CanvasPanel extends JPanel implements MouseMotionListener, MouseLis
      */
     public CanvasPanel(String pathUrl) {
         super();
-        Parser parser = new Parser(pathUrl);
-        SVG svg = parser.parse();
-        m_p = svg.getPathList().get(0);
+		m_pathList = new ArrayList<>();
         initComponents();
     }
 
@@ -78,8 +76,14 @@ public class CanvasPanel extends JPanel implements MouseMotionListener, MouseLis
         super.paintComponent(g);
         resetImage(g);
         g.translate(m_positionCanvasX + m_mouseDeltaX, m_positionCanvasY + m_mouseDeltaY);
-        g.setColor(Color.BLUE);
-        m_p.getElements().stream().forEach((l) -> {
+		
+//		for(Path p : m_pathList) {
+//			p.render(g);
+//		}
+		
+		Rasterizer.renderPath(m_pathList, g);
+		
+        /*m_p.getElements().stream().forEach((l) -> {
             //System.out.println("paintComponent un elem");
             for (float t = 0.01f; t < 1; t += 0.01f) {
                 Vector2f a = l.getPoint(t - 0.01f);
@@ -88,7 +92,7 @@ public class CanvasPanel extends JPanel implements MouseMotionListener, MouseLis
                 g.drawLine((int) a.x, (int) a.y, (int) b.x, (int) b.y);
 
             }
-        });
+        });*/
     }
 
     /**
@@ -195,8 +199,8 @@ public class CanvasPanel extends JPanel implements MouseMotionListener, MouseLis
      *
      * @param m_p
      */
-    public void setM_p(Path m_p) {
-        this.m_p = m_p;
+    public void setPathList(ArrayList<Path> pathList) {
+        m_pathList = pathList;
     }
 
     /**

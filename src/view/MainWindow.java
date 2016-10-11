@@ -1,7 +1,6 @@
 package view;
 
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 import javax.swing.BorderFactory;
 import javax.swing.DebugGraphics;
@@ -161,10 +160,8 @@ public class MainWindow extends JFrame {
             //redraw
             Parser parser = new Parser(filePath);
             SVG svg = parser.parse();
-            path = svg.getPathList().get(0);
-            m_panelCanvas.setM_p(path);
+            m_panelCanvas.setPathList(svg.getPathList());
             m_panelCanvas.repaintImage();
-
         }
     }
 
