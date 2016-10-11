@@ -25,11 +25,15 @@ public class CanvasPanel extends JPanel implements MouseMotionListener, MouseLis
 	private SimpleDrawer m_simpDraw;
 	private ArrayList<Path> m_pathList;
 
-	public static int mouseX;
-	public static int mouseY;
-	private static int translateX;
-	private static int translateY;
-	private static boolean isMousePressed;
+	// rendering context
+	public static float zoom = 1;
+	private static int translateX = 0;
+	private static int translateY = 0;
+	
+	// input context
+	public static int mouseX = 0;
+	public static int mouseY = 0;
+	private static boolean isMousePressed = false;
 
 	/**
 	 * The constructor of the CanvasPanel, used when a default SVG file is
