@@ -188,8 +188,7 @@ public class MainWindow extends JFrame {
             //redraw
             Parser parser = new Parser(filePath);
             SVG svg = parser.parse();
-            path = svg.getPathList().get(0);
-            m_panelCanvas.setM_p(path);
+            m_panelCanvas.setPathList(svg.getPathList());
             m_panelCanvas.repaintImage();
             setTitle(file.getName());
 
