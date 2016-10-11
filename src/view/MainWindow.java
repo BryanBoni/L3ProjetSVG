@@ -214,5 +214,8 @@ public class MainWindow extends JFrame {
     public static void changeLabelPosition(int mouseX, int mouseY) {
         position.setText("X:" + mouseX + "Y:" + mouseY);
     }
+    public static void changeLabelPosition() {
+        position.setText("X:" + "Y:");
+    }
 
 }
