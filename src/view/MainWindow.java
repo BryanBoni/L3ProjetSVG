@@ -1,5 +1,7 @@
 package view;
 
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import javax.swing.BorderFactory;
@@ -13,6 +15,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.LayoutStyle;
 import javax.swing.WindowConstants;
 import parser.Parser;
@@ -29,6 +32,8 @@ public class MainWindow extends JFrame {
     private JPanel m_postionPanel;
     private JPanel m_toolsPanel;
     private JButton m_resetButton;
+    private JLabel m_zoomLabel;
+    private JTextField m_zoomField;
     private static JLabel position;
 
     public MainWindow(String filePath) {
@@ -51,7 +56,9 @@ public class MainWindow extends JFrame {
         m_FileChooser = new JMenuItem();
         position = new JLabel();
         m_resetButton = new JButton();
-        
+        m_zoomLabel = new JLabel();
+        m_zoomField = new JTextField();
+
         setCursor(null);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         //setTitle("I wanna move it move it");
@@ -72,41 +79,57 @@ public class MainWindow extends JFrame {
                 m_panelCanvasLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addGap(0, 500, Short.MAX_VALUE));
 
         m_resetButton.setText("reset position");
-        
+
         m_toolsPanel.setBorder(BorderFactory.createEtchedBorder());
 
         GroupLayout toolsPanelLayout = new GroupLayout(m_toolsPanel);
         m_toolsPanel.setLayout(toolsPanelLayout);
         toolsPanelLayout.setHorizontalGroup(
                 toolsPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                    .addComponent(m_resetButton)
-                    .addGap(0, 137, Short.MAX_VALUE)
+                .addComponent(m_resetButton)
+                .addGap(0, 137, Short.MAX_VALUE)
         );
         toolsPanelLayout.setVerticalGroup(
-                toolsPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)   
-                    .addComponent(m_resetButton)
-                    .addGap(0, 496, Short.MAX_VALUE)
+                toolsPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                .addComponent(m_resetButton)
+                .addGap(0, 496, Short.MAX_VALUE)
         );
 
         position.setText("X: Y:");
+        m_zoomLabel.setText("Zoom :");
 
+        m_zoomField.setEditable(false);
+        m_zoomField.setBackground(new Color(255, 255, 255));
+        m_zoomField.setText("100%");
+        
+        
+        
         m_postionPanel.setBorder(BorderFactory.createEtchedBorder());
 
         GroupLayout postionPanelLayout = new GroupLayout(m_postionPanel);
         m_postionPanel.setLayout(postionPanelLayout);
         postionPanelLayout.setHorizontalGroup(postionPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
                 .addGroup(GroupLayout.Alignment.TRAILING, postionPanelLayout.createSequentialGroup()
-                        .addContainerGap(292, Short.MAX_VALUE)
+                        .addContainerGap(10, Short.MAX_VALUE)
+                        .addComponent(m_zoomLabel)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(m_zoomField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 400, Short.MAX_VALUE)
                         .addComponent(position, GroupLayout.PREFERRED_SIZE, 98, GroupLayout.PREFERRED_SIZE)
                         .addContainerGap())
         );
         postionPanelLayout.setVerticalGroup(postionPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
                 .addGroup(GroupLayout.Alignment.TRAILING, postionPanelLayout.createSequentialGroup()
                         .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(position)
+                        .addGroup(postionPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                .addComponent(m_zoomLabel)
+                                .addComponent(m_zoomField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                .addComponent(position))
                         .addContainerGap())
         );
-
+        
+        
+        
         m_FileMenu.setText("File");
 
         m_FileChooser.setText("Chose File");
@@ -161,7 +184,7 @@ public class MainWindow extends JFrame {
             File file = fc.getSelectedFile();
             filePath = file.getPath();
             System.out.println(filePath + "\n");
-            
+
             //redraw
             Parser parser = new Parser(filePath);
             SVG svg = parser.parse();
@@ -172,18 +195,16 @@ public class MainWindow extends JFrame {
 
         }
     }
-    
+
     /**
      * On call, reset the position of the panel m_panelCanvas.
-     * 
-     * @param evt 
+     *
+     * @param evt
      */
-    private void m_resetButtonActionPerformed(ActionEvent evt){
+    private void m_resetButtonActionPerformed(ActionEvent evt) {
         m_panelCanvas.resetPostion();
         m_panelCanvas.repaintImage();
     }
-    
-    
 
     /**
      * Display constantly the position of the mouse on the canvasPanel.
