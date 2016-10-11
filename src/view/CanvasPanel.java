@@ -20,7 +20,7 @@ import parser.Path;
  */
 public class CanvasPanel extends JPanel implements MouseMotionListener, MouseListener {
 
-    public static CanvasPanel m_currentCanvas;
+    public static CanvasPanel currentCanvas;
     private BufferedImage m_canvasImage;
     private SimpleDrawer m_simpDraw;
     private ArrayList<Path> m_pathList;
@@ -28,14 +28,14 @@ public class CanvasPanel extends JPanel implements MouseMotionListener, MouseLis
     private boolean m_stayPressed;
     private boolean m_isDragged;
 
-    public static int m_mouseX;
-    public static int m_mouseY;
-    private static int m_mouseInitX;
-    private static int m_mouseInitY;
-    private static int m_mouseDeltaX;
-    private static int m_mouseDeltaY;
-    private static int m_positionCanvasX;
-    private static int m_positionCanvasY;
+    public static int mouseX;
+    public static int mouseY;
+    private static int mouseInitX;
+    private static int mouseInitY;
+    private static int mouseDeltaX;
+    private static int mouseDeltaY;
+    private static int positionCanvasX;
+    private static int positionCanvasY;
 
     /**
      * The constructor of the CanvasPanel, used when a default SVG file is
@@ -54,6 +54,7 @@ public class CanvasPanel extends JPanel implements MouseMotionListener, MouseLis
      */
     public CanvasPanel() {
         super();
+        initComponents();
     }
 
     private void initComponents() {
@@ -61,13 +62,13 @@ public class CanvasPanel extends JPanel implements MouseMotionListener, MouseLis
         setSize(500, 500);
         addMouseMotionListener(this);
         addMouseListener(this);
-        m_currentCanvas = this;
+        currentCanvas = this;
         m_stayPressed = false;
         m_isDragged = false;
-        m_mouseDeltaX = 0;
-        m_mouseDeltaY = 0;
-        m_positionCanvasX = 0;
-        m_positionCanvasY = 0;
+        mouseDeltaX = 0;
+        mouseDeltaY = 0;
+        positionCanvasX = 0;
+        positionCanvasY = 0;
     }
 
     @Override
@@ -75,6 +76,9 @@ public class CanvasPanel extends JPanel implements MouseMotionListener, MouseLis
         //System.out.println("paintComponent");
         super.paintComponent(g);
         resetImage(g);
+        g.translate(positionCanvasX + mouseDeltaX, positionCanvasY + mouseDeltaY);
+        g.setColor(Color.BLUE);
+        m_p.getElements().stream().forEach((l) -> {
         g.translate(m_positionCanvasX + m_mouseDeltaX, m_positionCanvasY + m_mouseDeltaY);
 		
 //		for(Path p : m_pathList) {
@@ -126,6 +130,14 @@ public class CanvasPanel extends JPanel implements MouseMotionListener, MouseLis
     }
 
     /**
+     * Used to reset the position of the canvas himself.
+     */
+    public void resetPostion() {
+        positionCanvasX = 0;
+        positionCanvasY = 0;
+    }
+
+    /**
      *
      * @param e
      */
@@ -134,8 +146,8 @@ public class CanvasPanel extends JPanel implements MouseMotionListener, MouseLis
         //System.out.println("Mouse moved" + e);
 
         if (m_stayPressed == false) {
-            m_mouseInitX = e.getXOnScreen();
-            m_mouseInitY = e.getYOnScreen();
+            mouseInitX = e.getXOnScreen();
+            mouseInitY = e.getYOnScreen();
         }
 
         MainWindow.changeLabelPosition(e.getX(), e.getY());
@@ -153,11 +165,12 @@ public class CanvasPanel extends JPanel implements MouseMotionListener, MouseLis
         //System.out.println("Mouse moved" + e);
         m_isDragged = true;
 
-        m_mouseX = e.getXOnScreen();
-        m_mouseY = e.getYOnScreen();
+        mouseX = e.getXOnScreen();
+        mouseY = e.getYOnScreen();
 
-        m_mouseDeltaX = m_mouseX - m_mouseInitX;
-        m_mouseDeltaY = m_mouseY - m_mouseInitY;
+        mouseDeltaX = mouseX - mouseInitX;
+        mouseDeltaY = mouseY - mouseInitY;
+        
 
         //System.out.println("Mouse delta X: " + m_mouseDeltaX + " Y: " + m_mouseDeltaY);
         MainWindow.changeLabelPosition(e.getX(), e.getY());
@@ -186,8 +199,10 @@ public class CanvasPanel extends JPanel implements MouseMotionListener, MouseLis
     public void mouseReleased(MouseEvent e) {
         m_stayPressed = false;
         if (m_isDragged == true) {
-            m_positionCanvasX += m_mouseDeltaX;
-            m_positionCanvasY += m_mouseDeltaY;
+            positionCanvasX += mouseDeltaX;
+            positionCanvasY += mouseDeltaY;
+            mouseDeltaX = 0;
+            mouseDeltaY = 0;
             m_isDragged = false;
         }
 
