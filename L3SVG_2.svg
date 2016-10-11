@@ -1,61 +1,13 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg width="190" height="160" xmlns="http://www.w3.org/2000/svg">
 
-<svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="210mm"
-   height="297mm"
-   viewBox="0 0 744.09448819 1052.3622047"
-   id="svg2"
-   version="1.1"
-   inkscape:version="0.91 r13725"
-   sodipodi:docname="L3SVG_2.svg">
-  <defs
-     id="defs4" />
-  <sodipodi:namedview
-     id="base"
-     pagecolor="#ffffff"
-     bordercolor="#666666"
-     borderopacity="1.0"
-     inkscape:pageopacity="0.0"
-     inkscape:pageshadow="2"
-     inkscape:zoom="0.35"
-     inkscape:cx="375"
-     inkscape:cy="520"
-     inkscape:document-units="px"
-     inkscape:current-layer="layer1"
-     showgrid="false"
-     inkscape:window-width="500"
-     inkscape:window-height="500"
-     inkscape:window-x="-8"
-     inkscape:window-y="-8"
-     inkscape:window-maximized="1" />
-  <metadata
-     id="metadata7">
-    <rdf:RDF>
-      <cc:Work
-         rdf:about="">
-        <dc:format>image/svg+xml</dc:format>
-        <dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
-      </cc:Work>
-    </rdf:RDF>
-  </metadata>
-  <g
-     inkscape:label="Calque 1"
-     inkscape:groupmode="layer"
-     id="layer1">
-    <path
-       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 448.57143,143.79078 c -240,182.85714 -154.28572,297.14285 -154.28572,297.14285"
-       id="path3338"
-       inkscape:connector-curvature="0" />
-  </g>
+  <path style="stroke:#000000" d="M 10,10 C 20,20 40,20 50,10"/>
+  <path style="stroke:#0A860C" d="M 70,10 C 70,20 120,20 120,10" />
+  <path style="stroke:#FF0000" d="M 130,10 C 120,20 180,20 170,10" />
+  <path style="stroke:#00FF00" d="M 10,60 C 20,80 40,80 50,60" />
+  <path style="stroke:#0000FF" d="M 70,60 C 70,80 110,80 110,60" />
+  <path style="stroke:#FFFF00" d="M 130,60 C 120,80 180,80 170,60" />
+  <path style="stroke:#00FFFF" d="M 10,110 C 20,140 40,140 50,110" />
+  <path style="stroke:#FF00FF" d="M 70,110 C 70,140 110,140 110,110" />
+  <path style="stroke:#0E0C00" d="M 130,110 C 120,140 180,140 170,110" />
+
 </svg>

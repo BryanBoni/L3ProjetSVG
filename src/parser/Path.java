@@ -1,9 +1,11 @@
 package parser;
 
+import Maths.Vector2f;
 import data.Curve;
 import data.IDrawableSVG;
 import data.Line;
 import java.awt.Color;
+import java.awt.Graphics;
 import java.util.ArrayList;
 
 /**
@@ -62,5 +64,18 @@ public class Path implements IDrawableSVG {
     public void setStroke(Color m_stroke) {
         this.m_stroke = m_stroke;
     }
+	
+	
+	public void render(Graphics g) {
+		g.setColor(m_stroke);
+		for(Line l: m_elements) {
+            for (float t = 0.01f; t < 1; t += 0.01f) {
+                Vector2f a = l.getPoint(t - 0.01f);
+                Vector2f b = l.getPoint(t);
+
+                g.drawLine((int) a.x, (int) a.y, (int) b.x, (int) b.y);
+			}
+		}
+	}
 
 }
