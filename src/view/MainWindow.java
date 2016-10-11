@@ -218,6 +218,7 @@ public class MainWindow extends JFrame {
     public static void changeLabelPosition() {
         position.setText("X:" + "Y:");
     }
+    
     public static void changeFieldZoom(float zoom){
         zoom = zoom * 100;
         zoomField.setText(zoom + "%");
