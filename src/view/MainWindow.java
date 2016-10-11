@@ -33,7 +33,8 @@ public class MainWindow extends JFrame {
     private JPanel m_toolsPanel;
     private JButton m_resetButton;
     private JLabel m_zoomLabel;
-    private JTextField m_zoomField;
+    
+    private static JTextField zoomField;
     private static JLabel position;
 
     public MainWindow(String filePath) {
@@ -57,7 +58,7 @@ public class MainWindow extends JFrame {
         position = new JLabel();
         m_resetButton = new JButton();
         m_zoomLabel = new JLabel();
-        m_zoomField = new JTextField();
+        zoomField = new JTextField();
 
         setCursor(null);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -98,9 +99,9 @@ public class MainWindow extends JFrame {
         position.setText("X: Y:");
         m_zoomLabel.setText("Zoom :");
 
-        m_zoomField.setEditable(false);
-        m_zoomField.setBackground(new Color(255, 255, 255));
-        m_zoomField.setText("100%");
+        zoomField.setEditable(false);
+        zoomField.setBackground(new Color(255, 255, 255));
+        zoomField.setText("100%");
         
         
         
@@ -113,7 +114,7 @@ public class MainWindow extends JFrame {
                         .addContainerGap(10, Short.MAX_VALUE)
                         .addComponent(m_zoomLabel)
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(m_zoomField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                        .addComponent(zoomField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 400, Short.MAX_VALUE)
                         .addComponent(position, GroupLayout.PREFERRED_SIZE, 98, GroupLayout.PREFERRED_SIZE)
                         .addContainerGap())
@@ -123,7 +124,7 @@ public class MainWindow extends JFrame {
                         .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(postionPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                 .addComponent(m_zoomLabel)
-                                .addComponent(m_zoomField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                .addComponent(zoomField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                                 .addComponent(position))
                         .addContainerGap())
         );
@@ -217,5 +218,8 @@ public class MainWindow extends JFrame {
     public static void changeLabelPosition() {
         position.setText("X:" + "Y:");
     }
-
+    public static void changeFieldZoom(float zoom){
+        zoom = zoom * 100;
+        zoomField.setText(zoom + "%");
+    }
 }
