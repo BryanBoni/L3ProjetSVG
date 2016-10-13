@@ -4,7 +4,7 @@ import Maths.Vector2f;
 import data.Line;
 import java.awt.Graphics;
 import java.util.Collection;
-import parser.Path;
+import data.Path;
 import view.CanvasPanel;
 
 public class Rasterizer {

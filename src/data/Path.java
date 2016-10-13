@@ -1,9 +1,5 @@
-package parser;
+package data;
 
-import Maths.Vector2f;
-import data.Curve;
-import data.IDrawableSVG;
-import data.Line;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
@@ -15,12 +11,9 @@ import java.util.ArrayList;
  */
 public class Path implements IDrawableSVG {
 
-    private final ArrayList<Line> m_elements;
-    private Color m_stroke;
+    private final ArrayList<Line> m_elements = new ArrayList<>();
+    private Color m_strokeColor = Color.BLACK;
 
-    public Path() {
-        m_elements = new ArrayList<>();
-    }
 
     /**
      * Add a Line to be rendered with the Path.
@@ -44,37 +37,25 @@ public class Path implements IDrawableSVG {
         return m_elements;
     }
 
-    @Override
-    public void draw() {
-        m_elements.stream().forEach((l) -> {
-            l.draw();
-        });
-    }
-
     /**
-     * @return the m_stroke
+     * @return the m_strokeColor
      */
     public Color getStroke() {
-        return m_stroke;
+        return m_strokeColor;
     }
 
     /**
-     * @param m_stroke the m_stroke to set
+     * @param m_stroke the m_strokeColor to set
      */
     public void setStroke(Color m_stroke) {
-        this.m_stroke = m_stroke;
+        this.m_strokeColor = m_stroke;
     }
 	
-	
+	@Override
 	public void render(Graphics g) {
-		g.setColor(m_stroke);
+		g.setColor(m_strokeColor);
 		for(Line l: m_elements) {
-            for (float t = 0.01f; t < 1; t += 0.01f) {
-                Vector2f a = l.getPoint(t - 0.01f);
-                Vector2f b = l.getPoint(t);
-
-                g.drawLine((int) a.x, (int) a.y, (int) b.x, (int) b.y);
-			}
+            l.render(g);
 		}
 	}
 

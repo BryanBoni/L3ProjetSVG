@@ -1,5 +1,6 @@
 package parser;
 
+import data.Path;
 import data.Curve;
 import java.awt.Color;
 import java.io.File;
@@ -89,7 +90,7 @@ public class Parser {
                     }
                 }
 
-                svg.getPathList().add(path);
+                svg.getDrawableList().add(path);
             }
 
             return svg;

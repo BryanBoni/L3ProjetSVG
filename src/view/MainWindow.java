@@ -1,7 +1,6 @@
 package view;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import javax.swing.BorderFactory;
@@ -19,7 +18,7 @@ import javax.swing.JTextField;
 import javax.swing.LayoutStyle;
 import javax.swing.WindowConstants;
 import parser.Parser;
-import parser.Path;
+import data.Path;
 import parser.SVG;
 
 public class MainWindow extends JFrame {
@@ -188,10 +187,9 @@ public class MainWindow extends JFrame {
             //redraw
             Parser parser = new Parser(filePath);
             SVG svg = parser.parse();
-            m_panelCanvas.setPathList(svg.getPathList());
+            m_panelCanvas.setDrawableList(svg.getDrawableList());
             m_panelCanvas.repaintImage();
             setTitle(file.getName());
-
         }
     }
 

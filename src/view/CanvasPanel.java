@@ -2,7 +2,7 @@ package view;
 
 import Maths.Vector2f;
 import Maths.Vector3f;
-import data.Line;
+import data.IDrawableSVG;
 import draw.SimpleDrawer;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -12,7 +12,6 @@ import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import javax.swing.JPanel;
-import parser.Path;
 
 /**
  * This class is used to create a canvas.
@@ -23,10 +22,10 @@ public class CanvasPanel extends JPanel implements MouseMotionListener, MouseLis
 	public static CanvasPanel currentCanvas;
 	private BufferedImage m_canvasImage;
 	private SimpleDrawer m_simpDraw;
-	private ArrayList<Path> m_pathList;
+	private ArrayList<IDrawableSVG> m_drawableList;
 
 	// rendering context
-	public static float zoom = 1;
+	public static float zoom = 5.f;
 	private static int translateX = 0;
 	private static int translateY = 0;
 	
@@ -43,7 +42,7 @@ public class CanvasPanel extends JPanel implements MouseMotionListener, MouseLis
 	 */
 	public CanvasPanel(String pathUrl) {
 		super();
-		m_pathList = new ArrayList<>();
+		m_drawableList = new ArrayList<>();
 		initComponents();
 	}
 
@@ -70,20 +69,10 @@ public class CanvasPanel extends JPanel implements MouseMotionListener, MouseLis
 		super.paintComponent(g);
 		resetImage(g);
 		g.translate(translateX, translateY);
-		//Rasterizer.renderPath(m_pathList, g);
+		//Rasterizer.renderPath(m_drawableList, g);
 
-		for (Path p : m_pathList) {
-			g.setColor(p.getStroke());
-			for (Line l : p.getElements()) {
-				for (float t = 0.01f; t < 1; t += 0.01f) {
-					Vector2f a = l.getPoint(t - 0.01f);
-					Vector2f b = l.getPoint(t);
-
-					g.drawLine((int) a.x, (int) a.y, (int) b.x, (int) b.y);
-
-				}
-			}
-		}
+		for (IDrawableSVG p : m_drawableList)
+			p.render(g);
 	}
 
 	/**
@@ -187,8 +176,8 @@ public class CanvasPanel extends JPanel implements MouseMotionListener, MouseLis
 	 *
 	 * @param m_p
 	 */
-	public void setPathList(ArrayList<Path> pathList) {
-		m_pathList = pathList;
+	public void setDrawableList(ArrayList<IDrawableSVG> drawableList) {
+		m_drawableList = drawableList;
 	}
 
 	/**
