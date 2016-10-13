@@ -44,7 +44,7 @@ public class CanvasPanel extends JPanel implements MouseMotionListener, MouseLis
      */
     public CanvasPanel(String pathUrl) {
         super();
-        m_pathList = new ArrayList<>();
+        m_drawableList = new ArrayList<>();
         initComponents();
     }
 
@@ -68,23 +68,12 @@ public class CanvasPanel extends JPanel implements MouseMotionListener, MouseLis
 
     @Override
     protected void paintComponent(Graphics g) {
-        //System.out.println("paintComponent");
         super.paintComponent(g);
         resetImage(g);
         g.translate(translateX, translateY);
-        //Rasterizer.renderPath(m_pathList, g);
 
-        for (Path p : m_pathList) {
-            g.setColor(p.getStroke());
-            for (Line l : p.getElements()) {
-                for (float t = 0.01f; t < 1; t += 0.01f) {
-                    Vector2f a = l.getPoint(t - 0.01f);
-                    Vector2f b = l.getPoint(t);
-
-                    g.drawLine((int) a.x, (int) a.y, (int) b.x, (int) b.y);
-
-                }
-            }
+        for (IDrawableSVG drawable : m_drawableList) {
+			drawable.render(g);
         }
     }
 
@@ -186,7 +175,7 @@ public class CanvasPanel extends JPanel implements MouseMotionListener, MouseLis
 	 * Use this function to modify the path list variable of an SVG file for the
 	 * canvas panel.
 	 *
-	 * @param m_p
+	 * @param drawableList
 	 */
 	public void setDrawableList(ArrayList<IDrawableSVG> drawableList) {
 		m_drawableList = drawableList;
@@ -198,27 +187,15 @@ public class CanvasPanel extends JPanel implements MouseMotionListener, MouseLis
      */
     @Override
     public void mouseWheelMoved(MouseWheelEvent e) {
-        float step = 0.5f;
-        //System.out.println(e.getPreciseWheelRotation() + "\n");
-
-        if (e.getPreciseWheelRotation() == -1.0 && zoom <= 4.5f) {//zoom +
-            zoom += step;
-        } else if (e.getPreciseWheelRotation() == 1.0 && zoom >= 1.0f) {//zoom -
-            zoom -= step;
+        float step = 0.25f;
+        if (e.getPreciseWheelRotation() < 0) {//zoom +
+            zoom = Math.min(zoom + step, 5.0f);
+        } else if (e.getPreciseWheelRotation() > 0) {//zoom -
+            zoom = Math.max(zoom - step, 0.25f);
         }
         
+		repaint();
         MainWindow.changeFieldZoom(zoom);
-        
-    }
-
-    /**
-     * Use this function to modify the path list variable of an SVG file for the
-     * canvas panel.
-     *
-     * @param m_p
-     */
-    public void setPathList(ArrayList<Path> pathList) {
-        m_pathList = pathList;
     }
 
     /**
