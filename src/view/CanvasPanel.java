@@ -207,7 +207,7 @@ public class CanvasPanel extends JPanel implements MouseMotionListener, MouseLis
      * Use this function to modify the path list variable of an SVG file for the
      * canvas panel.
      *
-     * @param m_p
+     * @param pathList
      */
     public void setPathList(ArrayList<Path> pathList) {
         m_pathList = pathList;
