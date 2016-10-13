@@ -2,7 +2,7 @@ package view;
 
 import Maths.Vector2f;
 import Maths.Vector3f;
-import data.Line;
+import data.IDrawableSVG;
 import draw.SimpleDrawer;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -14,7 +14,6 @@ import java.awt.event.MouseWheelListener;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import javax.swing.JPanel;
-import parser.Path;
 
 /**
  * This class is used to create a canvas.
@@ -22,10 +21,10 @@ import parser.Path;
  */
 public class CanvasPanel extends JPanel implements MouseMotionListener, MouseListener, MouseWheelListener {
 
-    public static CanvasPanel currentCanvas;
-    private BufferedImage m_canvasImage;
-    private SimpleDrawer m_simpDraw;
-    private ArrayList<Path> m_pathList;
+	public static CanvasPanel currentCanvas;
+	private BufferedImage m_canvasImage;
+	private SimpleDrawer m_simpDraw;
+	private ArrayList<IDrawableSVG> m_drawableList;
 
     // rendering context
     public static float zoom = 1;
@@ -183,6 +182,15 @@ public class CanvasPanel extends JPanel implements MouseMotionListener, MouseLis
     public void mouseReleased(MouseEvent e) {
         isMousePressed = false;
     }
+	/**
+	 * Use this function to modify the path list variable of an SVG file for the
+	 * canvas panel.
+	 *
+	 * @param m_p
+	 */
+	public void setDrawableList(ArrayList<IDrawableSVG> drawableList) {
+		m_drawableList = drawableList;
+	}
 
     /**
      *

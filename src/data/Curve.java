@@ -4,10 +4,6 @@ import Maths.Vector2f;
 
 public class Curve extends Line implements IDrawableSVG {
 
-    public Curve() {
-        super();
-    }
-
     /**
      * Add a new stop to the Curve. A curve is only 4 points, so we can't add
      * more than 4 stops.
@@ -34,11 +30,6 @@ public class Curve extends Line implements IDrawableSVG {
         if (m_stops.size() < 4) {
             m_stops.add(position);
         }
-    }
-
-    @Override
-    public void draw() {
-
     }
 
 }
