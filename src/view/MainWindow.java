@@ -35,12 +35,16 @@ public class MainWindow extends JFrame {
     
     private static JTextField zoomField;
     private static JLabel position;
-
+    private static WindowPreferences pref;
+    
     public MainWindow(String filePath) {
         super();
         m_panelCanvas = new CanvasPanel(filePath);
+        pref = new WindowPreferences(new Color(52, 52, 52), new Color(255, 255, 255), Color.BLACK/*new Color(52, 52, 52)*/, new Color(255, 255, 255));
         initComponents();
+        applyPreferences();
         setTitle(filePath);
+
     }
 
     /**
@@ -99,11 +103,9 @@ public class MainWindow extends JFrame {
         m_zoomLabel.setText("Zoom :");
 
         zoomField.setEditable(false);
-        zoomField.setBackground(new Color(255, 255, 255));
         zoomField.setText("100%");
         
-        
-        
+
         m_postionPanel.setBorder(BorderFactory.createEtchedBorder());
 
         GroupLayout postionPanelLayout = new GroupLayout(m_postionPanel);
@@ -113,7 +115,7 @@ public class MainWindow extends JFrame {
                         .addContainerGap(10, Short.MAX_VALUE)
                         .addComponent(m_zoomLabel)
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(zoomField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                        .addComponent(zoomField, GroupLayout.PREFERRED_SIZE, 60, GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 400, Short.MAX_VALUE)
                         .addComponent(position, GroupLayout.PREFERRED_SIZE, 98, GroupLayout.PREFERRED_SIZE)
                         .addContainerGap())
@@ -142,13 +144,13 @@ public class MainWindow extends JFrame {
         m_jMenuBar1.add(m_jMenu2);
 
         setJMenuBar(m_jMenuBar1);
+        
 
         GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                         .addComponent(m_toolsPanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(m_panelCanvas, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
                 .addComponent(m_postionPanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
@@ -157,9 +159,9 @@ public class MainWindow extends JFrame {
                         .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                                 .addComponent(m_panelCanvas, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                                 .addComponent(m_toolsPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(m_postionPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
         );
+
 
         pack();
 
@@ -203,6 +205,38 @@ public class MainWindow extends JFrame {
         m_panelCanvas.resetPostion();
         m_panelCanvas.repaintImage();
     }
+    
+    public void applyPreferences(){
+        
+        m_toolsPanel.setBackground(pref.getM_backgroundColor());
+        m_toolsPanel.setForeground(pref.getM_textColor());
+
+        m_postionPanel.setBackground(pref.getM_backgroundColor());
+        m_postionPanel.setForeground(pref.getM_textColor());
+        
+        m_jMenuBar1.setBackground(pref.getM_backgroundColor());
+        m_jMenuBar1.setForeground(pref.getM_textColor());
+        
+        m_FileMenu.setBackground(pref.getM_backgroundColor());
+        m_FileMenu.setForeground(pref.getM_textColor());
+        
+        m_jMenu2.setBackground(pref.getM_backgroundColor());
+        m_jMenu2.setForeground(pref.getM_textColor());
+        
+        m_FileChooser.setBackground(pref.getM_backgroundColor());
+        m_FileChooser.setForeground(pref.getM_textColor());
+        
+        position.setBackground(pref.getM_backgroundColor());
+        position.setForeground(pref.getM_textColor());
+        
+        m_resetButton.setBackground(pref.getM_buttonBackgoundColor());
+        m_resetButton.setForeground(pref.getM_buttonColor());
+        
+        m_zoomLabel.setForeground(pref.getM_textColor());
+        
+        zoomField.setBackground(pref.getM_backgroundColor());
+        zoomField.setForeground(pref.getM_textColor());
+    }
 
     /**
      * Display constantly the position of the mouse on the canvasPanel.
@@ -211,10 +245,10 @@ public class MainWindow extends JFrame {
      * @param mouseY
      */
     public static void changeLabelPosition(int mouseX, int mouseY) {
-        position.setText("X:" + mouseX + "Y:" + mouseY);
+        position.setText("X:" + mouseX + " Y:" + mouseY);
     }
     public static void changeLabelPosition() {
-        position.setText("X:" + "Y:");
+        position.setText("X:" + " Y:");
     }
     
     public static void changeFieldZoom(float zoom){

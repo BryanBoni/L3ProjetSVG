@@ -21,10 +21,10 @@ import javax.swing.JPanel;
  */
 public class CanvasPanel extends JPanel implements MouseMotionListener, MouseListener, MouseWheelListener {
 
-	public static CanvasPanel currentCanvas;
-	private BufferedImage m_canvasImage;
-	private SimpleDrawer m_simpDraw;
-	private ArrayList<IDrawableSVG> m_drawableList;
+    public static CanvasPanel currentCanvas;
+    private BufferedImage m_canvasImage;
+    private SimpleDrawer m_simpDraw;
+    private ArrayList<IDrawableSVG> m_drawableList;
 
     // rendering context
     public static float zoom = 1;
@@ -73,7 +73,7 @@ public class CanvasPanel extends JPanel implements MouseMotionListener, MouseLis
         g.translate(translateX, translateY);
 
         for (IDrawableSVG drawable : m_drawableList) {
-			drawable.render(g);
+            drawable.render(g);
         }
     }
 
@@ -171,15 +171,16 @@ public class CanvasPanel extends JPanel implements MouseMotionListener, MouseLis
     public void mouseReleased(MouseEvent e) {
         isMousePressed = false;
     }
-	/**
-	 * Use this function to modify the path list variable of an SVG file for the
-	 * canvas panel.
-	 *
-	 * @param drawableList
-	 */
-	public void setDrawableList(ArrayList<IDrawableSVG> drawableList) {
-		m_drawableList = drawableList;
-	}
+
+    /**
+     * Use this function to modify the path list variable of an SVG file for the
+     * canvas panel.
+     *
+     * @param drawableList
+     */
+    public void setDrawableList(ArrayList<IDrawableSVG> drawableList) {
+        m_drawableList = drawableList;
+    }
 
     /**
      *
@@ -193,9 +194,10 @@ public class CanvasPanel extends JPanel implements MouseMotionListener, MouseLis
         } else if (e.getPreciseWheelRotation() > 0) {//zoom -
             zoom = Math.max(zoom - step, 0.25f);
         }
-        
-		repaint();
+
+        repaint();
         MainWindow.changeFieldZoom(zoom);
+
     }
 
     /**
