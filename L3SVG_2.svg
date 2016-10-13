@@ -10,4 +10,11 @@
   <path style="stroke:#FF00FF" d="M 70,110 C 70,140 110,140 110,110" />
   <path style="stroke:#0E0C00" d="M 130,110 C 120,140 180,140 170,110" />
 
+  <circle cx="90" cy="200" r="40" />
+  <circle cx="170" cy="200" r="40" />
+  <circle cx="90" cy="280" r="40" />
+  <circle cx="170" cy="280" r="40" />
+
+  <rect x="90" y="200" width="80" height="80" />
+
 </svg>

@@ -1,8 +1,10 @@
 package parser;
 
+import data.Circle;
 import data.Path;
 import data.Curve;
 import java.awt.Color;
+import data.Rectangle;
 import java.io.File;
 import java.io.IOException;
 import java.util.regex.Matcher;
@@ -34,9 +36,49 @@ public class Parser {
     public SVG parse() {
         if (doc != null) {
             SVG svg = new SVG();
+            
+            // Parsing circles
+            NodeList nodeList = doc.getElementsByTagName("circle");
+            if(nodeList.getLength() > 0) {
+                for(int i = 0; i < nodeList.getLength(); i++) {
+                    Circle circle = new Circle();
+                    Node node = nodeList.item(i);
+                    
+                    // Todo: parse style
+                    
+                    float cx = Float.parseFloat(node.getAttributes().getNamedItem("cx").getNodeValue());
+                    float cy = Float.parseFloat(node.getAttributes().getNamedItem("cy").getNodeValue());
+                    float r = Float.parseFloat(node.getAttributes().getNamedItem("r").getNodeValue());
+                    circle.setPosition(cx, cy);
+                    circle.setRadius(r);
+                    
+                    svg.getDrawableList().add(circle);
+                }
+            }
+            
+            // Parsing rectangle
+            nodeList = doc.getElementsByTagName("rect");
+            if(nodeList.getLength() > 0) {
+                for(int i = 0; i < nodeList.getLength(); i++) {
+                    Rectangle rect = new Rectangle();
+                    Node node = nodeList.item(i);
+                    
+                    // Todo: parse style
+                    
+                    float x = Float.parseFloat(node.getAttributes().getNamedItem("x").getNodeValue());
+                    float y = Float.parseFloat(node.getAttributes().getNamedItem("y").getNodeValue());
+                    float width = Float.parseFloat(node.getAttributes().getNamedItem("width").getNodeValue());
+                    float height = Float.parseFloat(node.getAttributes().getNamedItem("height").getNodeValue());
+                    rect.setPosition(x, y);
+                    rect.setSize(width,height);
+                    
+                    svg.getDrawableList().add(rect);
+                }
+            }
+            
 
-            // Parsing path
-            NodeList nodeList = doc.getElementsByTagName("path");
+            // Parsing paths
+            nodeList = doc.getElementsByTagName("path");
 
             for (int i = 0; i < nodeList.getLength(); i++) {
 
