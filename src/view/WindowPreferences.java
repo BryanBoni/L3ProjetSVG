@@ -15,6 +15,7 @@ public class WindowPreferences {
     private Color m_textColor;
     private Color m_buttonBackgoundColor;
     private Color m_buttonColor;
+    private static Color borderColor;
 
     /**
      * 
@@ -23,11 +24,12 @@ public class WindowPreferences {
      * @param buttonBackgoundColor
      * @param buttonColor 
      */
-    public WindowPreferences(Color backgroundColor, Color textColor, Color buttonBackgoundColor, Color buttonColor) {
+    public WindowPreferences(Color backgroundColor, Color textColor, Color buttonBackgoundColor, Color buttonColor, Color bordBack) {
         this.m_backgroundColor = backgroundColor;
         this.m_textColor = textColor;
         this.m_buttonBackgoundColor = buttonBackgoundColor;
         this.m_buttonColor = buttonColor;
+        borderColor = bordBack;
     }
 
     /**
@@ -94,11 +96,14 @@ public class WindowPreferences {
         this.m_buttonColor = m_buttonColor;
     }
 
-    
-    
-    
-       
+    public static Color getBorderColor() {
+        return borderColor;
+    }
 
+    public static void setBorderColor(Color borderColor) {
+        WindowPreferences.borderColor = borderColor;
+    }
+    
     /**
      * Show current preferences.
      * 

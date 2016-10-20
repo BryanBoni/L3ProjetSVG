@@ -5,15 +5,14 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 
 /**
- * Class representing a path red from a SVG file. 
- * It can contains Lines ("L" or * "l") and Curves ("C" or "c"). 
- * Some style can be defined, such as line width, line color...
+ * Class representing a path red from a SVG file. It can contains Lines ("L" or
+ * * "l") and Curves ("C" or "c"). Some style can be defined, such as line
+ * width, line color...
  */
 public class Path implements IDrawableSVG {
 
     private final ArrayList<Line> m_elements = new ArrayList<>();
     private Color m_strokeColor = Color.BLACK;
-
 
     /**
      * Add a Line to be rendered with the Path.
@@ -50,13 +49,13 @@ public class Path implements IDrawableSVG {
     public void setStroke(Color m_stroke) {
         this.m_strokeColor = m_stroke;
     }
-	
-	@Override
-	public void render(Graphics g) {
-		g.setColor(m_strokeColor);
-		for(Line l: m_elements) {
+
+    @Override
+    public void render(Graphics g) {
+        g.setColor(m_strokeColor);
+        for (Line l : m_elements) {
             l.render(g);
-		}
-	}
+        }
+    }
 
 }
