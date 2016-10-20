@@ -65,6 +65,7 @@ public class MainWindow extends JFrame {
 
         setCursor(null);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        
         //setTitle("I wanna move it move it");
 
         m_panelCanvas.setDebugGraphicsOptions(DebugGraphics.NONE_OPTION);
@@ -79,6 +80,7 @@ public class MainWindow extends JFrame {
         m_panelCanvasLayout.setHorizontalGroup(
                 m_panelCanvasLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
                 .addGap(0, 500, Short.MAX_VALUE));
+        
         m_panelCanvasLayout.setVerticalGroup(
                 m_panelCanvasLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addGap(0, 500, Short.MAX_VALUE));
 
@@ -207,33 +209,46 @@ public class MainWindow extends JFrame {
     }
     
     public void applyPreferences(){
+        getContentPane().setBackground(pref.getM_backgroundColor());
         
+        
+      //  m_toolsPanel.setOpaque(true);
         m_toolsPanel.setBackground(pref.getM_backgroundColor());
         m_toolsPanel.setForeground(pref.getM_textColor());
 
+      //  m_postionPanel.setOpaque(true);
         m_postionPanel.setBackground(pref.getM_backgroundColor());
         m_postionPanel.setForeground(pref.getM_textColor());
         
+       // m_jMenuBar1.setOpaque(true);
         m_jMenuBar1.setBackground(pref.getM_backgroundColor());
         m_jMenuBar1.setForeground(pref.getM_textColor());
         
+       // m_FileMenu.setOpaque(true);
         m_FileMenu.setBackground(pref.getM_backgroundColor());
         m_FileMenu.setForeground(pref.getM_textColor());
         
+       // m_jMenu2.setOpaque(true);
         m_jMenu2.setBackground(pref.getM_backgroundColor());
         m_jMenu2.setForeground(pref.getM_textColor());
         
+       // m_FileChooser.setOpaque(true);        
         m_FileChooser.setBackground(pref.getM_backgroundColor());
         m_FileChooser.setForeground(pref.getM_textColor());
         
+      //  position.setOpaque(true);
         position.setBackground(pref.getM_backgroundColor());
         position.setForeground(pref.getM_textColor());
         
-        m_resetButton.setBackground(pref.getM_buttonBackgoundColor());
+        
+     //   m_resetButton.setOpaque(true);
+        m_resetButton.setBackground(Color.BLACK/*pref.getM_buttonBackgoundColor()*/);
         m_resetButton.setForeground(pref.getM_buttonColor());
         
+
         m_zoomLabel.setForeground(pref.getM_textColor());
         
+      //  zoomField.setOpaque(true);
         zoomField.setBackground(pref.getM_backgroundColor());
         zoomField.setForeground(pref.getM_textColor());
     }
