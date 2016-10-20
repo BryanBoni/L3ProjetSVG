@@ -33,7 +33,7 @@ public class Rasterizer {
 		for (int x = 0; x < m_width; x++) {
 			for (int y = 0; y < m_height; y++) {
 				if (m_pixels[x][y] > 0) {
-					g.setColor(p.getStroke());
+					g.setColor(p.getColorStroke());
 					g.drawRect(x, y, 0, 0);
 				}
 			}

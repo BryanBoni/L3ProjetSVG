@@ -8,7 +8,7 @@ package data;
 import Maths.Vector2f;
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.Graphics;
+import java.awt.Graphics2D;
 import view.CanvasPanel;
 
 public class Text implements IDrawableSVG {
@@ -40,7 +40,7 @@ public class Text implements IDrawableSVG {
 	}
 	
 	@Override
-	public void render(Graphics g) {
+	public void render(Graphics2D g) {
 		//g.setFont(m_font);
 		float zoom = CanvasPanel.zoom;
 		int x, y;
