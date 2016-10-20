@@ -2,7 +2,7 @@ package data;
 
 import Maths.Vector2f;
 import draw.ThreadedRasterizer;
-import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.util.ArrayList;
 import view.CanvasPanel;
 
@@ -37,7 +37,7 @@ public class Line implements IDrawableSVG {
 	}
 
 	@Override
-	public void render(Graphics g) {
+	public void render(Graphics2D g) {
 		float zoom = CanvasPanel.zoom;
 		for (float t = DRAW_STEP / zoom; t <= 1; t += DRAW_STEP / zoom) {
 			Vector2f a = getPoint(t - DRAW_STEP / zoom).scale(zoom);
