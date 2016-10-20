@@ -39,11 +39,11 @@ public class Line implements IDrawableSVG {
 	@Override
 	public void render(Graphics g) {
 		float zoom = CanvasPanel.zoom;
-		for (float t = 0.01f / zoom; t < 1; t += 0.01f / zoom) {
-			Vector2f a = getPoint(t - 0.01f / zoom).scale(zoom);
+		for (float t = DRAW_STEP / zoom; t <= 1; t += DRAW_STEP / zoom) {
+			Vector2f a = getPoint(t - DRAW_STEP / zoom).scale(zoom);
 			Vector2f b = getPoint(t).scale(zoom);
 
-			g.drawLine((int) a.x, (int) a.y, (int) b.x, (int) b.y);
+			g.drawLine(Math.round(a.x), Math.round(a.y), Math.round(b.x), Math.round(b.y));
 		}
 	}
 
