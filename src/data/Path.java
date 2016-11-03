@@ -1,7 +1,7 @@
 package data;
 
 import java.awt.Color;
-import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.util.ArrayList;
 
 /**
@@ -39,19 +39,19 @@ public class Path implements IDrawableSVG {
     /**
      * @return the m_strokeColor
      */
-    public Color getStroke() {
+    public Color getColorStroke() {
         return m_strokeColor;
     }
 
     /**
-     * @param m_stroke the m_strokeColor to set
+     * @param colorStroke the m_strokeColor to set
      */
-    public void setStroke(Color m_stroke) {
-        this.m_strokeColor = m_stroke;
+    public void setColorStroke(Color colorStroke) {
+        this.m_strokeColor = colorStroke;
     }
 
     @Override
-    public void render(Graphics g) {
+    public void render(Graphics2D g) {
         g.setColor(m_strokeColor);
         for (Line l : m_elements) {
             l.render(g);

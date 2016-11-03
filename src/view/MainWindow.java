@@ -247,22 +247,28 @@ public class MainWindow extends JFrame {
         zoomField.setForeground(pref.getM_textColor());
     }
 
-    /**
-     * Display constantly the position of the mouse on the canvasPanel.
-     *
-     * @param mouseX
-     * @param mouseY
-     */
-    public static void changeLabelPosition(int mouseX, int mouseY) {
-        position.setText("X:" + mouseX + " Y:" + mouseY);
-    }
 
-    public static void changeLabelPosition() {
-        position.setText("X:" + " Y:");
-    }
 
-    public static void changeFieldZoom(float zoom) {
-        zoom = zoom * 100;
-        zoomField.setText(zoom + "%");
-    }
+	/**
+	 * Display constantly the position of the mouse on the canvasPanel.
+	 *
+	 * @param mouseX
+	 * @param mouseY
+	 */
+	public static void changeLabelPosition(int mouseX, int mouseY) {
+		position.setText("X:" + mouseX + " Y:" + mouseY);
+	}
+
+	public static void changeLabelPosition() {
+		position.setText("X: " + " Y:");
+	}
+
+	public static void changeFieldZoom(float zoom) {
+		zoom = zoom * 100;
+		String zoomText = String.valueOf(zoom);
+		if (zoomText.contains(".")) {
+			zoomText = zoomText.substring(0, zoomText.indexOf(".") + Math.min(zoomText.length() - zoomText.indexOf("."), 3));
+		}
+		zoomField.setText(zoomText + " %");
+	}
 }
