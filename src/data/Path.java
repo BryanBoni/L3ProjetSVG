@@ -13,7 +13,7 @@ public class Path implements IDrawableSVG {
 
     private final ArrayList<Line> m_elements = new ArrayList<>();
     private Color m_strokeColor = Color.BLACK;
-	private float m_strokeWidth = 2;
+	private float m_strokeWidth = 1;
 
     /**
      * Add a Line to be rendered with the Path.
@@ -74,6 +74,6 @@ public class Path implements IDrawableSVG {
         }
     }
 	
-	public static float STROKE_WIDTH = 2;
+	public static float STROKE_WIDTH = 1;
 
 }

@@ -38,12 +38,20 @@ public class Line implements IDrawableSVG {
 
 	@Override
 	public void render(Graphics2D g) {
+		//float entropie = 50;
+		//for (int i = 0; i < m_stops.size(); i++) {
+		//	m_stops.set(i, m_stops.get(i).add(new Vector2f((float) Math.random() * entropie - entropie/2, (float) Math.random() * entropie - entropie/2)));
+		//}
 		float zoom = CanvasPanel.zoom;
-		int size = Math.max(1, Math.round(Path.STROKE_WIDTH * zoom));
-		for (float t = 0 / zoom; t <= 1; t += DRAW_STEP / zoom) {
-			Vector2f a = getPoint(t - DRAW_STEP / zoom).scale(zoom);
-
-			g.fillOval(Math.round(a.x), Math.round(a.y), size, size);
+		float step = Path.STROKE_WIDTH * DRAW_STEP;
+		int size = Math.round(Path.STROKE_WIDTH * zoom);
+		for (float t = 0; t <= 1; t += step) {
+			Vector2f point = getPoint(t).scale(zoom);
+			if (size < 2) {
+				g.drawLine((int) point.x, (int) point.y, (int) point.x, (int) point.y);
+			} else {
+				g.fillOval(Math.round(point.x), Math.round(point.y), size, size);
+			}
 		}
 	}
 
