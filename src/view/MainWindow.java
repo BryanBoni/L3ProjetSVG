@@ -20,6 +20,7 @@ import javax.swing.WindowConstants;
 import parser.Parser;
 import data.Path;
 import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.LineBorder;
 import parser.SVG;
 
@@ -27,8 +28,10 @@ public class MainWindow extends JFrame {
 
     private final CanvasPanel m_panelCanvas;
     private JMenuItem m_FileChooser;
+    private JMenuItem m_themesMenuItem;
     private JMenu m_FileMenu;
-    private JMenu m_jMenu2;
+    private JMenu m_edit;
+    private JMenu m_toolsMenu;
     private JMenuBar m_jMenuBar1;
     private JPanel m_postionPanel;
     private JPanel m_toolsPanel;
@@ -36,6 +39,7 @@ public class MainWindow extends JFrame {
     private JLabel m_zoomLabel;
     private File currentDir = null;
 
+    public static MainWindow currentWindow;
     private static JTextField zoomField;
     private static JLabel position;
     private static WindowPreferences pref;
@@ -61,7 +65,9 @@ public class MainWindow extends JFrame {
         m_postionPanel = new JPanel();
         m_jMenuBar1 = new JMenuBar();
         m_FileMenu = new JMenu();
-        m_jMenu2 = new JMenu();
+        m_edit = new JMenu();
+        m_toolsMenu = new JMenu();
+        m_themesMenuItem = new JMenuItem();
         m_FileChooser = new JMenuItem();
         position = new JLabel();
         m_resetButton = new JButton();
@@ -143,8 +149,16 @@ public class MainWindow extends JFrame {
 
         m_jMenuBar1.add(m_FileMenu);
 
-        m_jMenu2.setText("Edit");
-        m_jMenuBar1.add(m_jMenu2);
+        m_edit.setText("Edit");
+        m_jMenuBar1.add(m_edit);
+
+        m_toolsMenu.setText("Tools");
+
+        m_themesMenuItem.setText("Themes");
+        m_themesMenuItem.addActionListener(this::m_themesMenuItemActionPerformed);
+        m_toolsMenu.add(m_themesMenuItem);
+
+        m_jMenuBar1.add(m_toolsMenu);
 
         setJMenuBar(m_jMenuBar1);
 
@@ -168,6 +182,8 @@ public class MainWindow extends JFrame {
 
         setResizable(false);
         setLocationRelativeTo(null);
+
+        currentWindow = this;
     }
 
     /**
@@ -213,6 +229,28 @@ public class MainWindow extends JFrame {
         m_panelCanvas.repaintImage();
     }
 
+    public void m_themesMenuItemActionPerformed(ActionEvent evt) {
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+                } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
+                    e.printStackTrace(System.out);
+                }
+                ThemeEditor themeEditDialog = new ThemeEditor(currentWindow, true);
+
+                themeEditDialog.addWindowListener(new java.awt.event.WindowAdapter() {
+                    /* @Override
+                    public void windowClosing(java.awt.event.WindowEvent e) {
+                        System.exit(0);
+                    }*/
+                });
+                themeEditDialog.setVisible(true);
+            }
+        });
+    }
+
     public void applyPreferences() {
 
         getContentPane().setBackground(pref.getM_backgroundColor());
@@ -229,11 +267,17 @@ public class MainWindow extends JFrame {
         m_FileMenu.setBackground(pref.getM_backgroundColor());
         m_FileMenu.setForeground(pref.getM_textColor());
 
-        m_jMenu2.setBackground(pref.getM_backgroundColor());
-        m_jMenu2.setForeground(pref.getM_textColor());
+        m_edit.setBackground(pref.getM_backgroundColor());
+        m_edit.setForeground(pref.getM_textColor());
+
+        m_toolsMenu.setBackground(pref.getM_backgroundColor());
+        m_toolsMenu.setForeground(pref.getM_textColor());
 
         m_FileChooser.setBackground(pref.getM_backgroundColor());
         m_FileChooser.setForeground(pref.getM_textColor());
+
+        m_themesMenuItem.setBackground(pref.getM_backgroundColor());
+        m_themesMenuItem.setForeground(pref.getM_textColor());
 
         position.setBackground(pref.getM_backgroundColor());
         position.setForeground(pref.getM_textColor());
@@ -245,30 +289,31 @@ public class MainWindow extends JFrame {
 
         zoomField.setBackground(pref.getM_backgroundColor());
         zoomField.setForeground(pref.getM_textColor());
+        
+       // UIManager.put("PopupMenu.border", new LineBorder(WindowPreferences.getBorderColor()));
+       // UIManager.put("MenuBar.border", new LineBorder(WindowPreferences.getBorderColor()));
     }
 
+    /**
+     * Display constantly the position of the mouse on the canvasPanel.
+     *
+     * @param mouseX
+     * @param mouseY
+     */
+    public static void changeLabelPosition(int mouseX, int mouseY) {
+        position.setText("X:" + mouseX + " Y:" + mouseY);
+    }
 
+    public static void changeLabelPosition() {
+        position.setText("X: " + " Y:");
+    }
 
-	/**
-	 * Display constantly the position of the mouse on the canvasPanel.
-	 *
-	 * @param mouseX
-	 * @param mouseY
-	 */
-	public static void changeLabelPosition(int mouseX, int mouseY) {
-		position.setText("X:" + mouseX + " Y:" + mouseY);
-	}
-
-	public static void changeLabelPosition() {
-		position.setText("X: " + " Y:");
-	}
-
-	public static void changeFieldZoom(float zoom) {
-		zoom = zoom * 100;
-		String zoomText = String.valueOf(zoom);
-		if (zoomText.contains(".")) {
-			zoomText = zoomText.substring(0, zoomText.indexOf(".") + Math.min(zoomText.length() - zoomText.indexOf("."), 3));
-		}
-		zoomField.setText(zoomText + " %");
-	}
+    public static void changeFieldZoom(float zoom) {
+        zoom = zoom * 100;
+        String zoomText = String.valueOf(zoom);
+        if (zoomText.contains(".")) {
+            zoomText = zoomText.substring(0, zoomText.indexOf(".") + Math.min(zoomText.length() - zoomText.indexOf("."), 3));
+        }
+        zoomField.setText(zoomText + " %");
+    }
 }

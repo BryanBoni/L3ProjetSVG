@@ -11,10 +11,10 @@ import java.awt.Color;
  */
 public class WindowPreferences {
     
-    private Color m_backgroundColor;
-    private Color m_textColor;
-    private Color m_buttonBackgoundColor;
-    private Color m_buttonColor;
+    private static Color m_backgroundColor;
+    private static Color m_textColor;
+    private static Color m_buttonBackgoundColor;
+    private static Color m_buttonColor;
     private static Color borderColor;
 
     /**
@@ -33,68 +33,36 @@ public class WindowPreferences {
         borderColor = bordBack;
     }
 
-    /**
-     *
-     * @return
-     */
-    public Color getM_backgroundColor() {
+    public static Color getM_backgroundColor() {
         return m_backgroundColor;
     }
 
-    /**
-     *
-     * @param m_backgroundColor
-     */
-    public void setM_backgroundColor(Color m_backgroundColor) {
-        this.m_backgroundColor = m_backgroundColor;
+    public static void setM_backgroundColor(Color m_backgroundColor) {
+        WindowPreferences.m_backgroundColor = m_backgroundColor;
     }
 
-    /**
-     *
-     * @return
-     */
-    public Color getM_textColor() {
+    public static Color getM_textColor() {
         return m_textColor;
     }
 
-    /**
-     *
-     * @param m_textColor
-     */
-    public void setM_textColor(Color m_textColor) {
-        this.m_textColor = m_textColor;
+    public static void setM_textColor(Color m_textColor) {
+        WindowPreferences.m_textColor = m_textColor;
     }
 
-    /**
-     *
-     * @return
-     */
-    public Color getM_buttonBackgoundColor() {
+    public static Color getM_buttonBackgoundColor() {
         return m_buttonBackgoundColor;
     }
 
-    /**
-     *
-     * @param m_buttonBackgoundColor
-     */
-    public void setM_buttonBackgoundColor(Color m_buttonBackgoundColor) {
-        this.m_buttonBackgoundColor = m_buttonBackgoundColor;
+    public static void setM_buttonBackgoundColor(Color m_buttonBackgoundColor) {
+        WindowPreferences.m_buttonBackgoundColor = m_buttonBackgoundColor;
     }
 
-    /**
-     *
-     * @return
-     */
-    public Color getM_buttonColor() {
+    public static Color getM_buttonColor() {
         return m_buttonColor;
     }
 
-    /**
-     *
-     * @param m_buttonColor
-     */
-    public void setM_buttonColor(Color m_buttonColor) {
-        this.m_buttonColor = m_buttonColor;
+    public static void setM_buttonColor(Color m_buttonColor) {
+        WindowPreferences.m_buttonColor = m_buttonColor;
     }
 
     public static Color getBorderColor() {
@@ -103,6 +71,16 @@ public class WindowPreferences {
 
     public static void setBorderColor(Color borderColor) {
         WindowPreferences.borderColor = borderColor;
+    }
+
+   
+    
+    public static void changePref(Color backgroundColor, Color textColor, Color buttonBackgoundColor, Color buttonColor, Color bordBack){
+        WindowPreferences.m_backgroundColor = backgroundColor;
+        WindowPreferences.m_textColor = textColor;
+        WindowPreferences.m_buttonBackgoundColor = buttonBackgoundColor;
+        WindowPreferences.m_buttonColor = buttonColor;
+        WindowPreferences.borderColor = bordBack;
     }
     
     /**

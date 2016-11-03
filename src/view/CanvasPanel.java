@@ -189,6 +189,7 @@ public class CanvasPanel extends JPanel implements MouseMotionListener, MouseLis
 	 */
 	@Override
 	public void mouseWheelMoved(MouseWheelEvent e) {
+            //todo make the zoom on the position of the mousse or the center.
 		float step = 0.25f;
 		if (e.getPreciseWheelRotation() < 0) {//zoom +
 			zoom = Math.min(zoom * 2f, 32.0f);
