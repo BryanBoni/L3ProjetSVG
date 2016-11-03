@@ -23,6 +23,7 @@ public class WindowPreferences {
      * @param textColor
      * @param buttonBackgoundColor
      * @param buttonColor 
+     * @param bordBack 
      */
     public WindowPreferences(Color backgroundColor, Color textColor, Color buttonBackgoundColor, Color buttonColor, Color bordBack) {
         this.m_backgroundColor = backgroundColor;
