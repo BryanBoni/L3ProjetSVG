@@ -9,8 +9,8 @@ public class Circle implements IDrawableSVG {
 
 	private Vector2f m_position = new Vector2f(0, 0);
 	private float m_radius = 0;
-	private Color m_colorStroke = Color.BLACK;
-	private Color m_colorFill = null;
+	private Color m_strokeColor = Color.BLACK;
+	private Color m_fillColor = null;
 
 	public void setPosition(Vector2f position) {
 		m_position = position;
@@ -25,12 +25,12 @@ public class Circle implements IDrawableSVG {
 		m_radius = radius;
 	}
 
-	public void setColorStroke(Color colorStroke) {
-		m_colorStroke = colorStroke;
+	public void setStrokeColor(Color strokeColor) {
+		m_strokeColor = strokeColor;
 	}
 
-	public void setColorFill(Color colorFill) {
-		m_colorFill = colorFill;
+	public void setFillColor(Color fillColor) {
+		m_fillColor = fillColor;
 	}
 
 	@Override
@@ -40,12 +40,12 @@ public class Circle implements IDrawableSVG {
 		x = Math.round((m_position.x - m_radius) * zoom);
 		y = Math.round((m_position.y - m_radius) * zoom);
 		d = Math.round(m_radius * 2 * zoom);
-		if (m_colorFill != null) {
-			g.setColor(m_colorFill);
+		if (m_fillColor != null) {
+			g.setColor(m_fillColor);
 			g.fillOval(x, y, d, d);
 		}
-		if (m_colorStroke != null) {
-			g.setColor(m_colorStroke);
+		if (m_strokeColor != null) {
+			g.setColor(m_strokeColor);
 			g.drawOval(x, y, d, d);
 		}
 	}

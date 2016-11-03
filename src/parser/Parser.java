@@ -48,10 +48,10 @@ public class Parser {
 						String style = node.getAttributes().getNamedItem("style").getNodeValue();
 						for (String s : style.split(";")) {
 							if (s.contains("stroke:")) {
-								circle.setColorStroke(Color.decode(s.replace("stroke:", "")));
+								circle.setStrokeColor(Color.decode(s.replace("stroke:", "")));
 							}
 							if (s.contains("fill:")) {
-								circle.setColorFill(Color.decode(s.replace("fill:", "")));
+								circle.setFillColor(Color.decode(s.replace("fill:", "")));
 							}
 						}
 					}
@@ -77,10 +77,10 @@ public class Parser {
 						String style = node.getAttributes().getNamedItem("style").getNodeValue();
 						for (String s : style.split(";")) {
 							if (s.contains("stroke:")) {
-								rect.setColorStroke(Color.decode(s.replace("stroke:", "")));
+								rect.setStrokeColor(Color.decode(s.replace("stroke:", "")));
 							}
 							if (s.contains("fill:")) {
-								rect.setColorFill(Color.decode(s.replace("fill:", "")));
+								rect.setFillColor(Color.decode(s.replace("fill:", "")));
 							}
 						}
 					}
@@ -110,7 +110,10 @@ public class Parser {
 					String style = node.getAttributes().getNamedItem("style").getNodeValue();
 					for (String s : style.split(";")) {
 						if (s.contains("stroke:")) {
-							path.setColorStroke(Color.decode(s.replace("stroke:", "")));
+							path.setStrokeColor(Color.decode(s.replace("stroke:", "")));
+						}
+						if (s.contains("stroke-width:")) {
+							path.setStrokeWidth(Float.parseFloat(s.replace("stroke-width:", "")));
 						}
 					}
 				}
