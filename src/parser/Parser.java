@@ -3,6 +3,8 @@ package parser;
 import data.Circle;
 import data.Path;
 import data.Curve;
+import data.Image;
+import data.Point;
 import java.awt.Color;
 import data.Rectangle;
 import java.io.File;
@@ -36,29 +38,42 @@ public class Parser {
 	public SVG parse() {
 		if (doc != null) {
 			SVG svg = new SVG();
-
 			// Parsing nodes
-			NodeList nodeList = doc.getFirstChild().getChildNodes();
-			for (int i = 0; i < nodeList.getLength(); i++) {
-				Node node = nodeList.item(i);
-				if (node.getNodeType() == Node.ELEMENT_NODE) {
-					if (node.getNodeName().equals("circle")) {
-						loadNodeCircle(node, svg);
-					}
-					if (node.getNodeName().equals("rect")) {
-						loadNodeRect(node, svg);
-					}
-					if (node.getNodeName().equals("path")) {
-						loadNodePath(node, svg);
-					}
-				}
+			NodeList nodeList = null;
+			nodeList = doc.getElementsByTagName("g");
+			if (nodeList.getLength() > 0) { // if exist "g" node (from Inkscape)
+				loadNodeList(nodeList.item(0).getChildNodes(), svg);
+			} else {
+				loadNodeList(doc.getFirstChild().getChildNodes(), svg);
 			}
 
+			svg.addDrawable(new Point()); // origin
+			
 			return svg;
 		} else {
 			return null;
 		}
 
+	}
+
+	public void loadNodeList(NodeList nodeList, SVG svg) {
+		for (int i = 0; i < nodeList.getLength(); i++) {
+			Node node = nodeList.item(i);
+			if (node.getNodeType() == Node.ELEMENT_NODE) {
+				if (node.getNodeName().equals("circle")) {
+					loadNodeCircle(node, svg);
+				}
+				if (node.getNodeName().equals("rect")) {
+					loadNodeRect(node, svg);
+				}
+				if (node.getNodeName().equals("path")) {
+					loadNodePath(node, svg);
+				}
+				if (node.getNodeName().equals("image")) {
+					loadNodeImage(node, svg);
+				}
+			}
+		}
 	}
 
 	public void loadNodeCircle(Node node, SVG svg) {
@@ -163,6 +178,21 @@ public class Parser {
 		}
 
 		svg.addDrawable(path);
+	}
+
+	public void loadNodeImage(Node node, SVG svg) {
+		Image image = new Image();
+		System.out.println("loading image node");
+		float x = Float.parseFloat(node.getAttributes().getNamedItem("x").getNodeValue());
+		float y = Float.parseFloat(node.getAttributes().getNamedItem("y").getNodeValue());
+		float width = Float.parseFloat(node.getAttributes().getNamedItem("width").getNodeValue());
+		float height = Float.parseFloat(node.getAttributes().getNamedItem("height").getNodeValue());
+		String xlinkHref = node.getAttributes().getNamedItem("xlink:href").getNodeValue();
+		image.setPosition(x, y);
+		image.setSize(width, height);
+		image.setXlinkHref(xlinkHref);
+
+		svg.addDrawable(image);
 	}
 
 }
