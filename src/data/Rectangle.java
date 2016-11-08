@@ -9,8 +9,8 @@ public class Rectangle implements IDrawableSVG {
 
 	private Vector2f m_position = new Vector2f(0, 0);
 	private Vector2f m_size = new Vector2f(0, 0);
-	private Color m_colorStroke = Color.BLACK;
-	private Color m_colorFill = null;
+	private Color m_strokeColor = Color.BLACK;
+	private Color m_fillColor = null;
 
 	public void setPosition(Vector2f position) {
 		m_position = position;
@@ -30,12 +30,12 @@ public class Rectangle implements IDrawableSVG {
 		m_size.y = height;
 	}
 
-	public void setColorStroke(Color colorStroke) {
-		m_colorStroke = colorStroke;
+	public void setStrokeColor(Color strokeColor) {
+		m_strokeColor = strokeColor;
 	}
 
-	public void setColorFill(Color colorFill) {
-		m_colorFill = colorFill;
+	public void setFillColor(Color fillColor) {
+		m_fillColor = fillColor;
 	}
 
 	@Override
@@ -47,12 +47,12 @@ public class Rectangle implements IDrawableSVG {
 		y = Math.round(m_position.y * zoom);
 		w = Math.round(m_size.x * zoom);
 		h = Math.round(m_size.y * zoom);
-		if (m_colorFill != null) {
-			g.setColor(m_colorFill);
+		if (m_fillColor != null) {
+			g.setColor(m_fillColor);
 			g.fillRect(x, y, w, h);
 		}
-		if (m_colorStroke != null) {
-			g.setColor(m_colorStroke);
+		if (m_strokeColor != null) {
+			g.setColor(m_strokeColor);
 			g.drawRect(x, y, w, h);
 		}
 	}

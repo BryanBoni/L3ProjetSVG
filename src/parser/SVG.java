@@ -14,4 +14,8 @@ public class SVG {
     public ArrayList<IDrawableSVG> getDrawableList() {
         return m_drawableList;
     }
+	
+	public void addDrawable(IDrawableSVG drawable) {
+		m_drawableList.add(drawable);
+	}
 }
