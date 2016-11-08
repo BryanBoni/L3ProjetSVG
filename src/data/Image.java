@@ -1,15 +1,14 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package data;
 
 import Maths.Vector2f;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.InputStream;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import javax.imageio.ImageIO;
 import view.CanvasPanel;
 
@@ -56,6 +55,20 @@ public class Image implements IDrawableSVG {
 				m_image = null;
 				System.out.println("Impossible to load image! (" + m_xlinkHref + ")");
 			}
+		} else {
+			System.out.println("loading embadded image...");
+			try {
+				String dataStr = m_xlinkHref.substring(m_xlinkHref.indexOf(",") + 1);
+				Base64.Decoder decoder = Base64.getMimeDecoder();
+				byte data[] = decoder.decode(dataStr.getBytes(StandardCharsets.UTF_8));
+				InputStream in = new ByteArrayInputStream(data);
+				m_image = ImageIO.read(in);
+				System.out.println("Image loaded");
+			} catch (Exception e) {
+				m_image = null;
+				System.out.println("Impossible to load image!");
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -78,17 +91,15 @@ public class Image implements IDrawableSVG {
 		h = Math.round(m_size.y * zoom);
 		if (m_image != null) {
 			g.drawImage(m_image,
-					x, y,
-					w, h,
-					0, 0,
-					m_image.getWidth(null),m_image.getHeight(null),
+					x, y, x+w, y+h,
+					0, 0, m_image.getWidth(null), m_image.getHeight(null),
 					null);
 		} else {
 			g.setColor(Color.WHITE);
 			g.fillRect(x, y, w, h);
-			g.setColor(Color.BLACK);
-			g.drawRect(x, y, w, h);
 		}
+		g.setColor(Color.BLACK);
+		g.drawRect(x, y, w, h);
 	}
 
 	public void renderImageEmbed(Graphics2D g) {
@@ -99,8 +110,15 @@ public class Image implements IDrawableSVG {
 		y = Math.round(m_position.y * zoom);
 		w = Math.round(m_size.x * zoom);
 		h = Math.round(m_size.y * zoom);
-		g.setColor(Color.RED);
-		g.fillRect(x, y, w, h);
+		if (m_image != null) {
+			g.drawImage(m_image,
+					x, y, x+w, y+h,
+					0, 0, m_image.getWidth(null), m_image.getHeight(null),
+					null);
+		} else {
+			g.setColor(Color.RED);
+			g.fillRect(x, y, w, h);
+		}
 		g.setColor(Color.BLUE);
 		g.drawRect(x, y, w, h);
 	}
