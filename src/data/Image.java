@@ -74,6 +74,10 @@ public class Image implements IDrawableSVG {
 
 	@Override
 	public void render(Graphics2D g) {
+//		float entropie = 50;
+//		m_position = m_position.add(new Vector2f((float) Math.random() * entropie - entropie/2, (float) Math.random() * entropie - entropie/2));
+//		m_size = m_size.add(new Vector2f((float) Math.random() * entropie - entropie/2, (float) Math.random() * entropie - entropie/2));
+
 		if (m_isXlinkHrefPath) {
 			renderImageLink(g);
 		} else {
