@@ -39,19 +39,23 @@
      inkscape:window-height="716"
      id="namedview32"
      showgrid="false"
-     inkscape:zoom="3.1631836"
-     inkscape:cx="0"
-     inkscape:cy="0"
+     inkscape:zoom="1"
+     inkscape:cx="1.2145513"
+     inkscape:cy="104.69599"
      inkscape:window-x="-8"
      inkscape:window-y="-8"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg2" />
   <path
-     style="stroke:#000000;fill:none"
+     style="stroke:#AAAAAAA;fill:none;stroke-width:10;"
+     d="M 0,0 C 200,0 0,200 200,200"
+     id="path2" />
+  <path
+     style="stroke:#000000;fill:none;stroke-width:10;"
      d="M 10,10 C 20,20 40,20 50,10"
      id="path4" />
   <path
-     style="stroke:#0A860C;fill:none"
+     style="fill:none;stroke:#0a860c;stroke-width:5;"
      d="M 70,10 C 70,20 120,20 120,10"
      id="path6" />
   <path
@@ -63,15 +67,15 @@
      d="M 10,60 C 20,80 40,80 50,60"
      id="path10" />
   <path
-     style="stroke:#0000FF;fill:none"
+     style="stroke:#0000FF;fill:none;stroke-width:10;"
      d="M 70,60 C 70,80 110,80 110,60"
      id="path12" />
   <path
-     style="stroke:#FFFF00;fill:none"
+     style="stroke:#FFFF00;fill:none;stroke-width:5;"
      d="M 130,60 C 120,80 180,80 170,60"
      id="path14" />
   <path
-     style="stroke:#00FFFF;fill:none"
+     style="stroke:#00FFFF;fill:none;stroke-width:5;"
      d="M 10,110 C 20,140 40,140 50,110"
      id="path16" />
   <path
@@ -79,7 +83,7 @@
      d="M 70,110 C 70,140 110,140 110,110"
      id="path18" />
   <path
-     style="stroke:#0E0C00;fill:none"
+     style="stroke:#0E0C00;fill:none;stroke-width:10;"
      d="M 130,110 C 120,140 180,140 170,110"
      id="path20" />
   <circle

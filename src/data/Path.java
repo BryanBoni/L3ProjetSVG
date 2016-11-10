@@ -13,6 +13,7 @@ public class Path implements IDrawableSVG {
 
     private final ArrayList<Line> m_elements = new ArrayList<>();
     private Color m_strokeColor = Color.BLACK;
+	private float m_strokeWidth = 1;
 
     /**
      * Add a Line to be rendered with the Path.
@@ -39,23 +40,40 @@ public class Path implements IDrawableSVG {
     /**
      * @return the m_strokeColor
      */
-    public Color getColorStroke() {
+    public Color getStrokeColor() {
         return m_strokeColor;
     }
 
     /**
-     * @param colorStroke the m_strokeColor to set
+     * @param strokeColor the m_strokeColor to set
      */
-    public void setColorStroke(Color colorStroke) {
-        this.m_strokeColor = colorStroke;
+    public void setStrokeColor(Color strokeColor) {
+        this.m_strokeColor = strokeColor;
+    }
+
+    /**
+     * @return the m_strokeWidth
+     */
+    public float getStrokeWidth() {
+        return m_strokeWidth;
+    }
+
+    /**
+     * @param strokeWidth the m_strokeWidth to set
+     */
+    public void setStrokeWidth(float strokeWidth) {
+        this.m_strokeWidth = strokeWidth;
     }
 
     @Override
     public void render(Graphics2D g) {
         g.setColor(m_strokeColor);
+		STROKE_WIDTH = m_strokeWidth;
         for (Line l : m_elements) {
             l.render(g);
         }
     }
+	
+	public static float STROKE_WIDTH = 1;
 
 }
