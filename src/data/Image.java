@@ -40,34 +40,47 @@ public class Image implements IDrawableSVG {
 
 	public void setXlinkHref(String xlinkHref) {
 		m_xlinkHref = xlinkHref;
-		String start = m_xlinkHref.substring(0, m_xlinkHref.indexOf(":"));
-		m_isXlinkHrefPath = start.equals("file");
-		System.out.println(start + " ? " + "file = " + m_isXlinkHrefPath);
-		if (m_isXlinkHrefPath) {
-			System.out.println("loading image file...");
-			try {
-				String path = m_xlinkHref.replace("file:///", "");
-				URL url = new URL(m_xlinkHref);
-				File imageFile = new File(url.toURI());
-				m_image = ImageIO.read(imageFile);
-				System.out.println("Image loaded (" + url.toURI() + ")");
-			} catch (Exception e) {
-				m_image = null;
-				System.out.println("Impossible to load image! (" + m_xlinkHref + ")");
-			}
-		} else {
-			System.out.println("loading embadded image...");
-			try {
-				String dataStr = m_xlinkHref.substring(m_xlinkHref.indexOf(",") + 1);
-				Base64.Decoder decoder = Base64.getMimeDecoder();
-				byte data[] = decoder.decode(dataStr.getBytes(StandardCharsets.UTF_8));
-				InputStream in = new ByteArrayInputStream(data);
-				m_image = ImageIO.read(in);
-				System.out.println("Image loaded");
-			} catch (Exception e) {
-				m_image = null;
-				System.out.println("Impossible to load image!");
-				e.printStackTrace();
+		if (!m_xlinkHref.contains(":")) { // local relative file
+			m_isXlinkHrefPath = true;
+				System.out.println("loading image file...");
+				try {
+					File imageFile = new File(m_xlinkHref);
+					m_image = ImageIO.read(imageFile);
+					System.out.println("Image loaded (" + m_xlinkHref + ")");
+				} catch (Exception e) {
+					m_image = null;
+					System.out.println("Impossible to load image! (" + m_xlinkHref + ")");
+				}
+		} else { // url
+			String start = m_xlinkHref.substring(0, m_xlinkHref.indexOf(":"));
+			m_isXlinkHrefPath = start.equals("file");
+			System.out.println(start + " ? " + "file = " + m_isXlinkHrefPath);
+			if (m_isXlinkHrefPath) {
+				System.out.println("loading image file...");
+				try {
+					String path = m_xlinkHref.replace("file:///", "");
+					URL url = new URL(m_xlinkHref);
+					File imageFile = new File(url.toURI());
+					m_image = ImageIO.read(imageFile);
+					System.out.println("Image loaded (" + url.toURI() + ")");
+				} catch (Exception e) {
+					m_image = null;
+					System.out.println("Impossible to load image! (" + m_xlinkHref + ")");
+				}
+			} else {
+				System.out.println("loading embadded image...");
+				try {
+					String dataStr = m_xlinkHref.substring(m_xlinkHref.indexOf(",") + 1);
+					Base64.Decoder decoder = Base64.getMimeDecoder();
+					byte data[] = decoder.decode(dataStr.getBytes(StandardCharsets.UTF_8));
+					InputStream in = new ByteArrayInputStream(data);
+					m_image = ImageIO.read(in);
+					System.out.println("Image loaded");
+				} catch (Exception e) {
+					m_image = null;
+					System.out.println("Impossible to load image!");
+					e.printStackTrace();
+				}
 			}
 		}
 	}
@@ -95,7 +108,7 @@ public class Image implements IDrawableSVG {
 		h = Math.round(m_size.y * zoom);
 		if (m_image != null) {
 			g.drawImage(m_image,
-					x, y, x+w, y+h,
+					x, y, x + w, y + h,
 					0, 0, m_image.getWidth(null), m_image.getHeight(null),
 					null);
 		} else {
@@ -116,7 +129,7 @@ public class Image implements IDrawableSVG {
 		h = Math.round(m_size.y * zoom);
 		if (m_image != null) {
 			g.drawImage(m_image,
-					x, y, x+w, y+h,
+					x, y, x + w, y + h,
 					0, 0, m_image.getWidth(null), m_image.getHeight(null),
 					null);
 		} else {
