@@ -37,6 +37,9 @@ public class CanvasPanel extends JPanel implements MouseMotionListener, MouseLis
     public static int mouseY = 0;
     private static boolean isMousePressed = false;
 
+    //init
+    private boolean isEnd = false; // delimiter
+
     /**
      * The constructor of the CanvasPanel, used when a default SVG file is
      * define at the begining.
@@ -194,27 +197,36 @@ public class CanvasPanel extends JPanel implements MouseMotionListener, MouseLis
         int diffX, diffY;
         diffX = Math.abs(translateX - e.getX());
         diffY = Math.abs(translateY - e.getY());
-        
+
         float oldScale = zoom;
 
-        
-        float step = 0.25f;
         if (e.getPreciseWheelRotation() < 0) {//zoom +
             zoom = Math.min(zoom * 2f, 32.0f);
+
+            //get the diff of the old and new position.
+            int newDiffX = (int) (((diffX / oldScale) * zoom));
+            int newDiffY = (int) (((diffY / oldScale) * zoom));
+
+            translateX -= (newDiffX - diffX);
+            translateY -= (newDiffY - diffY);
+
         } else if (e.getPreciseWheelRotation() > 0) {//zoom -
             zoom = Math.max(zoom * 0.5f, 0.25f);
+
+            int newDiffX = (int) (((diffX / oldScale) * zoom));
+            int newDiffY = (int) (((diffY / oldScale) * zoom));
+            /*
+                translateX += newDiffX;
+                translateY += newDiffY;
+             */
+            translateX -= (newDiffX - diffX);
+            translateY -= (newDiffY - diffY);
+
         }
 
-        //get the diff of the old and new position.
-        int newDiffX = (int) (((diffX * oldScale) - (diffX * zoom))/2);
-        int newDiffY = (int) (((diffY * oldScale) - (diffY * zoom))/2);
-        
-        translateX += newDiffX;
-        translateY += newDiffY;
-
-        
-       // System.out.println(zoom + " , " + currentScale);
+        // System.out.println(zoom + " , " + currentScale);
         repaint();
+
         MainWindow.changeFieldZoom(zoom);
 
     }
