@@ -19,6 +19,7 @@ import javax.swing.LayoutStyle;
 import javax.swing.WindowConstants;
 import parser.Parser;
 import data.Path;
+import javax.swing.JTabbedPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.LineBorder;
@@ -26,6 +27,7 @@ import parser.SVG;
 
 public class MainWindow extends JFrame {
 
+    //Window components.
     private final CanvasPanel m_panelCanvas;
     private JMenuItem m_FileChooser;
     private JMenuItem m_themesMenuItem;
@@ -37,7 +39,10 @@ public class MainWindow extends JFrame {
     private JPanel m_toolsPanel;
     private JButton m_resetButton;
     private JLabel m_zoomLabel;
-    private File currentDir = null;
+    private JTabbedPane m_multiCanvas;
+
+    private File m_currentDir = null;
+    private String m_curTheme;
 
     public static MainWindow currentWindow;
     private static JTextField zoomField;
@@ -48,6 +53,7 @@ public class MainWindow extends JFrame {
         super();
         m_panelCanvas = new CanvasPanel(filePath);
         pref = new WindowPreferences(new Color(52, 52, 52), new Color(255, 255, 255), Color.BLACK, new Color(255, 255, 255), new Color(52, 52, 52));
+        m_curTheme = "Dark";
         initComponents();
         applyPreferences();
         setTitle(filePath);
@@ -73,6 +79,7 @@ public class MainWindow extends JFrame {
         m_resetButton = new JButton();
         m_zoomLabel = new JLabel();
         zoomField = new JTextField();
+        m_multiCanvas = new JTabbedPane();
 
         setCursor(null);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -92,23 +99,27 @@ public class MainWindow extends JFrame {
                         .addGap(0, 500, Short.MAX_VALUE));
 
         m_panelCanvasLayout.setVerticalGroup(
-                m_panelCanvasLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addGap(0, 500, Short.MAX_VALUE));
+                m_panelCanvasLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGap(0, 500, Short.MAX_VALUE));
+
+        //Set the Multi canvas pane.
+        m_multiCanvas.addTab("NewFile", m_panelCanvas);
 
         m_resetButton.setText("reset position");
 
-        m_toolsPanel.setBorder(BorderFactory.createEtchedBorder());
+        //m_toolsPanel.setBorder(BorderFactory.createEtchedBorder());
 
         GroupLayout toolsPanelLayout = new GroupLayout(m_toolsPanel);
         m_toolsPanel.setLayout(toolsPanelLayout);
         toolsPanelLayout.setHorizontalGroup(
                 toolsPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                        .addComponent(m_resetButton)
+                        .addComponent(m_resetButton, GroupLayout.Alignment.CENTER)
                         .addGap(0, 137, Short.MAX_VALUE)
         );
         toolsPanelLayout.setVerticalGroup(
                 toolsPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                        .addComponent(m_resetButton)
-                        .addGap(0, 496, Short.MAX_VALUE)
+                        .addComponent(m_resetButton, GroupLayout.Alignment.TRAILING)
+                        .addGap(0, 520, Short.MAX_VALUE)
         );
 
         position.setText("X: Y:");
@@ -117,7 +128,7 @@ public class MainWindow extends JFrame {
         zoomField.setEditable(false);
         zoomField.setText("100%");
 
-        m_postionPanel.setBorder(BorderFactory.createEtchedBorder());
+        //m_postionPanel.setBorder(BorderFactory.createEtchedBorder());
 
         GroupLayout postionPanelLayout = new GroupLayout(m_postionPanel);
         m_postionPanel.setLayout(postionPanelLayout);
@@ -167,14 +178,19 @@ public class MainWindow extends JFrame {
         layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                         .addComponent(m_toolsPanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(m_panelCanvas, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                        //.addComponent(m_panelCanvas, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(m_multiCanvas, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
                 .addComponent(m_postionPanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                 .addGroup(GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                                .addComponent(m_panelCanvas, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                //.addComponent(m_panelCanvas, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                .addComponent(m_multiCanvas, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                
                                 .addComponent(m_toolsPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(m_postionPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
         );
 
@@ -184,6 +200,13 @@ public class MainWindow extends JFrame {
         setLocationRelativeTo(null);
 
         currentWindow = this;
+    }
+    
+    /**
+     * Unused for now.
+     */
+    private void addCanvasPanel(){
+        
     }
 
     /**
@@ -196,8 +219,8 @@ public class MainWindow extends JFrame {
 
         Path path;
         JFileChooser fc = new JFileChooser();
-        if (currentDir != null) {
-            fc.setCurrentDirectory(currentDir);
+        if (m_currentDir != null) {
+            fc.setCurrentDirectory(m_currentDir);
         } else {
             fc.setCurrentDirectory(new File("."));
         }
@@ -215,7 +238,7 @@ public class MainWindow extends JFrame {
             m_panelCanvas.setDrawableList(svg.getDrawableList());
             m_panelCanvas.repaintImage();
             setTitle(file.getName());
-            currentDir = file;
+            m_currentDir = file;
         }
     }
 
@@ -238,7 +261,7 @@ public class MainWindow extends JFrame {
                 } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
                     e.printStackTrace(System.out);
                 }
-                ThemeEditor themeEditDialog = new ThemeEditor(currentWindow, true);
+                ThemeEditor themeEditDialog = new ThemeEditor(currentWindow, true, m_curTheme);
 
                 themeEditDialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     /* @Override
@@ -289,9 +312,9 @@ public class MainWindow extends JFrame {
 
         zoomField.setBackground(pref.getM_backgroundColor());
         zoomField.setForeground(pref.getM_textColor());
-        
-       // UIManager.put("PopupMenu.border", new LineBorder(WindowPreferences.getBorderColor()));
-       // UIManager.put("MenuBar.border", new LineBorder(WindowPreferences.getBorderColor()));
+
+        // UIManager.put("PopupMenu.border", new LineBorder(WindowPreferences.getBorderColor()));
+        // UIManager.put("MenuBar.border", new LineBorder(WindowPreferences.getBorderColor()));
     }
 
     /**
