@@ -10,14 +10,18 @@ import javax.swing.UnsupportedLookAndFeelException;
  */
 public class ThemeEditor extends javax.swing.JDialog /*implements Runnable*/ {
 
+    private static String curTheme;
+
     /**
      * Creates new form ThemeEditor
      *
      * @param parent
      * @param modal
+     * @param curTheme
      */
-    public ThemeEditor(java.awt.Frame parent, boolean modal) {
+    public ThemeEditor(java.awt.Frame parent, boolean modal, String curTheme) {
         super(parent, modal);
+        ThemeEditor.curTheme = curTheme;
         initComponents();
         setTitle("Theme Preferences Editor");
         setLocationRelativeTo(parent);
@@ -35,10 +39,11 @@ public class ThemeEditor extends javax.swing.JDialog /*implements Runnable*/ {
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        jCurTheme = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         classicBtn = new javax.swing.JButton();
         darkBtn = new javax.swing.JButton();
+        customBtn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -47,8 +52,8 @@ public class ThemeEditor extends javax.swing.JDialog /*implements Runnable*/ {
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
         jLabel1.setText("Current Theme :");
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
-        jLabel2.setText("none");
+        jCurTheme.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
+        jCurTheme.setText(curTheme);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -57,9 +62,9 @@ public class ThemeEditor extends javax.swing.JDialog /*implements Runnable*/ {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel2)
-                .addContainerGap(158, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(jCurTheme)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -67,7 +72,7 @@ public class ThemeEditor extends javax.swing.JDialog /*implements Runnable*/ {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(jLabel2))
+                    .addComponent(jCurTheme))
                 .addContainerGap())
         );
 
@@ -89,6 +94,14 @@ public class ThemeEditor extends javax.swing.JDialog /*implements Runnable*/ {
             }
         });
 
+        customBtn.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
+        customBtn.setText("Custom it !");
+        customBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                customBtnActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -96,8 +109,9 @@ public class ThemeEditor extends javax.swing.JDialog /*implements Runnable*/ {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(classicBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(darkBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(classicBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 270, Short.MAX_VALUE)
+                    .addComponent(darkBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(customBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
@@ -107,7 +121,9 @@ public class ThemeEditor extends javax.swing.JDialog /*implements Runnable*/ {
                 .addComponent(classicBtn)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(darkBtn)
-                .addContainerGap(87, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(customBtn)
+                .addContainerGap(51, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -142,19 +158,28 @@ public class ThemeEditor extends javax.swing.JDialog /*implements Runnable*/ {
     private void darkBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_darkBtnActionPerformed
         WindowPreferences.changePref(new Color(52, 52, 52), new Color(255, 255, 255), Color.BLACK, new Color(255, 255, 255), new Color(52, 52, 52));
         MainWindow.currentWindow.applyPreferences();
+        ThemeEditor.curTheme = "Dark";
+        jCurTheme.setText(curTheme);
     }//GEN-LAST:event_darkBtnActionPerformed
 
     private void classicBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_classicBtnActionPerformed
-        WindowPreferences.changePref(new Color(240,240,240), new Color(52, 52, 52), Color.WHITE, new Color(52, 52, 52), new Color(240,240,240));
+        WindowPreferences.changePref(new Color(240, 240, 240), new Color(52, 52, 52), Color.WHITE, new Color(52, 52, 52), new Color(240, 240, 240));
         MainWindow.currentWindow.applyPreferences();
+        ThemeEditor.curTheme = "Classic";
+        jCurTheme.setText(curTheme);
     }//GEN-LAST:event_classicBtnActionPerformed
+
+    private void customBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_customBtnActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_customBtnActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton classicBtn;
+    private javax.swing.JButton customBtn;
     private javax.swing.JButton darkBtn;
+    private javax.swing.JLabel jCurTheme;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
