@@ -11,6 +11,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 public class ThemeEditor extends javax.swing.JDialog /*implements Runnable*/ {
 
     private static String curTheme;
+
     /**
      * Creates new form ThemeEditor
      *
@@ -158,12 +159,14 @@ public class ThemeEditor extends javax.swing.JDialog /*implements Runnable*/ {
         WindowPreferences.changePref(new Color(52, 52, 52), new Color(255, 255, 255), Color.BLACK, new Color(255, 255, 255), new Color(52, 52, 52));
         MainWindow.currentWindow.applyPreferences();
         ThemeEditor.curTheme = "Dark";
+        jCurTheme.setText(curTheme);
     }//GEN-LAST:event_darkBtnActionPerformed
 
     private void classicBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_classicBtnActionPerformed
-        WindowPreferences.changePref(new Color(240,240,240), new Color(52, 52, 52), Color.WHITE, new Color(52, 52, 52), new Color(240,240,240));
+        WindowPreferences.changePref(new Color(240, 240, 240), new Color(52, 52, 52), Color.WHITE, new Color(52, 52, 52), new Color(240, 240, 240));
         MainWindow.currentWindow.applyPreferences();
         ThemeEditor.curTheme = "Classic";
+        jCurTheme.setText(curTheme);
     }//GEN-LAST:event_classicBtnActionPerformed
 
     private void customBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_customBtnActionPerformed

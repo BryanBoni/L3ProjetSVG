@@ -3,7 +3,6 @@ package view;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.io.File;
-import javax.swing.BorderFactory;
 import javax.swing.DebugGraphics;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
@@ -18,12 +17,13 @@ import javax.swing.JTextField;
 import javax.swing.LayoutStyle;
 import javax.swing.WindowConstants;
 import parser.Parser;
-import data.Path;
 import java.util.ArrayList;
 import javax.swing.JTabbedPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.LineBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import parser.SVG;
 
 public final class MainWindow extends JFrame {
@@ -36,46 +36,65 @@ public final class MainWindow extends JFrame {
     private JMenu m_edit;
     private JMenu m_toolsMenu;
     private JMenuBar m_jMenuBar1;
-    private JPanel m_postionPanel;
+    private JPanel m_infoPanel;
     private JPanel m_toolsPanel;
     private JButton m_resetButton;
     private JLabel m_zoomLabel;
     private JTabbedPane m_multiCanvas;
     private int m_NbFenetres;
-    private ArrayList<CanvasPanel> m_CanvasList;
+    private int m_currentPane;
+
+    private ArrayList<CanvasPanel> m_canvasList; //Stock info des canvas panel.
 
     private File m_currentDir = null;
-    private String m_curTheme;
 
     public static MainWindow currentWindow;
     private static JTextField zoomField;
     private static JLabel position;
+    private static String curTheme;
     private static WindowPreferences pref;
 
     public MainWindow() {
         super();
         m_NbFenetres = 0;
-
-        m_CanvasList = new ArrayList<>();
+        m_canvasList = new ArrayList<>();
         m_panelCanvas = new CanvasPanel();
-        m_CanvasList.add(m_panelCanvas);
 
         pref = new WindowPreferences(new Color(52, 52, 52), new Color(255, 255, 255), Color.BLACK, new Color(255, 255, 255), new Color(52, 52, 52));
-        m_curTheme = "Dark";
+        curTheme = "Dark";
 
         initComponents();
         applyPreferences();
+
+        m_multiCanvas.addChangeListener(new ChangeListener() {
+
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                if (e.getSource() instanceof JTabbedPane) {
+                    JTabbedPane pane = (JTabbedPane) e.getSource();
+                    System.out.println("Selected paneNo : " + pane.getSelectedIndex());
+                    //TODO optimize tab panel
+                    m_multiCanvas.setComponentAt(m_currentPane, null);
+                    m_multiCanvas.setComponentAt(pane.getSelectedIndex(), m_canvasList.get(pane.getSelectedIndex()));
+                    m_currentPane = pane.getSelectedIndex();
+                }
+            }
+        });
+
     }
 
     /**
-     * Intialise all the components of the main window.
+     * Intialise all the components of the main window, It create & init all the
+     * needed componenent for our SVG reader : - a canvas panel, - a bar menu, -
+     * a tool panel and its components - a info panel and its components.
+     *
      */
     private void initComponents() {
         UIManager.put("PopupMenu.border", new LineBorder(WindowPreferences.getBorderColor()));
         //UIManager.put("MenuBar.border", new LineBorder(WindowPreferences.getBorderColor()));
 
         m_toolsPanel = new JPanel();
-        m_postionPanel = new JPanel();
+        m_infoPanel = new JPanel();
         m_jMenuBar1 = new JMenuBar();
         m_FileMenu = new JMenu();
         m_edit = new JMenu();
@@ -91,13 +110,13 @@ public final class MainWindow extends JFrame {
         setCursor(null);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-        m_CanvasList.get(m_CanvasList.indexOf(m_panelCanvas)).setDebugGraphicsOptions(DebugGraphics.NONE_OPTION);
-        m_CanvasList.get(m_CanvasList.indexOf(m_panelCanvas)).setDoubleBuffered(false);
-        m_CanvasList.get(m_CanvasList.indexOf(m_panelCanvas)).setRequestFocusEnabled(false);
-        m_CanvasList.get(m_CanvasList.indexOf(m_panelCanvas)).setLayout(null);
+        m_panelCanvas.setDebugGraphicsOptions(DebugGraphics.NONE_OPTION);
+        m_panelCanvas.setDoubleBuffered(false);
+        m_panelCanvas.setRequestFocusEnabled(false);
+        m_panelCanvas.setLayout(null);
 
-        GroupLayout m_panelCanvasLayout = new GroupLayout(m_CanvasList.get(m_CanvasList.indexOf(m_panelCanvas)));
-        m_CanvasList.get(m_CanvasList.indexOf(m_panelCanvas)).setLayout(m_panelCanvasLayout);
+        GroupLayout m_panelCanvasLayout = new GroupLayout(m_panelCanvas);
+        m_panelCanvas.setLayout(m_panelCanvasLayout);
 
         //Setting the size of a the canvas
         m_panelCanvasLayout.setHorizontalGroup(
@@ -109,7 +128,7 @@ public final class MainWindow extends JFrame {
                         .addGap(0, 500, Short.MAX_VALUE));
 
         //Set the Multi canvas pane.
-        m_multiCanvas.addTab("NewFile", m_CanvasList.get(m_CanvasList.indexOf(m_panelCanvas)));
+        m_multiCanvas.addTab("NewFile", m_panelCanvas);
 
         m_resetButton.setText("reset position");
 
@@ -134,8 +153,8 @@ public final class MainWindow extends JFrame {
         zoomField.setText("100%");
 
         //m_postionPanel.setBorder(BorderFactory.createEtchedBorder());
-        GroupLayout postionPanelLayout = new GroupLayout(m_postionPanel);
-        m_postionPanel.setLayout(postionPanelLayout);
+        GroupLayout postionPanelLayout = new GroupLayout(m_infoPanel);
+        m_infoPanel.setLayout(postionPanelLayout);
         postionPanelLayout.setHorizontalGroup(postionPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
                 .addGroup(GroupLayout.Alignment.TRAILING, postionPanelLayout.createSequentialGroup()
                         .addContainerGap(10, Short.MAX_VALUE)
@@ -185,7 +204,7 @@ public final class MainWindow extends JFrame {
                         //.addComponent(m_panelCanvas, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(m_multiCanvas, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                .addComponent(m_postionPanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(m_infoPanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                 .addGroup(GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
@@ -194,7 +213,7 @@ public final class MainWindow extends JFrame {
                                 .addComponent(m_multiCanvas, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                                 .addComponent(m_toolsPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(m_postionPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                        .addComponent(m_infoPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
         );
 
         pack();
@@ -206,21 +225,17 @@ public final class MainWindow extends JFrame {
     }
 
     /**
-     * Unused for now.
-     */
-    private void addCanvasPanel() {
-
-    }
-
-    /**
      * This function is a listener for the FileChooser item, use to retreve the
-     * path of a file from a repository and call a function to parse this file.
+     * path of a file from a repository and call a function to parse this file,
+     *
+     * It open a new SVG file and add it to the multiCanvas Tab.
      *
      * @param evt
      */
     private void m_FileChooserActionPerformed(ActionEvent evt) {
         if (m_NbFenetres == 0) {
             JFileChooser fc = new JFileChooser();
+
             if (m_currentDir != null) {
                 fc.setCurrentDirectory(m_currentDir);
             } else {
@@ -237,13 +252,17 @@ public final class MainWindow extends JFrame {
                 //redraw
                 Parser parser = new Parser(filePath);
                 SVG svg = parser.parse();
-                m_CanvasList.get(m_CanvasList.indexOf(m_panelCanvas)).setDrawableList(svg.getDrawableList());
-                m_CanvasList.get(m_CanvasList.indexOf(m_panelCanvas)).repaintImage();
+                m_panelCanvas.setDrawableList(svg.getDrawableList());
+                m_panelCanvas.repaintImage();
                 setTitle(file.getName());
                 m_multiCanvas.setTitleAt(m_NbFenetres, file.getName());
                 m_currentDir = file;
+
+                m_canvasList.add(m_NbFenetres, m_panelCanvas);
             }
         } else { //Create a new tab with a choosen file.
+            int oldPane = m_multiCanvas.getSelectedIndex();
+
             CanvasPanel canvas = new CanvasPanel();
             JFileChooser fc = new JFileChooser();
 
@@ -269,14 +288,13 @@ public final class MainWindow extends JFrame {
                 setTitle(file.getName());
                 m_currentDir = file;
 
-                m_CanvasList.add(canvas);
-                m_CanvasList.get(m_CanvasList.indexOf(canvas)).setDebugGraphicsOptions(DebugGraphics.NONE_OPTION);
-                m_CanvasList.get(m_CanvasList.indexOf(canvas)).setDoubleBuffered(false);
-                m_CanvasList.get(m_CanvasList.indexOf(canvas)).setRequestFocusEnabled(false);
-                m_CanvasList.get(m_CanvasList.indexOf(canvas)).setLayout(null);
+                canvas.setDebugGraphicsOptions(DebugGraphics.NONE_OPTION);
+                canvas.setDoubleBuffered(false);
+                canvas.setRequestFocusEnabled(false);
+                canvas.setLayout(null);
 
-                GroupLayout m_panelCanvasLayout = new GroupLayout(m_CanvasList.get(m_CanvasList.indexOf(canvas)));
-                m_CanvasList.get(m_CanvasList.indexOf(canvas)).setLayout(m_panelCanvasLayout);
+                GroupLayout m_panelCanvasLayout = new GroupLayout(canvas);
+                canvas.setLayout(m_panelCanvasLayout);
 
                 //Setting the size of a the canvas
                 m_panelCanvasLayout.setHorizontalGroup(
@@ -286,9 +304,12 @@ public final class MainWindow extends JFrame {
                 m_panelCanvasLayout.setVerticalGroup(
                         m_panelCanvasLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
                                 .addGap(0, 500, Short.MAX_VALUE));
-
+                
                 //adding a canvas to the table of canvas.
-                m_multiCanvas.addTab(file.getName(), m_CanvasList.get(m_CanvasList.indexOf(canvas)));
+                m_multiCanvas.addTab(file.getName(), null);
+
+                m_canvasList.add(m_NbFenetres, canvas);
+
             }
         }
         m_NbFenetres += 1;
@@ -313,7 +334,7 @@ public final class MainWindow extends JFrame {
                 } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
                     e.printStackTrace(System.out);
                 }
-                ThemeEditor themeEditDialog = new ThemeEditor(currentWindow, true, m_curTheme);
+                ThemeEditor themeEditDialog = new ThemeEditor(currentWindow, true, curTheme);
 
                 themeEditDialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     /* @Override
@@ -333,8 +354,8 @@ public final class MainWindow extends JFrame {
         m_toolsPanel.setBackground(WindowPreferences.getM_backgroundColor());
         m_toolsPanel.setForeground(WindowPreferences.getM_textColor());
 
-        m_postionPanel.setBackground(WindowPreferences.getM_backgroundColor());
-        m_postionPanel.setForeground(WindowPreferences.getM_textColor());
+        m_infoPanel.setBackground(WindowPreferences.getM_backgroundColor());
+        m_infoPanel.setForeground(WindowPreferences.getM_textColor());
 
         m_jMenuBar1.setBackground(WindowPreferences.getM_backgroundColor());
         m_jMenuBar1.setForeground(WindowPreferences.getM_textColor());
