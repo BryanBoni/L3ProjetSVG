@@ -4,7 +4,7 @@ package data;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
-public class Point  implements IDrawableSVG {
+public class Point extends DrawableSVG {
 	
 
 	@Override

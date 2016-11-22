@@ -11,7 +11,7 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import view.CanvasPanel;
 
-public class Text implements IDrawableSVG {
+public class Text extends DrawableSVG {
 
 	private Vector2f m_position;
 	private int m_fontSize;

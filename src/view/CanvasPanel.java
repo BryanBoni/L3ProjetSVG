@@ -2,7 +2,8 @@ package view;
 
 import Maths.Vector2f;
 import Maths.Vector3f;
-import data.IDrawableSVG;
+import data.DrawableSVG;
+import static data.DrawableSVG.RENDRING_HINTS;
 import draw.SimpleDrawer;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -25,10 +26,12 @@ public class CanvasPanel extends JPanel implements MouseMotionListener, MouseLis
 	public static CanvasPanel currentCanvas;
 	private BufferedImage m_canvasImage;
 	private SimpleDrawer m_simpDraw;
-	private ArrayList<IDrawableSVG> m_drawableList;
+	private ArrayList<DrawableSVG> m_drawableList;
 
 	// rendering context
 	public static float zoom = 1;
+	public static float minZoom = 16;
+	public static float maxZoom = 0.25f;
 	private static int translateX = 0;
 	private static int translateY = 0;
 
@@ -72,8 +75,8 @@ public class CanvasPanel extends JPanel implements MouseMotionListener, MouseLis
 		super.paintComponent(g);
 		resetImage(g);
 		g.translate(translateX, translateY);
-
-		for (IDrawableSVG drawable : m_drawableList) {
+		((Graphics2D)g).setRenderingHints(RENDRING_HINTS);
+		for (DrawableSVG drawable : m_drawableList) {
 			drawable.render((Graphics2D) g);
 		}
 	}
@@ -179,7 +182,7 @@ public class CanvasPanel extends JPanel implements MouseMotionListener, MouseLis
 	 *
 	 * @param drawableList
 	 */
-	public void setDrawableList(ArrayList<IDrawableSVG> drawableList) {
+	public void setDrawableList(ArrayList<DrawableSVG> drawableList) {
 		m_drawableList = drawableList;
 	}
 

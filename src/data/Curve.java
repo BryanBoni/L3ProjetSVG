@@ -2,7 +2,7 @@ package data;
 
 import Maths.Vector2f;
 
-public class Curve extends Line implements IDrawableSVG {
+public class Curve extends Line {
 
     /**
      * Add a new stop to the Curve. A curve is only 4 points, so we can't add

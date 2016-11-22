@@ -53,13 +53,13 @@
      id="layer1"
      transform="translate(0,0)">
     <path
-       style="fill:none;stroke:#ff00ff;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="fill:none;stroke:#ff00ff;stroke-width:5px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:0.25"
        d="M 5,5 C 495,5 5,495 495,495 C 5,495 495,495 495,5"
        id="path2983"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc" />
     <path
-       style="fill:none;stroke:#00ffff;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="fill:none;stroke:#00ffff;stroke-width:5px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:0.25"
        d="M 15,15 C 495,5 5,495 495,495 C 5,495 495,495 495,5"
        id="path2983"
        inkscape:connector-curvature="0"

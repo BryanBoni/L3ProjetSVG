@@ -72,6 +72,9 @@ public class Parser {
 				if (node.getNodeName().equals("image")) {
 					loadNodeImage(node, svg);
 				}
+				if (node.getNodeName().equals("text")) {
+					
+				}
 			}
 		}
 	}
@@ -85,8 +88,14 @@ public class Parser {
 				if (s.contains("stroke:")) {
 					circle.setStrokeColor(Color.decode(s.replace("stroke:", "")));
 				}
+				if (s.contains("stroke-opacity:")) {
+					circle.setStrokeOpacity(Float.parseFloat(s.replace("stroke-opacity:", "")));
+				}
 				if (s.contains("fill:")) {
 					circle.setFillColor(Color.decode(s.replace("fill:", "")));
+				}
+				if (s.contains("fill-opacity:")) {
+					circle.setFillOpacity(Float.parseFloat(s.replace("fill-opacity:", "")));
 				}
 			}
 		}
@@ -109,8 +118,14 @@ public class Parser {
 				if (s.contains("stroke:")) {
 					rect.setStrokeColor(Color.decode(s.replace("stroke:", "")));
 				}
+				if (s.contains("stroke-opacity:")) {
+					rect.setStrokeOpacity(Float.parseFloat(s.replace("stroke-opacity:", "")));
+				}
 				if (s.contains("fill:")) {
 					rect.setFillColor(Color.decode(s.replace("fill:", "")));
+				}
+				if (s.contains("fill-opacity:")) {
+					rect.setFillOpacity(Float.parseFloat(s.replace("fill-opacity:", "")));
 				}
 			}
 		}
@@ -136,7 +151,10 @@ public class Parser {
 					path.setStrokeColor(Color.decode(s.replace("stroke:", "")));
 				}
 				if (s.contains("stroke-width:")) {
-					path.setStrokeWidth(Float.parseFloat(s.replace("stroke-width:", "")));
+					path.setStrokeWidth(Float.parseFloat(s.replace("stroke-width:", "").replace("px", "")));
+				}
+				if (s.contains("stroke-opacity:")) {
+					path.setStrokeOpacity(Float.parseFloat(s.replace("stroke-opacity:", "")));
 				}
 			}
 		}

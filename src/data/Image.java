@@ -12,7 +12,7 @@ import java.util.Base64;
 import javax.imageio.ImageIO;
 import view.CanvasPanel;
 
-public class Image implements IDrawableSVG {
+public class Image extends DrawableSVG {
 
 	private Vector2f m_position = new Vector2f(0, 0);
 	private Vector2f m_size = new Vector2f(0, 0);
