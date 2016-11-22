@@ -19,13 +19,14 @@ import javax.swing.LayoutStyle;
 import javax.swing.WindowConstants;
 import parser.Parser;
 import data.Path;
+import java.util.ArrayList;
 import javax.swing.JTabbedPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.LineBorder;
 import parser.SVG;
 
-public class MainWindow extends JFrame {
+public final class MainWindow extends JFrame {
 
     //Window components.
     private final CanvasPanel m_panelCanvas;
@@ -40,6 +41,8 @@ public class MainWindow extends JFrame {
     private JButton m_resetButton;
     private JLabel m_zoomLabel;
     private JTabbedPane m_multiCanvas;
+    private int m_NbFenetres;
+    private ArrayList<CanvasPanel> m_CanvasList;
 
     private File m_currentDir = null;
     private String m_curTheme;
@@ -49,15 +52,19 @@ public class MainWindow extends JFrame {
     private static JLabel position;
     private static WindowPreferences pref;
 
-    public MainWindow(String filePath) {
+    public MainWindow() {
         super();
-        m_panelCanvas = new CanvasPanel(filePath);
+        m_NbFenetres = 0;
+
+        m_CanvasList = new ArrayList<>();
+        m_panelCanvas = new CanvasPanel();
+        m_CanvasList.add(m_panelCanvas);
+
         pref = new WindowPreferences(new Color(52, 52, 52), new Color(255, 255, 255), Color.BLACK, new Color(255, 255, 255), new Color(52, 52, 52));
         m_curTheme = "Dark";
+
         initComponents();
         applyPreferences();
-        setTitle(filePath);
-
     }
 
     /**
@@ -65,7 +72,7 @@ public class MainWindow extends JFrame {
      */
     private void initComponents() {
         UIManager.put("PopupMenu.border", new LineBorder(WindowPreferences.getBorderColor()));
-        UIManager.put("MenuBar.border", new LineBorder(WindowPreferences.getBorderColor()));
+        //UIManager.put("MenuBar.border", new LineBorder(WindowPreferences.getBorderColor()));
 
         m_toolsPanel = new JPanel();
         m_postionPanel = new JPanel();
@@ -84,14 +91,13 @@ public class MainWindow extends JFrame {
         setCursor(null);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-        //setTitle("I wanna move it move it");
-        m_panelCanvas.setDebugGraphicsOptions(DebugGraphics.NONE_OPTION);
-        m_panelCanvas.setDoubleBuffered(false);
-        m_panelCanvas.setRequestFocusEnabled(false);
-        m_panelCanvas.setLayout(null);
+        m_CanvasList.get(m_CanvasList.indexOf(m_panelCanvas)).setDebugGraphicsOptions(DebugGraphics.NONE_OPTION);
+        m_CanvasList.get(m_CanvasList.indexOf(m_panelCanvas)).setDoubleBuffered(false);
+        m_CanvasList.get(m_CanvasList.indexOf(m_panelCanvas)).setRequestFocusEnabled(false);
+        m_CanvasList.get(m_CanvasList.indexOf(m_panelCanvas)).setLayout(null);
 
-        GroupLayout m_panelCanvasLayout = new GroupLayout(m_panelCanvas);
-        m_panelCanvas.setLayout(m_panelCanvasLayout);
+        GroupLayout m_panelCanvasLayout = new GroupLayout(m_CanvasList.get(m_CanvasList.indexOf(m_panelCanvas)));
+        m_CanvasList.get(m_CanvasList.indexOf(m_panelCanvas)).setLayout(m_panelCanvasLayout);
 
         //Setting the size of a the canvas
         m_panelCanvasLayout.setHorizontalGroup(
@@ -103,12 +109,11 @@ public class MainWindow extends JFrame {
                         .addGap(0, 500, Short.MAX_VALUE));
 
         //Set the Multi canvas pane.
-        m_multiCanvas.addTab("NewFile", m_panelCanvas);
+        m_multiCanvas.addTab("NewFile", m_CanvasList.get(m_CanvasList.indexOf(m_panelCanvas)));
 
         m_resetButton.setText("reset position");
 
         //m_toolsPanel.setBorder(BorderFactory.createEtchedBorder());
-
         GroupLayout toolsPanelLayout = new GroupLayout(m_toolsPanel);
         m_toolsPanel.setLayout(toolsPanelLayout);
         toolsPanelLayout.setHorizontalGroup(
@@ -129,7 +134,6 @@ public class MainWindow extends JFrame {
         zoomField.setText("100%");
 
         //m_postionPanel.setBorder(BorderFactory.createEtchedBorder());
-
         GroupLayout postionPanelLayout = new GroupLayout(m_postionPanel);
         m_postionPanel.setLayout(postionPanelLayout);
         postionPanelLayout.setHorizontalGroup(postionPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
@@ -188,7 +192,6 @@ public class MainWindow extends JFrame {
                         .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                                 //.addComponent(m_panelCanvas, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                                 .addComponent(m_multiCanvas, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                
                                 .addComponent(m_toolsPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(m_postionPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
@@ -201,12 +204,12 @@ public class MainWindow extends JFrame {
 
         currentWindow = this;
     }
-    
+
     /**
      * Unused for now.
      */
-    private void addCanvasPanel(){
-        
+    private void addCanvasPanel() {
+
     }
 
     /**
@@ -216,30 +219,79 @@ public class MainWindow extends JFrame {
      * @param evt
      */
     private void m_FileChooserActionPerformed(ActionEvent evt) {
+        if (m_NbFenetres == 0) {
+            JFileChooser fc = new JFileChooser();
+            if (m_currentDir != null) {
+                fc.setCurrentDirectory(m_currentDir);
+            } else {
+                fc.setCurrentDirectory(new File("."));
+            }
+            String filePath;
+            int returnVal = fc.showOpenDialog(MainWindow.this);
 
-        Path path;
-        JFileChooser fc = new JFileChooser();
-        if (m_currentDir != null) {
-            fc.setCurrentDirectory(m_currentDir);
-        } else {
-            fc.setCurrentDirectory(new File("."));
+            if (returnVal == JFileChooser.APPROVE_OPTION) {
+                File file = fc.getSelectedFile();
+                filePath = file.getPath();
+                System.out.println(filePath + "\n");
+
+                //redraw
+                Parser parser = new Parser(filePath);
+                SVG svg = parser.parse();
+                m_CanvasList.get(m_CanvasList.indexOf(m_panelCanvas)).setDrawableList(svg.getDrawableList());
+                m_CanvasList.get(m_CanvasList.indexOf(m_panelCanvas)).repaintImage();
+                setTitle(file.getName());
+                m_multiCanvas.setTitleAt(m_NbFenetres, file.getName());
+                m_currentDir = file;
+            }
+        } else { //Create a new tab with a choosen file.
+            CanvasPanel canvas = new CanvasPanel();
+            JFileChooser fc = new JFileChooser();
+
+            if (m_currentDir != null) {
+                fc.setCurrentDirectory(m_currentDir);
+            } else {
+                fc.setCurrentDirectory(new File("."));
+            }
+
+            String filePath;
+            int returnVal = fc.showOpenDialog(MainWindow.this);
+
+            if (returnVal == JFileChooser.APPROVE_OPTION) {
+                File file = fc.getSelectedFile();
+                filePath = file.getPath();
+                System.out.println(filePath + "\n");
+
+                //redraw
+                Parser parser = new Parser(filePath);
+                SVG svg = parser.parse();
+                canvas.setDrawableList(svg.getDrawableList());
+                canvas.repaintImage();
+                setTitle(file.getName());
+                m_currentDir = file;
+
+                m_CanvasList.add(canvas);
+                m_CanvasList.get(m_CanvasList.indexOf(canvas)).setDebugGraphicsOptions(DebugGraphics.NONE_OPTION);
+                m_CanvasList.get(m_CanvasList.indexOf(canvas)).setDoubleBuffered(false);
+                m_CanvasList.get(m_CanvasList.indexOf(canvas)).setRequestFocusEnabled(false);
+                m_CanvasList.get(m_CanvasList.indexOf(canvas)).setLayout(null);
+
+                GroupLayout m_panelCanvasLayout = new GroupLayout(m_CanvasList.get(m_CanvasList.indexOf(canvas)));
+                m_CanvasList.get(m_CanvasList.indexOf(canvas)).setLayout(m_panelCanvasLayout);
+
+                //Setting the size of a the canvas
+                m_panelCanvasLayout.setHorizontalGroup(
+                        m_panelCanvasLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                .addGap(0, 500, Short.MAX_VALUE));
+
+                m_panelCanvasLayout.setVerticalGroup(
+                        m_panelCanvasLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                .addGap(0, 500, Short.MAX_VALUE));
+
+                //adding a canvas to the table of canvas.
+                m_multiCanvas.addTab(file.getName(), m_CanvasList.get(m_CanvasList.indexOf(canvas)));
+            }
         }
-        String filePath;
-        int returnVal = fc.showOpenDialog(MainWindow.this);
-
-        if (returnVal == JFileChooser.APPROVE_OPTION) {
-            File file = fc.getSelectedFile();
-            filePath = file.getPath();
-            System.out.println(filePath + "\n");
-
-            //redraw
-            Parser parser = new Parser(filePath);
-            SVG svg = parser.parse();
-            m_panelCanvas.setDrawableList(svg.getDrawableList());
-            m_panelCanvas.repaintImage();
-            setTitle(file.getName());
-            m_currentDir = file;
-        }
+        m_NbFenetres += 1;
     }
 
     /**
@@ -276,42 +328,42 @@ public class MainWindow extends JFrame {
 
     public void applyPreferences() {
 
-        getContentPane().setBackground(pref.getM_backgroundColor());
+        getContentPane().setBackground(WindowPreferences.getM_backgroundColor());
 
-        m_toolsPanel.setBackground(pref.getM_backgroundColor());
-        m_toolsPanel.setForeground(pref.getM_textColor());
+        m_toolsPanel.setBackground(WindowPreferences.getM_backgroundColor());
+        m_toolsPanel.setForeground(WindowPreferences.getM_textColor());
 
-        m_postionPanel.setBackground(pref.getM_backgroundColor());
-        m_postionPanel.setForeground(pref.getM_textColor());
+        m_postionPanel.setBackground(WindowPreferences.getM_backgroundColor());
+        m_postionPanel.setForeground(WindowPreferences.getM_textColor());
 
-        m_jMenuBar1.setBackground(pref.getM_backgroundColor());
-        m_jMenuBar1.setForeground(pref.getM_textColor());
+        m_jMenuBar1.setBackground(WindowPreferences.getM_backgroundColor());
+        m_jMenuBar1.setForeground(WindowPreferences.getM_textColor());
 
-        m_FileMenu.setBackground(pref.getM_backgroundColor());
-        m_FileMenu.setForeground(pref.getM_textColor());
+        m_FileMenu.setBackground(WindowPreferences.getM_backgroundColor());
+        m_FileMenu.setForeground(WindowPreferences.getM_textColor());
 
-        m_edit.setBackground(pref.getM_backgroundColor());
-        m_edit.setForeground(pref.getM_textColor());
+        m_edit.setBackground(WindowPreferences.getM_backgroundColor());
+        m_edit.setForeground(WindowPreferences.getM_textColor());
 
-        m_toolsMenu.setBackground(pref.getM_backgroundColor());
-        m_toolsMenu.setForeground(pref.getM_textColor());
+        m_toolsMenu.setBackground(WindowPreferences.getM_backgroundColor());
+        m_toolsMenu.setForeground(WindowPreferences.getM_textColor());
 
-        m_FileChooser.setBackground(pref.getM_backgroundColor());
-        m_FileChooser.setForeground(pref.getM_textColor());
+        m_FileChooser.setBackground(WindowPreferences.getM_backgroundColor());
+        m_FileChooser.setForeground(WindowPreferences.getM_textColor());
 
-        m_themesMenuItem.setBackground(pref.getM_backgroundColor());
-        m_themesMenuItem.setForeground(pref.getM_textColor());
+        m_themesMenuItem.setBackground(WindowPreferences.getM_backgroundColor());
+        m_themesMenuItem.setForeground(WindowPreferences.getM_textColor());
 
-        position.setBackground(pref.getM_backgroundColor());
-        position.setForeground(pref.getM_textColor());
+        position.setBackground(WindowPreferences.getM_backgroundColor());
+        position.setForeground(WindowPreferences.getM_textColor());
 
-        m_resetButton.setBackground(pref.getM_buttonBackgoundColor());
-        m_resetButton.setForeground(pref.getM_buttonColor());
+        m_resetButton.setBackground(WindowPreferences.getM_buttonBackgoundColor());
+        m_resetButton.setForeground(WindowPreferences.getM_buttonColor());
 
-        m_zoomLabel.setForeground(pref.getM_textColor());
+        m_zoomLabel.setForeground(WindowPreferences.getM_textColor());
 
-        zoomField.setBackground(pref.getM_backgroundColor());
-        zoomField.setForeground(pref.getM_textColor());
+        zoomField.setBackground(WindowPreferences.getM_backgroundColor());
+        zoomField.setForeground(WindowPreferences.getM_textColor());
 
         // UIManager.put("PopupMenu.border", new LineBorder(WindowPreferences.getBorderColor()));
         // UIManager.put("MenuBar.border", new LineBorder(WindowPreferences.getBorderColor()));

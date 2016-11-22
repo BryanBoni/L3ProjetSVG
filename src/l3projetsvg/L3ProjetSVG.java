@@ -17,6 +17,6 @@ public class L3ProjetSVG {
             e.printStackTrace(System.out);
         }
         
-        new MainWindow("L3SVG.svg").setVisible(true);
+        new MainWindow().setVisible(true);
     }
 }

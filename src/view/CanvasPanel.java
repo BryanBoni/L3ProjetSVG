@@ -41,22 +41,11 @@ public class CanvasPanel extends JPanel implements MouseMotionListener, MouseLis
     private boolean isEnd = false; // delimiter
 
     /**
-     * The constructor of the CanvasPanel, used when a default SVG file is
-     * define at the begining.
-     *
-     * @param pathUrl
-     */
-    public CanvasPanel(String pathUrl) {
-        super();
-        m_drawableList = new ArrayList<>();
-        initComponents();
-    }
-
-    /**
      * The constructor of the CanvasPanel.
      */
     public CanvasPanel() {
         super();
+        m_drawableList = new ArrayList<>();
         initComponents();
     }
 
