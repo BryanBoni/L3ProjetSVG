@@ -1,9 +1,7 @@
 package l3projetsvg;
 
-import java.awt.Color;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-import javax.swing.border.LineBorder;
 import view.MainWindow;
 
 public class L3ProjetSVG {
