@@ -1,16 +1,19 @@
 package data;
 
 import Maths.Vector2f;
+import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import view.CanvasPanel;
 
-public class Circle implements IDrawableSVG {
+public class Circle extends DrawableSVG {
 
 	private Vector2f m_position = new Vector2f(0, 0);
 	private float m_radius = 0;
 	private Color m_strokeColor = Color.BLACK;
-	private Color m_fillColor = null;
+	private Color m_fillColor = Color.BLACK;
+	private AlphaComposite m_strokeOpacity = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1);
+	private AlphaComposite m_fillOpacity = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1);
 
 	public void setPosition(Vector2f position) {
 		m_position = position;
@@ -32,6 +35,14 @@ public class Circle implements IDrawableSVG {
 	public void setFillColor(Color fillColor) {
 		m_fillColor = fillColor;
 	}
+	
+	public void setStrokeOpacity(float opacity) {
+		m_strokeOpacity = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, opacity);
+	}
+	
+	public void setFillOpacity(float opacity) {
+		m_fillOpacity = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, opacity);
+	}
 
 	@Override
 	public void render(Graphics2D g) {
@@ -42,10 +53,12 @@ public class Circle implements IDrawableSVG {
 		d = Math.round(m_radius * 2 * zoom);
 		if (m_fillColor != null) {
 			g.setColor(m_fillColor);
+			g.setComposite(m_fillOpacity);
 			g.fillOval(x, y, d, d);
 		}
 		if (m_strokeColor != null) {
 			g.setColor(m_strokeColor);
+			g.setComposite(m_strokeOpacity);
 			g.drawOval(x, y, d, d);
 		}
 	}

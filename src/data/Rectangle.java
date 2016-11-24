@@ -1,16 +1,19 @@
 package data;
 
 import Maths.Vector2f;
+import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import view.CanvasPanel;
 
-public class Rectangle implements IDrawableSVG {
+public class Rectangle extends DrawableSVG {
 
 	private Vector2f m_position = new Vector2f(0, 0);
 	private Vector2f m_size = new Vector2f(0, 0);
 	private Color m_strokeColor = Color.BLACK;
-	private Color m_fillColor = null;
+	private Color m_fillColor = Color.BLACK;
+	private AlphaComposite m_strokeOpacity = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1);
+	private AlphaComposite m_fillOpacity = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1);
 
 	public void setPosition(Vector2f position) {
 		m_position = position;
@@ -36,6 +39,14 @@ public class Rectangle implements IDrawableSVG {
 
 	public void setFillColor(Color fillColor) {
 		m_fillColor = fillColor;
+	}
+	
+	public void setStrokeOpacity(float opacity) {
+		m_strokeOpacity = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, opacity);
+	}
+	
+	public void setFillOpacity(float opacity) {
+		m_fillOpacity = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, opacity);
 	}
 
 	@Override

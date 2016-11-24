@@ -1,21 +1,21 @@
 package parser;
 
-import data.IDrawableSVG;
 import java.util.ArrayList;
+import data.DrawableSVG;
 
 public class SVG {
 
-    private final ArrayList<IDrawableSVG> m_drawableList;
+    private final ArrayList<DrawableSVG> m_drawableList;
 
     public SVG() {
         m_drawableList = new ArrayList<>();
     }
 
-    public ArrayList<IDrawableSVG> getDrawableList() {
+    public ArrayList<DrawableSVG> getDrawableList() {
         return m_drawableList;
     }
 	
-	public void addDrawable(IDrawableSVG drawable) {
+	public void addDrawable(DrawableSVG drawable) {
 		m_drawableList.add(drawable);
 	}
 }
