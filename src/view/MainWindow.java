@@ -1,7 +1,10 @@
 package view;
 
 import java.awt.Color;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import javax.swing.DebugGraphics;
 import javax.swing.GroupLayout;
@@ -66,6 +69,7 @@ public final class MainWindow extends JFrame {
         initComponents();
         applyPreferences();
 
+        //add a listener for when we change pane.
         m_multiCanvas.addChangeListener(new ChangeListener() {
 
             @Override
@@ -73,7 +77,6 @@ public final class MainWindow extends JFrame {
                 if (e.getSource() instanceof JTabbedPane) {
                     JTabbedPane pane = (JTabbedPane) e.getSource();
                     System.out.println("Selected paneNo : " + pane.getSelectedIndex());
-                    //TODO optimize tab panel
                     m_multiCanvas.setComponentAt(m_currentPane, null);
                     m_multiCanvas.setComponentAt(pane.getSelectedIndex(), m_canvasList.get(pane.getSelectedIndex()));
                     m_currentPane = pane.getSelectedIndex();
@@ -86,7 +89,7 @@ public final class MainWindow extends JFrame {
     /**
      * Intialise all the components of the main window, It create & init all the
      * needed componenent for our SVG reader : - a canvas panel, - a bar menu, -
-     * a tool panel and its components - a info panel and its components.
+     * a tool panel and its components, - a info panel and its components.
      *
      */
     private void initComponents() {
@@ -127,8 +130,11 @@ public final class MainWindow extends JFrame {
                 m_panelCanvasLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
                         .addGap(0, 500, Short.MAX_VALUE));
 
-        //Set the Multi canvas pane.
+        /*
+         //Set the Multi canvas pane.
         m_multiCanvas.addTab("NewFile", m_panelCanvas);
+         */
+        addPane(0, "NewFile", m_panelCanvas);
 
         m_resetButton.setText("reset position");
 
@@ -224,6 +230,40 @@ public final class MainWindow extends JFrame {
         currentWindow = this;
     }
 
+    private void addPane(int index, String title, CanvasPanel panel) {
+        //Set the Multi canvas pane.
+        m_multiCanvas.addTab(title, panel);
+
+        JPanel pnlTab = new JPanel(new GridBagLayout());
+
+        JLabel titleLabl = new JLabel(title);
+ //       titleLabl.setBackground(Color.);
+                
+        JButton closeBtn = new JButton("X");
+        closeBtn.setBackground(Color.red);
+        closeBtn.setForeground(Color.white);
+        
+        closeBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                m_multiCanvas.remove(panel);
+            }
+        });
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.weightx = 1;
+
+        pnlTab.add(titleLabl, gbc);
+
+        gbc.gridx++;
+        gbc.weightx = 0;
+        pnlTab.add(closeBtn, gbc);
+
+        m_multiCanvas.setTabComponentAt(index, pnlTab);
+    }
+
     /**
      * This function is a listener for the FileChooser item, use to retreve the
      * path of a file from a repository and call a function to parse this file,
@@ -304,9 +344,11 @@ public final class MainWindow extends JFrame {
                 m_panelCanvasLayout.setVerticalGroup(
                         m_panelCanvasLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
                                 .addGap(0, 500, Short.MAX_VALUE));
-                
+
+                /*
                 //adding a canvas to the table of canvas.
-                m_multiCanvas.addTab(file.getName(), null);
+                m_multiCanvas.addTab(file.getName(), null);*/
+                addPane(m_NbFenetres, file.getName(), null);
 
                 m_canvasList.add(m_NbFenetres, canvas);
 
@@ -325,6 +367,10 @@ public final class MainWindow extends JFrame {
         m_panelCanvas.repaintImage();
     }
 
+    /**
+     *
+     * @param evt
+     */
     public void m_themesMenuItemActionPerformed(ActionEvent evt) {
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
@@ -347,6 +393,9 @@ public final class MainWindow extends JFrame {
         });
     }
 
+    /**
+     *
+     */
     public void applyPreferences() {
 
         getContentPane().setBackground(WindowPreferences.getM_backgroundColor());
@@ -412,4 +461,5 @@ public final class MainWindow extends JFrame {
         }
         zoomField.setText(zoomText + " %");
     }
+
 }

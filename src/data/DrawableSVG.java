@@ -11,7 +11,7 @@ public class DrawableSVG {
 	public Vector2f m_size = new Vector2f();
 	public Vector2f m_position = new Vector2f();
 	public double m_drawSteps = 0.01f;
-	public static float PRE_RENDERING_RATIO = 2;
+	public static float PRE_RENDERING_RATIO = 1;
 	public static RenderingHints RENDRING_HINTS = initRenderingHint();
 	public BufferedImage m_bufferedImage = null;
 	
