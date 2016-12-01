@@ -104,7 +104,7 @@ public class CanvasPanel extends JPanel implements MouseMotionListener, MouseLis
     }
 
     /**
-     * Used to reset the position of the canvas himself.
+     * Used to reset the position of the canvas panel.
      */
     public void resetPostion() {
         translateX = 0;

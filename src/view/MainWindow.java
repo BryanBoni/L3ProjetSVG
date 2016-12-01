@@ -1,5 +1,7 @@
 package view;
 
+import data.SaveState;
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -21,6 +23,7 @@ import javax.swing.LayoutStyle;
 import javax.swing.WindowConstants;
 import parser.Parser;
 import java.util.ArrayList;
+import javax.swing.JProgressBar;
 import javax.swing.JTabbedPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -47,15 +50,18 @@ public final class MainWindow extends JFrame {
     private int m_NbFenetres;
     private int m_currentPane;
 
-    private ArrayList<CanvasPanel> m_canvasList; //Stock info des canvas panel.
-
-    private File m_currentDir = null;
-
     public static MainWindow currentWindow;
+    public static JProgressBar loadingBar;
     private static JTextField zoomField;
     private static JLabel position;
     private static String curTheme;
     private static WindowPreferences pref;
+
+    //Memory variables
+    private ArrayList<CanvasPanel> m_canvasList; //Stock all canvas loaded.
+    private ArrayList<SaveState> m_statList;//TODO : use it !
+
+    private File m_currentDir = null;
 
     public MainWindow() {
         super();
@@ -109,6 +115,7 @@ public final class MainWindow extends JFrame {
         m_zoomLabel = new JLabel();
         zoomField = new JTextField();
         m_multiCanvas = new JTabbedPane();
+        loadingBar = new JProgressBar(0, 100);
 
         setCursor(null);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -137,6 +144,7 @@ public final class MainWindow extends JFrame {
         addPane(0, "NewFile", m_panelCanvas);
 
         m_resetButton.setText("reset position");
+        m_resetButton.addActionListener(this::m_resetButtonActionPerformed);
 
         //m_toolsPanel.setBorder(BorderFactory.createEtchedBorder());
         GroupLayout toolsPanelLayout = new GroupLayout(m_toolsPanel);
@@ -158,29 +166,48 @@ public final class MainWindow extends JFrame {
         zoomField.setEditable(false);
         zoomField.setText("100%");
 
+        //loadingBar.setLayout(null);
+        loadingBar.setBounds(0, 0, 100, 10);
         //m_postionPanel.setBorder(BorderFactory.createEtchedBorder());
         GroupLayout postionPanelLayout = new GroupLayout(m_infoPanel);
         m_infoPanel.setLayout(postionPanelLayout);
+
         postionPanelLayout.setHorizontalGroup(postionPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
                 .addGroup(GroupLayout.Alignment.TRAILING, postionPanelLayout.createSequentialGroup()
                         .addContainerGap(10, Short.MAX_VALUE)
                         .addComponent(m_zoomLabel)
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(zoomField, GroupLayout.PREFERRED_SIZE, 60, GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 400, Short.MAX_VALUE)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
+                        .addComponent(loadingBar, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 245, Short.MAX_VALUE)
                         .addComponent(position, GroupLayout.PREFERRED_SIZE, 98, GroupLayout.PREFERRED_SIZE)
                         .addContainerGap())
         );
+
         postionPanelLayout.setVerticalGroup(postionPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
                 .addGroup(GroupLayout.Alignment.TRAILING, postionPanelLayout.createSequentialGroup()
                         .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(postionPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                 .addComponent(m_zoomLabel)
                                 .addComponent(zoomField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                .addComponent(loadingBar, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                                 .addComponent(position))
                         .addContainerGap())
         );
 
+        /*        BorderLayout postionPanelLayout2 = new BorderLayout();
+        m_infoPanel.setLayout(postionPanelLayout2);
+        
+        JPanel westPanel = new JPanel(new BorderLayout());
+
+        westPanel.add(m_zoomLabel, BorderLayout.CENTER);
+        westPanel.add(zoomField, BorderLayout.EAST);
+        m_infoPanel.add(westPanel, BorderLayout.WEST);
+        
+        m_infoPanel.add(position, BorderLayout.EAST);
+        m_infoPanel.add(loadingBar, BorderLayout.CENTER);
+         */
         m_FileMenu.setText("File");
 
         m_FileChooser.setText("Chose File");
@@ -230,6 +257,13 @@ public final class MainWindow extends JFrame {
         currentWindow = this;
     }
 
+    /**
+     * Used to create a new pane in the tabbed pane
+     *
+     * @param index
+     * @param title
+     * @param panel
+     */
     private void addPane(int index, String title, CanvasPanel panel) {
         //Set the Multi canvas pane.
         m_multiCanvas.addTab(title, panel);
@@ -237,16 +271,66 @@ public final class MainWindow extends JFrame {
         JPanel pnlTab = new JPanel(new GridBagLayout());
 
         JLabel titleLabl = new JLabel(title);
- //       titleLabl.setBackground(Color.);
-                
+
         JButton closeBtn = new JButton("X");
         closeBtn.setBackground(Color.red);
         closeBtn.setForeground(Color.white);
-        
+
         closeBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 m_multiCanvas.remove(panel);
+                m_canvasList.remove(panel);
+            }
+        });
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.weightx = 1;
+
+        pnlTab.add(titleLabl, gbc);
+
+        gbc.gridx++;
+        gbc.weightx = 0;
+        pnlTab.add(closeBtn, gbc);
+
+        m_multiCanvas.setTabComponentAt(index, pnlTab);
+    }
+
+    /**
+     * Used to change the value of the progress bar.
+     * 
+     * @param value a positive or negative value.
+     */
+    public void modifLoadingBar(int value) {
+        if ((loadingBar.getValue() + value) <= 100 || (loadingBar.getValue() + value) >= 0) {
+            loadingBar.setValue(loadingBar.getValue() + value);
+        }
+    }
+
+    /**
+     * Used when a pane content is modified.
+     *
+     * @param index
+     * @param title
+     * @param panel
+     */
+    private void modifPane(int index, String title, CanvasPanel panel) {
+
+        JPanel pnlTab = new JPanel(new GridBagLayout());
+
+        JLabel titleLabl = new JLabel(title);
+
+        JButton closeBtn = new JButton("X");
+        closeBtn.setBackground(Color.red);
+        closeBtn.setForeground(Color.white);
+
+        closeBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                m_multiCanvas.remove(index);
+                m_canvasList.remove(panel);
             }
         });
 
@@ -297,9 +381,10 @@ public final class MainWindow extends JFrame {
                 setTitle(file.getName());
                 m_multiCanvas.setTitleAt(m_NbFenetres, file.getName());
                 m_currentDir = file;
-
+                modifPane(m_NbFenetres, file.getName(), m_panelCanvas);
                 m_canvasList.add(m_NbFenetres, m_panelCanvas);
             }
+
         } else { //Create a new tab with a choosen file.
             int oldPane = m_multiCanvas.getSelectedIndex();
 
@@ -345,9 +430,7 @@ public final class MainWindow extends JFrame {
                         m_panelCanvasLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
                                 .addGap(0, 500, Short.MAX_VALUE));
 
-                /*
                 //adding a canvas to the table of canvas.
-                m_multiCanvas.addTab(file.getName(), null);*/
                 addPane(m_NbFenetres, file.getName(), null);
 
                 m_canvasList.add(m_NbFenetres, canvas);
@@ -364,10 +447,11 @@ public final class MainWindow extends JFrame {
      */
     private void m_resetButtonActionPerformed(ActionEvent evt) {
         m_panelCanvas.resetPostion();
-        m_panelCanvas.repaintImage();
     }
 
     /**
+     * Used to open a new jDialog where the user can modify the theme of the
+     * interface.
      *
      * @param evt
      */
@@ -383,10 +467,6 @@ public final class MainWindow extends JFrame {
                 ThemeEditor themeEditDialog = new ThemeEditor(currentWindow, true, curTheme);
 
                 themeEditDialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    /* @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }*/
                 });
                 themeEditDialog.setVisible(true);
             }
@@ -394,7 +474,7 @@ public final class MainWindow extends JFrame {
     }
 
     /**
-     *
+     * Used to apply a new theme for the interface.
      */
     public void applyPreferences() {
 
@@ -435,6 +515,8 @@ public final class MainWindow extends JFrame {
         zoomField.setBackground(WindowPreferences.getM_backgroundColor());
         zoomField.setForeground(WindowPreferences.getM_textColor());
 
+        m_multiCanvas.setBackground(WindowPreferences.getM_backgroundColor());
+
         // UIManager.put("PopupMenu.border", new LineBorder(WindowPreferences.getBorderColor()));
         // UIManager.put("MenuBar.border", new LineBorder(WindowPreferences.getBorderColor()));
     }
@@ -449,10 +531,18 @@ public final class MainWindow extends JFrame {
         position.setText("X:" + mouseX + " Y:" + mouseY);
     }
 
+    /**
+     * initiate the text for the postition label.
+     */
     public static void changeLabelPosition() {
         position.setText("X: " + " Y:");
     }
 
+    /**
+     * Used to change the zoom label to the new zoom given.
+     *
+     * @param zoom
+     */
     public static void changeFieldZoom(float zoom) {
         zoom = zoom * 100;
         String zoomText = String.valueOf(zoom);
