@@ -51,7 +51,7 @@ public final class MainWindow extends JFrame {
     private int m_currentPane;
 
     public static MainWindow currentWindow;
-    public static JProgressBar loadingBar;
+    private static JProgressBar loadingBar;
     private static JTextField zoomField;
     private static JLabel position;
     private static String curTheme;
@@ -304,9 +304,7 @@ public final class MainWindow extends JFrame {
      * @param value a positive or negative value.
      */
     public void modifLoadingBar(int value) {
-        if ((loadingBar.getValue() + value) <= 100 || (loadingBar.getValue() + value) >= 0) {
-            loadingBar.setValue(loadingBar.getValue() + value);
-        }
+        loadingBar.setValue(value);
     }
 
     /**
