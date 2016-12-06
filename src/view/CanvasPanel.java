@@ -23,17 +23,17 @@ import javax.swing.JPanel;
  */
 public class CanvasPanel extends JPanel implements MouseMotionListener, MouseListener, MouseWheelListener {
 
-	public static CanvasPanel currentCanvas;
-	private BufferedImage m_canvasImage;
-	private SimpleDrawer m_simpDraw;
-	private ArrayList<DrawableSVG> m_drawableList;
+    public static CanvasPanel currentCanvas;
+    private BufferedImage m_canvasImage;
+    private SimpleDrawer m_simpDraw;
+    private ArrayList<DrawableSVG> m_drawableList;
 
-	// rendering context
-	public static float zoom = 1;
-	public static float minZoom = 16;
-	public static float maxZoom = 0.25f;
-	private static int translateX = 0;
-	private static int translateY = 0;
+    // rendering context
+    public static float zoom = 1;
+    public static float minZoom = 16;
+    public static float maxZoom = 0.25f;
+    public static int translateX = 0;
+    public static int translateY = 0;
 
     // input context
     public static int mouseX = 0;
@@ -62,16 +62,16 @@ public class CanvasPanel extends JPanel implements MouseMotionListener, MouseLis
         isMousePressed = false;
     }
 
-	@Override
-	protected void paintComponent(Graphics g) {
-		super.paintComponent(g);
-		resetImage(g);
-		g.translate(translateX, translateY);
-		((Graphics2D)g).setRenderingHints(RENDRING_HINTS);
-		for (DrawableSVG drawable : m_drawableList) {
-			drawable.render((Graphics2D) g);
-		}
-	}
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        resetImage(g);
+        g.translate(translateX, translateY);
+        ((Graphics2D) g).setRenderingHints(RENDRING_HINTS);
+        for (DrawableSVG drawable : m_drawableList) {
+            drawable.render((Graphics2D) g);
+        }
+    }
 
     /**
      *
@@ -168,15 +168,15 @@ public class CanvasPanel extends JPanel implements MouseMotionListener, MouseLis
         isMousePressed = false;
     }
 
-	/**
-	 * Use this function to modify the path list variable of an SVG file for the
-	 * canvas panel.
-	 *
-	 * @param drawableList
-	 */
-	public void setDrawableList(ArrayList<DrawableSVG> drawableList) {
-		m_drawableList = drawableList;
-	}
+    /**
+     * Use this function to modify the path list variable of an SVG file for the
+     * canvas panel.
+     *
+     * @param drawableList
+     */
+    public void setDrawableList(ArrayList<DrawableSVG> drawableList) {
+        m_drawableList = drawableList;
+    }
 
     /**
      *
@@ -224,7 +224,7 @@ public class CanvasPanel extends JPanel implements MouseMotionListener, MouseLis
     }
 
     /**
-     * unused here.
+     * change the boolean isMousePressed to true if the mouse is pressed.
      *
      * @param e : cath the even of a mouse.
      */
@@ -234,7 +234,7 @@ public class CanvasPanel extends JPanel implements MouseMotionListener, MouseLis
     }
 
     /**
-     * unused here.
+     * Used to change the label position relative to the mouse on the canvas.
      *
      * @param e : cath the even of a mouse.
      */
@@ -252,5 +252,4 @@ public class CanvasPanel extends JPanel implements MouseMotionListener, MouseLis
     public void mouseExited(MouseEvent e) {
         MainWindow.changeLabelPosition(translateX, translateY);
     }
-
 }

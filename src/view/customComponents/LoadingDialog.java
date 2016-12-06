@@ -1,17 +1,11 @@
 package view.customComponents;
 
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
-import static view.MainWindow.currentWindow;
-import view.ThemeEditor;
-
 /**
  *
  * @author Bryanboni
  */
 public class LoadingDialog extends javax.swing.JDialog {
     
-    Thread loadingthread;
 
     /**
      * Creates new form LoadingDialog
@@ -19,6 +13,8 @@ public class LoadingDialog extends javax.swing.JDialog {
     public LoadingDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        setLocationRelativeTo(parent);
+        loadingBar.setValue(0);
     }
 
     @SuppressWarnings("unchecked")
@@ -59,32 +55,6 @@ public class LoadingDialog extends javax.swing.JDialog {
         loadingBar.setValue(value);
     }
 
-    public void loadingDone(){
-        this.setVisible(false);
-        loadingthread.interrupt();
-    }
-    
-    public void startLoading(){
-       // java.awt.EventQueue.invokeLater(new Runnable() {
-       Runnable Loading = new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
-                } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
-                    e.printStackTrace(System.out);
-                }
-                LoadingDialog loadindDialog = new LoadingDialog(currentWindow, true);
-
-                loadindDialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                });
-                loadindDialog.setVisible(true);
-            }
-        };
-       
-       loadingthread = new Thread(Loading);
-       loadingthread.start();
-    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private static javax.swing.JProgressBar loadingBar;
     // End of variables declaration//GEN-END:variables

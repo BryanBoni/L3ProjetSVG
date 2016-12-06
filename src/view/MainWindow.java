@@ -22,6 +22,8 @@ import javax.swing.JTextField;
 import javax.swing.LayoutStyle;
 import javax.swing.WindowConstants;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JProgressBar;
 import javax.swing.JTabbedPane;
 import javax.swing.UIManager;
@@ -31,6 +33,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import parser.SVG;
 import parser.Parser;
+import view.customComponents.LoadingDialog;
 
 /**
  * This class is used to create a new window for the program.
@@ -67,10 +70,15 @@ public final class MainWindow extends JFrame {
 
     private File m_currentDir = null;
 
+    //Thread
+    private Thread loadingthread;
+    private LoadingDialog loadingDialog;
+
     public MainWindow() {
         super();
         m_NbFenetres = 0;
         m_canvasList = new ArrayList<>();
+        m_statList = new ArrayList<>();
         m_panelCanvas = new CanvasPanel();
 
         pref = new WindowPreferences(new Color(52, 52, 52), new Color(255, 255, 255), Color.BLACK, new Color(255, 255, 255), new Color(52, 52, 52));
@@ -87,9 +95,15 @@ public final class MainWindow extends JFrame {
                 if (e.getSource() instanceof JTabbedPane) {
                     JTabbedPane pane = (JTabbedPane) e.getSource();
                     System.out.println("Selected paneNo : " + pane.getSelectedIndex());
+                    m_statList.get(m_currentPane).save(CanvasPanel.translateX, CanvasPanel.translateY, CanvasPanel.zoom);
                     m_multiCanvas.setComponentAt(m_currentPane, null);
                     m_multiCanvas.setComponentAt(pane.getSelectedIndex(), m_canvasList.get(pane.getSelectedIndex()));
                     m_currentPane = pane.getSelectedIndex();
+                    CanvasPanel.translateX = m_statList.get(pane.getSelectedIndex()).getTranslateX();
+                    CanvasPanel.translateY = m_statList.get(pane.getSelectedIndex()).getTranslateY();
+                    CanvasPanel.zoom = m_statList.get(pane.getSelectedIndex()).getZoom();
+                    changeFieldZoom(m_statList.get(pane.getSelectedIndex()).getZoom());
+                    
                 }
             }
         });
@@ -264,6 +278,7 @@ public final class MainWindow extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 m_multiCanvas.remove(panel);
                 m_canvasList.remove(panel);
+                m_NbFenetres -= 1;
             }
         });
 
@@ -301,8 +316,9 @@ public final class MainWindow extends JFrame {
         closeBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                m_multiCanvas.remove(index);
+                m_multiCanvas.remove(panel);
                 m_canvasList.remove(panel);
+                m_NbFenetres -= 1;
             }
         });
 
@@ -329,6 +345,23 @@ public final class MainWindow extends JFrame {
      * @param evt
      */
     private void m_FileChooserActionPerformed(ActionEvent evt) {
+
+        Runnable Loading = new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+                } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
+                    e.printStackTrace(System.out);
+                }
+                loadingDialog = new LoadingDialog(currentWindow, true);
+
+                loadingDialog.addWindowListener(new java.awt.event.WindowAdapter() {
+                });
+                loadingDialog.setVisible(true);
+            }
+        };
+
         if (m_NbFenetres == 0) {
             JFileChooser fc = new JFileChooser();
 
@@ -346,26 +379,34 @@ public final class MainWindow extends JFrame {
                 System.out.println(filePath + "\n");
 
                 //redraw
-				// move to a new thread
-				modifLoadingBar(0);
+                // move to a new thread
+                loadingthread = new Thread(Loading);
+                loadingthread.start();
+
                 Parser parser = new Parser(filePath);
                 SVG svg = parser.parse();
-				float progressStep = 1 / svg.getDrawableList().size();
-				for(int i = 0; i < svg.getDrawableList().size(); i++) {
-					DrawableSVG d = svg.getDrawableList().get(i);
-					d.preDraw();
-					modifLoadingBar(Math.round(i * progressStep));
-				}
+                float progressStep = 1 / svg.getDrawableList().size();
+                for (int i = 0; i < svg.getDrawableList().size(); i++) {
+                    DrawableSVG d = svg.getDrawableList().get(i);
+                    d.preDraw();
+                    loadingDialog.modifLoadingBar(Math.round(i * progressStep));
+                }
                 m_panelCanvas.setDrawableList(svg.getDrawableList());
                 m_panelCanvas.repaintImage();
-				modifLoadingBar(100);
+
+                loadingDialog.modifLoadingBar(100);
+                loadingDialog.setVisible(false);
+                loadingthread.interrupt();
+
                 setTitle(file.getName());
                 m_multiCanvas.setTitleAt(m_NbFenetres, file.getName());
                 m_currentDir = file;
                 modifPane(m_NbFenetres, file.getName(), m_panelCanvas);
                 m_canvasList.add(m_NbFenetres, m_panelCanvas);
-            }
 
+                SaveState SaveState = new SaveState(0, 0, 1.0f);
+                m_statList.add(m_NbFenetres, SaveState);
+            }
         } else { //Create a new tab with a choosen file.
             int oldPane = m_multiCanvas.getSelectedIndex();
 
@@ -387,10 +428,25 @@ public final class MainWindow extends JFrame {
                 System.out.println(filePath + "\n");
 
                 //redraw
+                // move to a new thread
+                loadingthread = new Thread(Loading);
+                loadingthread.start();
+
                 Parser parser = new Parser(filePath);
                 SVG svg = parser.parse();
+                float progressStep = 1 / svg.getDrawableList().size();
+                for (int i = 0; i < svg.getDrawableList().size(); i++) {
+                    DrawableSVG d = svg.getDrawableList().get(i);
+                    d.preDraw();
+                    loadingDialog.modifLoadingBar(Math.round(i * progressStep));
+                }
                 canvas.setDrawableList(svg.getDrawableList());
                 canvas.repaintImage();
+
+                loadingDialog.modifLoadingBar(100);
+                loadingDialog.setVisible(false);
+                loadingthread.interrupt();
+
                 setTitle(file.getName());
                 m_currentDir = file;
 
@@ -415,7 +471,8 @@ public final class MainWindow extends JFrame {
                 addPane(m_NbFenetres, file.getName(), null);
 
                 m_canvasList.add(m_NbFenetres, canvas);
-
+                SaveState SaveState = new SaveState(0, 0, 1.0f);
+                m_statList.add(m_NbFenetres, SaveState);
             }
         }
         m_NbFenetres += 1;

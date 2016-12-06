@@ -6,7 +6,7 @@ import java.awt.Color;
  *
  * @author BryanBoni
  */
-public class ThemeEditor extends javax.swing.JDialog /*implements Runnable*/ {
+public class ThemeEditor extends javax.swing.JDialog{
 
     private static String curTheme;
 

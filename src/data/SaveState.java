@@ -9,7 +9,7 @@ public class SaveState {
 
     private int translateX;
     private int translateY;
-    private int zoom;
+    private float zoom;
 
     /**
      * 
@@ -17,7 +17,7 @@ public class SaveState {
      * @param translateY
      * @param zoom 
      */
-    public SaveState(int translateX, int translateY, int zoom) {
+    public SaveState(int translateX, int translateY, float zoom) {
         this.translateX = translateX;
         this.translateY = translateY;
         this.zoom = zoom;
@@ -59,7 +59,7 @@ public class SaveState {
      * 
      * @return 
      */
-    public int getZoom() {
+    public float getZoom() {
         return zoom;
     }
 
@@ -67,7 +67,20 @@ public class SaveState {
      * 
      * @param zoom 
      */
-    public void setZoom(int zoom) {
+    public void setZoom(float zoom) {
+        this.zoom = zoom;
+    }
+    
+    /**
+     * save current state
+     * 
+     * @param translateX
+     * @param translateY
+     * @param zoom
+     */
+    public void save(int translateX, int translateY, float zoom){
+        this.translateX = translateX;
+        this.translateY = translateY;
         this.zoom = zoom;
     }
 }
