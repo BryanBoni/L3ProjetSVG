@@ -1,7 +1,6 @@
 package view;
 
 import data.SaveState;
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -21,7 +20,6 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle;
 import javax.swing.WindowConstants;
-import parser.Parser;
 import java.util.ArrayList;
 import javax.swing.JProgressBar;
 import javax.swing.JTabbedPane;
@@ -31,7 +29,13 @@ import javax.swing.border.LineBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import parser.SVG;
+import parser.Parser;
 
+/**
+ * This class is used to create a new window for the program.
+ *
+ * @author BryanBoni.
+ */
 public final class MainWindow extends JFrame {
 
     //Window components.
@@ -51,7 +55,6 @@ public final class MainWindow extends JFrame {
     private int m_currentPane;
 
     public static MainWindow currentWindow;
-    private static JProgressBar loadingBar;
     private static JTextField zoomField;
     private static JLabel position;
     private static String curTheme;
@@ -115,7 +118,6 @@ public final class MainWindow extends JFrame {
         m_zoomLabel = new JLabel();
         zoomField = new JTextField();
         m_multiCanvas = new JTabbedPane();
-        loadingBar = new JProgressBar(0, 100);
 
         setCursor(null);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -137,10 +139,7 @@ public final class MainWindow extends JFrame {
                 m_panelCanvasLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
                         .addGap(0, 500, Short.MAX_VALUE));
 
-        /*
-         //Set the Multi canvas pane.
-        m_multiCanvas.addTab("NewFile", m_panelCanvas);
-         */
+        //Set the Multi canvas pane.
         addPane(0, "NewFile", m_panelCanvas);
 
         m_resetButton.setText("reset position");
@@ -166,9 +165,6 @@ public final class MainWindow extends JFrame {
         zoomField.setEditable(false);
         zoomField.setText("100%");
 
-        //loadingBar.setLayout(null);
-        loadingBar.setBounds(0, 0, 100, 10);
-        //m_postionPanel.setBorder(BorderFactory.createEtchedBorder());
         GroupLayout postionPanelLayout = new GroupLayout(m_infoPanel);
         m_infoPanel.setLayout(postionPanelLayout);
 
@@ -179,7 +175,6 @@ public final class MainWindow extends JFrame {
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(zoomField, GroupLayout.PREFERRED_SIZE, 60, GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
-                        .addComponent(loadingBar, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 245, Short.MAX_VALUE)
                         .addComponent(position, GroupLayout.PREFERRED_SIZE, 98, GroupLayout.PREFERRED_SIZE)
                         .addContainerGap())
@@ -191,23 +186,10 @@ public final class MainWindow extends JFrame {
                         .addGroup(postionPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                 .addComponent(m_zoomLabel)
                                 .addComponent(zoomField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                .addComponent(loadingBar, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                                 .addComponent(position))
                         .addContainerGap())
         );
 
-        /*        BorderLayout postionPanelLayout2 = new BorderLayout();
-        m_infoPanel.setLayout(postionPanelLayout2);
-        
-        JPanel westPanel = new JPanel(new BorderLayout());
-
-        westPanel.add(m_zoomLabel, BorderLayout.CENTER);
-        westPanel.add(zoomField, BorderLayout.EAST);
-        m_infoPanel.add(westPanel, BorderLayout.WEST);
-        
-        m_infoPanel.add(position, BorderLayout.EAST);
-        m_infoPanel.add(loadingBar, BorderLayout.CENTER);
-         */
         m_FileMenu.setText("File");
 
         m_FileChooser.setText("Chose File");
@@ -296,15 +278,6 @@ public final class MainWindow extends JFrame {
         pnlTab.add(closeBtn, gbc);
 
         m_multiCanvas.setTabComponentAt(index, pnlTab);
-    }
-
-    /**
-     * Used to change the value of the progress bar.
-     * 
-     * @param value a positive or negative value.
-     */
-    public void modifLoadingBar(int value) {
-        loadingBar.setValue(value);
     }
 
     /**
@@ -514,9 +487,6 @@ public final class MainWindow extends JFrame {
         zoomField.setForeground(WindowPreferences.getM_textColor());
 
         m_multiCanvas.setBackground(WindowPreferences.getM_backgroundColor());
-
-        // UIManager.put("PopupMenu.border", new LineBorder(WindowPreferences.getBorderColor()));
-        // UIManager.put("MenuBar.border", new LineBorder(WindowPreferences.getBorderColor()));
     }
 
     /**

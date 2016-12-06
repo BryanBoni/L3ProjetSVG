@@ -7,7 +7,7 @@ import java.awt.Color;
 
 /**
  *
- * @author Bryan Boni
+ * @author BryanBoni
  */
 public class WindowPreferences {
     
