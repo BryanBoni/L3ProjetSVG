@@ -1,5 +1,6 @@
 package view;
 
+import data.DrawableSVG;
 import data.SaveState;
 import java.awt.Color;
 import java.awt.GridBagConstraints;
@@ -345,10 +346,19 @@ public final class MainWindow extends JFrame {
                 System.out.println(filePath + "\n");
 
                 //redraw
+				// move to a new thread
+				modifLoadingBar(0);
                 Parser parser = new Parser(filePath);
                 SVG svg = parser.parse();
+				float progressStep = 1 / svg.getDrawableList().size();
+				for(int i = 0; i < svg.getDrawableList().size(); i++) {
+					DrawableSVG d = svg.getDrawableList().get(i);
+					d.preDraw();
+					modifLoadingBar(Math.round(i * progressStep));
+				}
                 m_panelCanvas.setDrawableList(svg.getDrawableList());
                 m_panelCanvas.repaintImage();
+				modifLoadingBar(100);
                 setTitle(file.getName());
                 m_multiCanvas.setTitleAt(m_NbFenetres, file.getName());
                 m_currentDir = file;
