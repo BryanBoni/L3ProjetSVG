@@ -51,7 +51,7 @@ public class CanvasPanel extends JPanel implements MouseMotionListener, MouseLis
     }
 
     /**
-     * initiate 
+     * initiate the properties and components of the new canvas panel.
      */
     private void initComponents() {
         setBackground(Color.gray);
@@ -63,6 +63,11 @@ public class CanvasPanel extends JPanel implements MouseMotionListener, MouseLis
         isMousePressed = false;
     }
 
+    /**
+     * Used to redraw/update constantly the canvas panel.
+     * 
+     * @param g containt the current properties of the canvas.
+     */
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -75,8 +80,9 @@ public class CanvasPanel extends JPanel implements MouseMotionListener, MouseLis
     }
 
     /**
-     *
-     * @param g
+     * Redraw an empty canvas.
+     * 
+     * @param g containt the current properties of the canvas.
      */
     public void resetImage(Graphics g) {
         g.setColor(Color.white);
@@ -100,8 +106,9 @@ public class CanvasPanel extends JPanel implements MouseMotionListener, MouseLis
     }
 
     /**
-     *
-     * @param e
+     * Used to give the current position of the mouse.
+     * 
+     * @param e event catch when the user mouve his mouse.
      */
     @Override
     public void mouseMoved(MouseEvent e) {
@@ -113,11 +120,10 @@ public class CanvasPanel extends JPanel implements MouseMotionListener, MouseLis
     }
 
     /**
-     *
      * Call when the right click of the mouse is pressed and exit when it's
      * released, used to change the position of the picture on the canvas.
      *
-     * @param e
+     * @param e event catch when the user click on the mouse button and this one stay pressed.
      */
     @Override
     public void mouseDragged(MouseEvent e) {
@@ -134,21 +140,18 @@ public class CanvasPanel extends JPanel implements MouseMotionListener, MouseLis
     }
 
     /**
-     * Call when the right click of the mouse is pressed, Change the state of
-     * stayPressed to true.
+     * Unused here, implement only because of the MouseListener interface.
      *
-     * @param e
+     * @param e event catch when a mouse button is pressed.
      */
     @Override
     public void mouseClicked(MouseEvent e) {
     }
 
     /**
-     * Call when the right click of the mouse is pressed, change the state of
-     * stayPressed to false and change the position of the canvas right after a
-     * drag operation.
+     * On call, change the value of isMousePressed.
      *
-     * @param e : cath the even of a mouse.
+     * @param e event catch when a mouse button is released.
      */
     @Override
     public void mouseReleased(MouseEvent e) {
@@ -159,15 +162,18 @@ public class CanvasPanel extends JPanel implements MouseMotionListener, MouseLis
      * Use this function to modify the path list variable of an SVG file for the
      * canvas panel.
      *
-     * @param drawableList
+     * @param drawableList the new pathList table.
      */
     public void setDrawableList(ArrayList<DrawableSVG> drawableList) {
         m_drawableList = drawableList;
     }
 
     /**
-     *
-     * @param e
+     * Used to change the zoom of the canvas panel when the user move the wheel of his mouse,
+     * The origin of the zoom is relative to the mouse.
+     * 
+     * 
+     * @param e event catch when a mouse wheel is mouved.
      */
     @Override
     public void mouseWheelMoved(MouseWheelEvent e) {
@@ -194,16 +200,12 @@ public class CanvasPanel extends JPanel implements MouseMotionListener, MouseLis
 
             int newDiffX = (int) (((diffX / oldScale) * zoom));
             int newDiffY = (int) (((diffY / oldScale) * zoom));
-            /*
-                translateX += newDiffX;
-                translateY += newDiffY;
-             */
+
             translateX -= (newDiffX - diffX);
             translateY -= (newDiffY - diffY);
 
         }
 
-        // System.out.println(zoom + " , " + currentScale);
         repaint();
 
         MainWindow.changeFieldZoom(zoom);
@@ -213,7 +215,7 @@ public class CanvasPanel extends JPanel implements MouseMotionListener, MouseLis
     /**
      * change the boolean isMousePressed to true if the mouse is pressed.
      *
-     * @param e : cath the even of a mouse.
+     * @param e event catch when a mouse button is released.
      */
     @Override
     public void mousePressed(MouseEvent e) {
@@ -223,7 +225,7 @@ public class CanvasPanel extends JPanel implements MouseMotionListener, MouseLis
     /**
      * Used to change the label position relative to the mouse on the canvas.
      *
-     * @param e : cath the even of a mouse.
+     * @param e even catch of a mouse when it entered the canvas panel.
      */
     @Override
     public void mouseEntered(MouseEvent e) {
@@ -231,9 +233,9 @@ public class CanvasPanel extends JPanel implements MouseMotionListener, MouseLis
     }
 
     /**
-     * unused here.
+     * Used to change the label position to the translate X and Y.
      *
-     * @param e : cath the even of a mouse.
+     * @param e even catch of a mouse when it quite the canvas panel.
      */
     @Override
     public void mouseExited(MouseEvent e) {
