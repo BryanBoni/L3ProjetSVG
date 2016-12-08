@@ -1,44 +1,47 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package data;
 
-import Maths.Vector2f;
-import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import view.CanvasPanel;
 
+/**
+ * Class that describes text objects that have to be drawn on the canvas.
+ *
+ * @author ANTOINE
+ */
 public class Text extends DrawableSVG {
 
-	private Vector2f m_position;
-	private int m_fontSize;
-	private Color m_color;
-	private String m_text;
-	private Font m_font;
+	private int m_fontSize; // size of the font
+	private String m_text; // text displayed
+	private Font m_font; // font used
 
-	public void setPosition(Vector2f position) {
-		m_position = position;
-	}
-	public void setPosition(int x, int y) {
-		m_position.x = x;
-		m_position.y = y;
-	}
+	/**
+	 * Set the size for the font to be rendered in.
+	 *
+	 * @param fontSize Size of the font.
+	 */
 	public void setFontSize(int fontSize) {
 		m_fontSize = fontSize;
 	}
-	public void setColor(Color color) {
-		m_color = color;
-	}
+
+	/**
+	 * Set the text content of the object
+	 *
+	 * @param text Text to be displayed.
+	 */
 	public void setText(String text) {
 		m_text = text;
 	}
+
+	/**
+	 * Set the font in wich the text will be rendered.
+	 *
+	 * @param font Font of the text.
+	 */
 	public void setFont(Font font) {
 		m_font = font;
 	}
-	
+
 	@Override
 	public void render(Graphics2D g) {
 		//g.setFont(m_font);
