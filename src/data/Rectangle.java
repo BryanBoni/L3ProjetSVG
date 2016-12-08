@@ -1,59 +1,20 @@
 package data;
 
-import Maths.Vector2f;
-import java.awt.AlphaComposite;
-import java.awt.Color;
 import java.awt.Graphics2D;
 import view.CanvasPanel;
 
+/**
+ * Class that describe a rectangle object that has to be drawn on the canvas.
+ *
+ * @author ANTOINE
+ */
 public class Rectangle extends DrawableSVG {
-
-	private Vector2f m_position = new Vector2f(0, 0);
-	private Vector2f m_size = new Vector2f(0, 0);
-	private Color m_strokeColor = Color.BLACK;
-	private Color m_fillColor = Color.BLACK;
-	private AlphaComposite m_strokeOpacity = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1);
-	private AlphaComposite m_fillOpacity = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1);
-
-	public void setPosition(Vector2f position) {
-		m_position = position;
-	}
-
-	public void setPosition(float x, float y) {
-		m_position.x = x;
-		m_position.y = y;
-	}
-
-	public void setSize(Vector2f size) {
-		m_size = size;
-	}
-
-	public void setSize(float width, float height) {
-		m_size.x = width;
-		m_size.y = height;
-	}
-
-	public void setStrokeColor(Color strokeColor) {
-		m_strokeColor = strokeColor;
-	}
-
-	public void setFillColor(Color fillColor) {
-		m_fillColor = fillColor;
-	}
-	
-	public void setStrokeOpacity(float opacity) {
-		m_strokeOpacity = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, opacity);
-	}
-	
-	public void setFillOpacity(float opacity) {
-		m_fillOpacity = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, opacity);
-	}
 
 	@Override
 	public void render(Graphics2D g) {
 		float zoom = CanvasPanel.zoom;
 		int x, y, w, h;
-		
+
 		x = Math.round(m_position.x * zoom);
 		y = Math.round(m_position.y * zoom);
 		w = Math.round(m_size.x * zoom);

@@ -1,6 +1,5 @@
 package data;
 
-import Maths.Vector2f;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.io.ByteArrayInputStream;
@@ -12,45 +11,31 @@ import java.util.Base64;
 import javax.imageio.ImageIO;
 import view.CanvasPanel;
 
+/**
+ * Class that holds datas for images files that have to be rendered on the
+ * canvas.
+ *
+ * @author ANTOINE
+ */
 public class Image extends DrawableSVG {
 
-	private Vector2f m_position = new Vector2f(0, 0);
-	private Vector2f m_size = new Vector2f(0, 0);
-	private String m_xlinkHref = "";
-	private boolean m_isXlinkHrefPath = false;
-	private java.awt.Image m_image = null;
-
-	public void setPosition(Vector2f position) {
-		m_position = position;
-	}
-
-	public void setPosition(float x, float y) {
-		m_position.x = x;
-		m_position.y = y;
-	}
-
-	public void setSize(Vector2f size) {
-		m_size = size;
-	}
-
-	public void setSize(float width, float height) {
-		m_size.x = width;
-		m_size.y = height;
-	}
+	private String m_xlinkHref = ""; // either a path or a bunch of data
+	private boolean m_isXlinkHrefPath = false; // defines if the picture is path located or data described
+	private java.awt.Image m_image = null; // data of the image once loaded
 
 	public void setXlinkHref(String xlinkHref) {
 		m_xlinkHref = xlinkHref;
 		if (!m_xlinkHref.contains(":")) { // local relative file
 			m_isXlinkHrefPath = true;
-				System.out.println("loading image file...");
-				try {
-					File imageFile = new File(m_xlinkHref);
-					m_image = ImageIO.read(imageFile);
-					System.out.println("Image loaded (" + m_xlinkHref + ")");
-				} catch (Exception e) {
-					m_image = null;
-					System.out.println("Impossible to load image! (" + m_xlinkHref + ")");
-				}
+			System.out.println("loading image file...");
+			try {
+				File imageFile = new File(m_xlinkHref);
+				m_image = ImageIO.read(imageFile);
+				System.out.println("Image loaded (" + m_xlinkHref + ")");
+			} catch (Exception e) {
+				m_image = null;
+				System.out.println("Impossible to load image! (" + m_xlinkHref + ")");
+			}
 		} else { // url
 			String start = m_xlinkHref.substring(0, m_xlinkHref.indexOf(":"));
 			m_isXlinkHrefPath = start.equals("file");
