@@ -1,11 +1,15 @@
 package data;
 
 import Maths.Vector2f;
-import draw.ThreadedRasterizer;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 import view.CanvasPanel;
 
+/**
+ * Class representing a line that is part of a path.
+ *
+ * @author ANTOINE
+ */
 public class Line extends DrawableSVG {
 
 	protected ArrayList<Vector2f> m_stops = new ArrayList<>();
@@ -38,10 +42,6 @@ public class Line extends DrawableSVG {
 
 	@Override
 	public void render(Graphics2D g) {
-		//float entropie = 50;
-		//for (int i = 0; i < m_stops.size(); i++) {
-		//	m_stops.set(i, m_stops.get(i).add(new Vector2f((float) Math.random() * entropie - entropie/2, (float) Math.random() * entropie - entropie/2)));
-		//}
 		float zoom = CanvasPanel.minZoom * PRE_RENDERING_RATIO;
 		double step = m_drawSteps;
 		int size = Math.round(Path.STROKE_WIDTH * zoom);
@@ -50,18 +50,36 @@ public class Line extends DrawableSVG {
 			Vector2f point = getPoint(t).scale(zoom);
 			g.fillOval(Math.round(point.x), Math.round(point.y), size, size);
 		}
-		Vector2f point = m_stops.get(m_stops.size()-1).scale(zoom);
+		Vector2f point = m_stops.get(m_stops.size() - 1).scale(zoom);
 		g.fillOval(Math.round(point.x), Math.round(point.y), size, size);
 	}
 
+	/**
+	 * Gets all the coordinates of this line.
+	 *
+	 * @return List of vectors(x,y).
+	 */
 	public ArrayList<Vector2f> getStops() {
 		return m_stops;
 	}
 
+	/**
+	 * Return a point along the bezier curve of this object.
+	 *
+	 * @param progression Which point we are willing to get.
+	 * @return Coordinates for the desired point.
+	 */
 	public Vector2f getPoint(double progression) {
-		return interpolate(m_stops, (float)progression);
+		return interpolate(m_stops, (float) progression);
 	}
 
+	/**
+	 * Reduces a list of coordinates to generate a point along the Bezier curve.
+	 *
+	 * @param existingStops List of points to be reduced.
+	 * @param progression Which point we are willing to get.
+	 * @return Coordinates for the desired point.
+	 */
 	protected Vector2f interpolate(ArrayList<Vector2f> existingStops, float progression) {
 		float reversedProgression = 1 - progression;
 		ArrayList<Vector2f> stops = new ArrayList<>();
@@ -76,18 +94,11 @@ public class Line extends DrawableSVG {
 		return stops.get(0);
 	}
 
-	public void rasterizeThread() {
-		try {
-			ThreadedRasterizer thread = new ThreadedRasterizer(m_stops, 0.5f, 0.5f);
-			System.out.println("Start thread.");
-			thread.start();
-			thread.join();
-			System.out.println("Thread finished.");
-		} catch (InterruptedException e) {
-			e.printStackTrace(System.out);
-		}
-	}
-
+	/**
+	 * Get the "most on left" coordinates of this object.
+	 *
+	 * @return minimum x coordinate
+	 */
 	public float getMinX() {
 		float min = m_stops.get(0).x;
 		for (Vector2f stop : m_stops) {
@@ -98,6 +109,11 @@ public class Line extends DrawableSVG {
 		return min;
 	}
 
+	/**
+	 * Get the "most on right" coordinates of this object.
+	 *
+	 * @return maximum x coordinate
+	 */
 	public float getMaxX() {
 		float max = m_stops.get(0).x;
 		for (Vector2f stop : m_stops) {
@@ -108,6 +124,11 @@ public class Line extends DrawableSVG {
 		return max;
 	}
 
+	/**
+	 * Get the "most on bot" coordinates of this object.
+	 *
+	 * @return minimum y coordinate
+	 */
 	public float getMinY() {
 		float min = m_stops.get(0).y;
 		for (Vector2f stop : m_stops) {
@@ -118,6 +139,11 @@ public class Line extends DrawableSVG {
 		return min;
 	}
 
+	/**
+	 * Get the "most on top" coordinates of this object.
+	 *
+	 * @return maximum x coordinate
+	 */
 	public float getMaxY() {
 		float max = m_stops.get(0).y;
 		for (Vector2f stop : m_stops) {
