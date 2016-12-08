@@ -109,6 +109,7 @@ public final class MainWindow extends JFrame {
                     CanvasPanel.translateY = m_statList.get(pane.getSelectedIndex()).getTranslateY();
                     CanvasPanel.zoom = m_statList.get(pane.getSelectedIndex()).getZoom();
                     changeFieldZoom(m_statList.get(pane.getSelectedIndex()).getZoom());
+                    setTitle(m_multiCanvas.getTitleAt(pane.getSelectedIndex()));
                     
                 }
             }
@@ -213,7 +214,7 @@ public final class MainWindow extends JFrame {
 
         m_FileMenu.setText("File");
 
-        m_FileChooser.setText("Chose File");
+        m_FileChooser.setText("Choose File");
         m_FileChooser.addActionListener(this::m_FileChooserActionPerformed);
         m_FileMenu.add(m_FileChooser);
 
@@ -454,7 +455,6 @@ public final class MainWindow extends JFrame {
                 loadingDialog.setVisible(false);
                 loadingthread.interrupt();
 
-                setTitle(file.getName());
                 m_currentDir = file;
 
                 canvas.setDebugGraphicsOptions(DebugGraphics.NONE_OPTION);
