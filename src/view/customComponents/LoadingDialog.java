@@ -1,14 +1,17 @@
 package view.customComponents;
 
+import javax.swing.JDialog;
+
 /**
- *
+ * Used to create a new JDialog diplaying a loading bar.
+ * 
  * @author Bryanboni
  */
-public class LoadingDialog extends javax.swing.JDialog {
+public class LoadingDialog extends JDialog {
     
 
     /**
-     * Creates new form LoadingDialog
+     * Creates new form LoadingDialog.
      */
     public LoadingDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);

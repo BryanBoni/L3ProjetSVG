@@ -1,6 +1,7 @@
 package view;
 
 import java.awt.Color;
+import java.awt.Frame;
 
 /**
  *
@@ -17,7 +18,7 @@ public class ThemeEditor extends javax.swing.JDialog{
      * @param modal
      * @param curTheme
      */
-    public ThemeEditor(java.awt.Frame parent, boolean modal, String curTheme) {
+    public ThemeEditor(Frame parent, boolean modal, String curTheme) {
         super(parent, modal);
         ThemeEditor.curTheme = curTheme;
         initComponents();
@@ -153,6 +154,11 @@ public class ThemeEditor extends javax.swing.JDialog{
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Define the current theme to default dark.
+     * 
+     * @param evt event catch when the user click on the dark button.
+     */
     private void darkBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_darkBtnActionPerformed
         WindowPreferences.changePref(new Color(52, 52, 52), new Color(255, 255, 255), Color.BLACK, new Color(255, 255, 255), new Color(52, 52, 52));
         MainWindow.currentWindow.applyPreferences();
@@ -160,6 +166,11 @@ public class ThemeEditor extends javax.swing.JDialog{
         jCurTheme.setText(curTheme);
     }//GEN-LAST:event_darkBtnActionPerformed
 
+    /**
+     * Define the current theme to default classic.
+     * 
+     * @param evt event catch when the user click on the classic button.
+     */
     private void classicBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_classicBtnActionPerformed
         WindowPreferences.changePref(new Color(240, 240, 240), new Color(52, 52, 52), Color.WHITE, new Color(52, 52, 52), new Color(240, 240, 240));
         MainWindow.currentWindow.applyPreferences();
@@ -167,6 +178,11 @@ public class ThemeEditor extends javax.swing.JDialog{
         jCurTheme.setText(curTheme);
     }//GEN-LAST:event_classicBtnActionPerformed
 
+    /**
+     * Define a custom theme, unused here.
+     * 
+     * @param evt event catch when the user click on the custom button.
+     */
     private void customBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_customBtnActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_customBtnActionPerformed

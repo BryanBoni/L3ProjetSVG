@@ -4,7 +4,6 @@ import Maths.Vector2f;
 import Maths.Vector3f;
 import data.DrawableSVG;
 import static data.DrawableSVG.RENDRING_HINTS;
-import draw.SimpleDrawer;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -18,14 +17,13 @@ import java.util.ArrayList;
 import javax.swing.JPanel;
 
 /**
- * This class is used to create a canvas.
+ * This class is used to create a canvas from an SVG file.
  *
  */
 public class CanvasPanel extends JPanel implements MouseMotionListener, MouseListener, MouseWheelListener {
 
     public static CanvasPanel currentCanvas;
     private BufferedImage m_canvasImage;
-    private SimpleDrawer m_simpDraw;
     private ArrayList<DrawableSVG> m_drawableList;
 
     // rendering context
@@ -52,6 +50,9 @@ public class CanvasPanel extends JPanel implements MouseMotionListener, MouseLis
         initComponents();
     }
 
+    /**
+     * initiate 
+     */
     private void initComponents() {
         setBackground(Color.gray);
         setSize(500, 500);
@@ -80,20 +81,6 @@ public class CanvasPanel extends JPanel implements MouseMotionListener, MouseLis
     public void resetImage(Graphics g) {
         g.setColor(Color.white);
         g.fillRect(0, 0, 500, 500);
-    }
-
-    /**
-     *
-     *
-     * @param x
-     * @param y
-     * @param r
-     * @param g
-     * @param b
-     */
-    public void drawPoint(int x, int y, int r, int g, int b) {
-        m_simpDraw = new SimpleDrawer(m_canvasImage);
-        m_simpDraw.drawPixel(new Vector2f(x, y), new Vector3f(r, g, b));
     }
 
     /**

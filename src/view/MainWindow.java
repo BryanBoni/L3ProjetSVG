@@ -22,9 +22,6 @@ import javax.swing.JTextField;
 import javax.swing.LayoutStyle;
 import javax.swing.WindowConstants;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JProgressBar;
 import javax.swing.JTabbedPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -57,7 +54,8 @@ public final class MainWindow extends JFrame {
     private JTabbedPane m_multiCanvas;
     private int m_NbFenetres;
     private int m_currentPane;
-
+    
+    //Static variable
     public static MainWindow currentWindow;
     private static JTextField zoomField;
     private static JLabel position;
@@ -74,6 +72,9 @@ public final class MainWindow extends JFrame {
     private Thread loadingthread;
     private LoadingDialog loadingDialog;
 
+    /**
+     * Constructor of the MainWindow class, used to initiate the interface.
+     */
     public MainWindow() {
         super();
         m_NbFenetres = 0;
@@ -90,6 +91,11 @@ public final class MainWindow extends JFrame {
         //add a listener for when we change pane.
         m_multiCanvas.addChangeListener(new ChangeListener() {
 
+            /**
+             * Apply the panel for the selected pane and delete the previous one of the current view.
+             * 
+             * @param e event catch when the user click in an other pane.
+             */
             @Override
             public void stateChanged(ChangeEvent e) {
                 if (e.getSource() instanceof JTabbedPane) {
@@ -112,8 +118,8 @@ public final class MainWindow extends JFrame {
 
     /**
      * Intialise all the components of the main window, It create & init all the
-     * needed componenent for our SVG reader : - a canvas panel, - a bar menu, -
-     * a tool panel and its components, - a info panel and its components.
+     * needed componenent for our SVG reader : a tabbed pane and a default panel within, a bar menu,
+     * a tool panel and its components, an info panel and its components.
      *
      */
     private void initComponents() {
@@ -257,9 +263,9 @@ public final class MainWindow extends JFrame {
     /**
      * Used to create a new pane in the tabbed pane
      *
-     * @param index
-     * @param title
-     * @param panel
+     * @param index where will be located the new pane on the pane table.
+     * @param title the title of the new pane.
+     * @param panel the content of the new pane.
      */
     private void addPane(int index, String title, CanvasPanel panel) {
         //Set the Multi canvas pane.
@@ -297,11 +303,11 @@ public final class MainWindow extends JFrame {
     }
 
     /**
-     * Used when a pane content is modified.
+     * Used to modify a pane content.
      *
-     * @param index
-     * @param title
-     * @param panel
+     * @param index where is be located the pane on the pane table.
+     * @param title the new title of the pane.
+     * @param panel the new content of the pane.
      */
     private void modifPane(int index, String title, CanvasPanel panel) {
 
@@ -340,9 +346,10 @@ public final class MainWindow extends JFrame {
      * This function is a listener for the FileChooser item, use to retreve the
      * path of a file from a repository and call a function to parse this file,
      *
-     * It open a new SVG file and add it to the multiCanvas Tab.
+     * It open a new SVG file and add it to the multiCanvas Tab,
+     * if it's the first time, the new SVG file will replace the current empty canvas.
      *
-     * @param evt
+     * @param evt event catch when the user click on the file chooser button.
      */
     private void m_FileChooserActionPerformed(ActionEvent evt) {
 
@@ -481,7 +488,7 @@ public final class MainWindow extends JFrame {
     /**
      * On call, reset the position of the panel m_panelCanvas.
      *
-     * @param evt
+     * @param evt event catch when the user click on the reset position button.
      */
     private void m_resetButtonActionPerformed(ActionEvent evt) {
         m_panelCanvas.resetPostion();
@@ -491,7 +498,7 @@ public final class MainWindow extends JFrame {
      * Used to open a new jDialog where the user can modify the theme of the
      * interface.
      *
-     * @param evt
+     * @param evt event catch when the user click on the themes button.
      */
     public void m_themesMenuItemActionPerformed(ActionEvent evt) {
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -512,7 +519,8 @@ public final class MainWindow extends JFrame {
     }
 
     /**
-     * Used to apply a new theme for the interface.
+     * Used to apply a new theme for the interface, with the values define in windowPreferences.
+     * 
      */
     public void applyPreferences() {
 
@@ -557,10 +565,10 @@ public final class MainWindow extends JFrame {
     }
 
     /**
-     * Display constantly the position of the mouse on the canvasPanel.
+     * Display constantly the position of the mouse on the canvas panel.
      *
-     * @param mouseX
-     * @param mouseY
+     * @param mouseX X coordinate of the mouse on the canvas panel.
+     * @param mouseY Y coordinate of the mouse on the canvas panel.
      */
     public static void changeLabelPosition(int mouseX, int mouseY) {
         position.setText("X:" + mouseX + " Y:" + mouseY);
@@ -568,6 +576,7 @@ public final class MainWindow extends JFrame {
 
     /**
      * initiate the text for the postition label.
+     * 
      */
     public static void changeLabelPosition() {
         position.setText("X: " + " Y:");
@@ -576,7 +585,7 @@ public final class MainWindow extends JFrame {
     /**
      * Used to change the zoom label to the new zoom given.
      *
-     * @param zoom
+     * @param zoom zoom value of the canvas panel, the default zoom value is equals 1.0f.
      */
     public static void changeFieldZoom(float zoom) {
         zoom = zoom * 100;
