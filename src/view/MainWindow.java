@@ -376,7 +376,7 @@ public final class MainWindow extends JFrame {
             if (m_currentDir != null) {
                 fc.setCurrentDirectory(m_currentDir);
             } else {
-                fc.setCurrentDirectory(new File("."));
+                fc.setCurrentDirectory(new File("./ressources"));
             }
             String filePath;
             int returnVal = fc.showOpenDialog(MainWindow.this);
@@ -424,7 +424,7 @@ public final class MainWindow extends JFrame {
             if (m_currentDir != null) {
                 fc.setCurrentDirectory(m_currentDir);
             } else {
-                fc.setCurrentDirectory(new File("."));
+                fc.setCurrentDirectory(new File("./ressources"));
             }
 
             String filePath;
