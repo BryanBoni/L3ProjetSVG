@@ -1,7 +1,5 @@
 package data;
 
-import java.awt.AlphaComposite;
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -18,10 +16,8 @@ import static view.CanvasPanel.minZoom;
 public class Path extends DrawableSVG {
 
 	private final ArrayList<Line> m_elements = new ArrayList<>(); // list of all lines building the path
-	private Color m_strokeColor = Color.BLACK; // color of the stroke
 	private float m_strokeWidth = 1; // size of the stroke
-	private AlphaComposite m_strokeOpacity = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1); // opacity of the stroke
-
+	
 	public static float STROKE_WIDTH = 1; // store the width of the current path, it needs to be accessed elsewhere
 
 	/**
@@ -52,30 +48,12 @@ public class Path extends DrawableSVG {
 	}
 
 	/**
-	 * Define the color for the stroke (line).
-	 *
-	 * @param strokeColor Color of the path
-	 */
-	public void setStrokeColor(Color strokeColor) {
-		this.m_strokeColor = strokeColor;
-	}
-
-	/**
 	 * Define the width of the stroke (line).
 	 *
 	 * @param strokeWidth Width of the path
 	 */
 	public void setStrokeWidth(float strokeWidth) {
 		this.m_strokeWidth = strokeWidth;
-	}
-
-	/**
-	 * Define the opacity for the stroke (line).
-	 *
-	 * @param opacity Opacity of the path
-	 */
-	public void setStrokeOpacity(float opacity) {
-		m_strokeOpacity = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, opacity);
 	}
 
 	@Override

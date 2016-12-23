@@ -23,6 +23,10 @@ public class Parser {
 
 	private Document doc;
 
+        /**
+         * Creates a parser object from a file path
+         * @param filePath 
+         */
 	public Parser(String filePath) {
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		factory.setIgnoringElementContentWhitespace(true);
@@ -35,6 +39,10 @@ public class Parser {
 		}
 	}
 
+        /**
+         * Parse the document
+         * @return an SVG object containing all the elements of the SVG
+         */
 	public SVG parse() {
 		if (doc != null) {
 			SVG svg = new SVG();
@@ -56,6 +64,11 @@ public class Parser {
 
 	}
 
+        /**
+         * Parse the nodeList and parse every element according to its type
+         * @param nodeList
+         * @param svg 
+         */
 	public void loadNodeList(NodeList nodeList, SVG svg) {
 		for (int i = 0; i < nodeList.getLength(); i++) {
 			Node node = nodeList.item(i);
@@ -78,7 +91,12 @@ public class Parser {
 			}
 		}
 	}
-
+        
+        /**
+         * Parse the nodes which types are circles
+         * @param node
+         * @param svg 
+         */
 	public void loadNodeCircle(Node node, SVG svg) {
 		Circle circle = new Circle();
 
@@ -109,6 +127,11 @@ public class Parser {
 		svg.addDrawable(circle);
 	}
 
+        /**
+         * Parse the nodes which types are rectangles
+         * @param node
+         * @param svg 
+         */
 	public void loadNodeRect(Node node, SVG svg) {
 		Rectangle rect = new Rectangle();
 
@@ -139,7 +162,12 @@ public class Parser {
 
 		svg.addDrawable(rect);
 	}
-
+        
+        /**
+         * Parse the nodes which types are path (curves)
+         * @param node
+         * @param svg 
+         */
 	public void loadNodePath(Node node, SVG svg) {
 		Path path = new Path();
 
@@ -197,7 +225,12 @@ public class Parser {
 
 		svg.addDrawable(path);
 	}
-
+        
+/**
+         * Parse the nodes which types are images
+         * @param node
+         * @param svg 
+         */
 	public void loadNodeImage(Node node, SVG svg) {
 		Image image = new Image();
 		System.out.println("loading image node");
